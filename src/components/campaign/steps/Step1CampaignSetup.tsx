@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Building2, Search, MapPin, Store, ShoppingBag, Plane, Dumbbell, Train, UtensilsCrossed, Filter, ChevronDown, ChevronUp, Users, TrendingUp, Target, Sparkles } from 'lucide-react';
+import { Building2, Search, MapPin, Store, ShoppingBag, Plane, Dumbbell, Train, UtensilsCrossed, Filter, ChevronDown, ChevronUp, Users, TrendingUp, Target, Sparkles, Star } from 'lucide-react';
 import { CampaignData } from '../NewCampaignWizard';
 
 interface Step1CampaignSetupProps {
@@ -65,21 +65,15 @@ const CITIES: Record<string, { id: string; name: string }[]> = {
   ],
 };
 
-// Smart Targeting Options (from Location Profile)
-const DEMOGRAPHICS = {
-  ageGroups: ['18-24', '25-34', '35-44', '45-54', '55-64', '65+'],
-  gender: ['Male', 'Female', 'Mixed'],
-  incomeLevel: ['Low', 'Middle', 'High', 'Mixed'],
-};
-
+// Smart Targeting Options (Realistic & Measurable)
+const LOCATION_TIERS = ['Premium', 'Mid-Range', 'Budget', 'Mixed'];
 const FOOT_TRAFFIC = ['Very Low', 'Low', 'Medium', 'High', 'Very High'];
-
 const AUDIENCE_INTERESTS = [
   'Shopping', 'Fitness', 'Travel', 'Food & Dining', 
   'Technology', 'Fashion', 'Entertainment', 'Business'
 ];
 
-// Mock kiosks with location profile data
+// Mock kiosks with realistic location profile data
 const MOCK_KIOSKS = [
   { 
     id: 'k1', 
@@ -91,7 +85,7 @@ const MOCK_KIOSKS = [
     status: 'online', 
     impressions: '250K/mo',
     hasProfile: true,
-    demographics: { ageGroups: ['25-34', '35-44'], gender: 'Mixed', incomeLevel: 'Middle' },
+    locationTier: 'Mid-Range',
     footTraffic: 'Very High',
     interests: ['Shopping', 'Fashion', 'Food & Dining'],
   },
@@ -105,7 +99,7 @@ const MOCK_KIOSKS = [
     status: 'online', 
     impressions: '500K/mo',
     hasProfile: true,
-    demographics: { ageGroups: ['25-34', '35-44', '45-54'], gender: 'Mixed', incomeLevel: 'High' },
+    locationTier: 'Premium',
     footTraffic: 'Very High',
     interests: ['Travel', 'Business', 'Technology'],
   },
@@ -119,7 +113,7 @@ const MOCK_KIOSKS = [
     status: 'online', 
     impressions: '150K/mo',
     hasProfile: true,
-    demographics: { ageGroups: ['25-34', '35-44'], gender: 'Mixed', incomeLevel: 'High' },
+    locationTier: 'Premium',
     footTraffic: 'High',
     interests: ['Fitness', 'Technology', 'Shopping'],
   },
@@ -133,7 +127,7 @@ const MOCK_KIOSKS = [
     status: 'online', 
     impressions: '400K/mo',
     hasProfile: true,
-    demographics: { ageGroups: ['25-34', '35-44', '45-54'], gender: 'Mixed', incomeLevel: 'Middle' },
+    locationTier: 'Mid-Range',
     footTraffic: 'Very High',
     interests: ['Business', 'Food & Dining', 'Technology'],
   },
@@ -147,7 +141,7 @@ const MOCK_KIOSKS = [
     status: 'online', 
     impressions: '300K/mo',
     hasProfile: true,
-    demographics: { ageGroups: ['25-34', '35-44', '45-54'], gender: 'Female', incomeLevel: 'High' },
+    locationTier: 'Premium',
     footTraffic: 'Very High',
     interests: ['Shopping', 'Fashion', 'Entertainment'],
   },
@@ -161,7 +155,7 @@ const MOCK_KIOSKS = [
     status: 'online', 
     impressions: '600K/mo',
     hasProfile: true,
-    demographics: { ageGroups: ['25-34', '35-44'], gender: 'Mixed', incomeLevel: 'High' },
+    locationTier: 'Premium',
     footTraffic: 'Very High',
     interests: ['Travel', 'Business', 'Food & Dining'],
   },
@@ -197,7 +191,7 @@ const MOCK_KIOSKS = [
     status: 'online', 
     impressions: '380K/mo',
     hasProfile: true,
-    demographics: { ageGroups: ['18-24', '25-34'], gender: 'Mixed', incomeLevel: 'Middle' },
+    locationTier: 'Mid-Range',
     footTraffic: 'High',
     interests: ['Business', 'Technology', 'Food & Dining'],
   },
@@ -211,7 +205,7 @@ const MOCK_KIOSKS = [
     status: 'online', 
     impressions: '280K/mo',
     hasProfile: true,
-    demographics: { ageGroups: ['25-34', '35-44'], gender: 'Mixed', incomeLevel: 'Middle' },
+    locationTier: 'Mid-Range',
     footTraffic: 'Very High',
     interests: ['Shopping', 'Fashion', 'Food & Dining'],
   },
@@ -224,12 +218,10 @@ export function Step1CampaignSetup({ data, onUpdate, onCreateClient }: Step1Camp
   const [selectedCity, setSelectedCity] = useState('');
   const [isInitialized, setIsInitialized] = useState(false);
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
-  const [onlyProfiled, setOnlyProfiled] = useState(false);
+  const [onlyProfiled, setOnlyProfiled] = useState(true);
 
-  // Smart targeting filters
-  const [selectedAgeGroups, setSelectedAgeGroups] = useState<string[]>([]);
-  const [selectedGender, setSelectedGender] = useState<string[]>([]);
-  const [selectedIncome, setSelectedIncome] = useState<string[]>([]);
+  // Smart targeting filters (realistic & measurable only)
+  const [selectedLocationTier, setSelectedLocationTier] = useState<string[]>([]);
   const [selectedFootTraffic, setSelectedFootTraffic] = useState<string[]>([]);
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
 
@@ -273,12 +265,10 @@ export function Step1CampaignSetup({ data, onUpdate, onCreateClient }: Step1Camp
     setSelectedState('');
     setSelectedCity('');
     onUpdate({ venueTypes: [] });
-    setSelectedAgeGroups([]);
-    setSelectedGender([]);
-    setSelectedIncome([]);
+    setSelectedLocationTier([]);
     setSelectedFootTraffic([]);
     setSelectedInterests([]);
-    setOnlyProfiled(false);
+    setOnlyProfiled(true);
   };
 
   const toggleArrayItem = (array: string[], item: string, setter: (arr: string[]) => void) => {
@@ -318,21 +308,9 @@ export function Step1CampaignSetup({ data, onUpdate, onCreateClient }: Step1Camp
     }
 
     // Advanced filters (only for kiosks with profiles)
-    if (selectedAgeGroups.length > 0) {
+    if (selectedLocationTier.length > 0) {
       filtered = filtered.filter(k => 
-        k.hasProfile && selectedAgeGroups.some(age => k.demographics?.ageGroups.includes(age))
-      );
-    }
-
-    if (selectedGender.length > 0) {
-      filtered = filtered.filter(k => 
-        k.hasProfile && selectedGender.includes(k.demographics?.gender || '')
-      );
-    }
-
-    if (selectedIncome.length > 0) {
-      filtered = filtered.filter(k => 
-        k.hasProfile && selectedIncome.includes(k.demographics?.incomeLevel || '')
+        k.hasProfile && selectedLocationTier.includes(k.locationTier || '')
       );
     }
 
@@ -365,9 +343,8 @@ export function Step1CampaignSetup({ data, onUpdate, onCreateClient }: Step1Camp
   const availableCities = selectedState ? CITIES[selectedState] || [] : [];
   const hasActiveFilters = selectedCountry || selectedState || selectedCity || 
     (data.venueTypes && data.venueTypes.length > 0) ||
-    selectedAgeGroups.length > 0 || selectedGender.length > 0 || 
-    selectedIncome.length > 0 || selectedFootTraffic.length > 0 || 
-    selectedInterests.length > 0 || onlyProfiled;
+    selectedLocationTier.length > 0 || selectedFootTraffic.length > 0 || 
+    selectedInterests.length > 0;
 
   const profiledKiosksCount = MOCK_KIOSKS.filter(k => k.hasProfile).length;
   const selectedProfiledCount = (data.kioskIds || []).filter(id => 
@@ -447,26 +424,6 @@ export function Step1CampaignSetup({ data, onUpdate, onCreateClient }: Step1Camp
                       Clear All
                     </button>
                   )}
-                </div>
-
-                {/* Profile Status Banner */}
-                <div className="mb-4 p-3 bg-[#F0F9FF] border border-[#BAE6FD] rounded-lg">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Sparkles className="w-4 h-4 text-[#0369A1]" />
-                    <p className="text-xs font-medium text-[#0C4A6E]">
-                      {profiledKiosksCount} Profiled Kiosks
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => setOnlyProfiled(!onlyProfiled)}
-                    className={`w-full px-3 h-7 rounded-md text-xs transition-colors ${
-                      onlyProfiled
-                        ? 'bg-[#0369A1] text-white'
-                        : 'bg-white text-[#0369A1] hover:bg-[#E0F2FE]'
-                    }`}
-                  >
-                    {onlyProfiled ? 'Show All' : 'Profiled Only'}
-                  </button>
                 </div>
 
                 <div className="space-y-4">
@@ -566,72 +523,26 @@ export function Step1CampaignSetup({ data, onUpdate, onCreateClient }: Step1Camp
                   {/* Advanced Filters - Collapsible */}
                   {showAdvancedFilters && (
                     <div className="space-y-4 p-3 bg-[#F9FAFB] border border-[#E5E7EB] rounded-lg">
-                      {/* Age Groups */}
+                      {/* Location Tier */}
                       <div>
                         <label className="block text-xs font-medium text-[#111827] mb-2 flex items-center gap-1.5">
-                          <Users className="w-3.5 h-3.5" />
-                          Age Groups
+                          <Star className="w-3.5 h-3.5" />
+                          Location Tier
                         </label>
                         <div className="flex flex-wrap gap-1.5">
-                          {DEMOGRAPHICS.ageGroups.map(age => {
-                            const isSelected = selectedAgeGroups.includes(age);
+                          {LOCATION_TIERS.map(tier => {
+                            const isSelected = selectedLocationTier.includes(tier);
                             return (
                               <button
-                                key={age}
-                                onClick={() => toggleArrayItem(selectedAgeGroups, age, setSelectedAgeGroups)}
+                                key={tier}
+                                onClick={() => toggleArrayItem(selectedLocationTier, tier, setSelectedLocationTier)}
                                 className={`px-2 py-1 text-[10px] rounded transition-colors ${
                                   isSelected
                                     ? 'bg-[#D9480F] text-white'
                                     : 'bg-white text-[#6B7280] border border-[#E5E7EB] hover:border-[#D9480F]'
                                 }`}
                               >
-                                {age}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-
-                      {/* Gender */}
-                      <div>
-                        <label className="block text-xs font-medium text-[#111827] mb-2">Gender</label>
-                        <div className="flex flex-wrap gap-1.5">
-                          {DEMOGRAPHICS.gender.map(gender => {
-                            const isSelected = selectedGender.includes(gender);
-                            return (
-                              <button
-                                key={gender}
-                                onClick={() => toggleArrayItem(selectedGender, gender, setSelectedGender)}
-                                className={`px-2 py-1 text-[10px] rounded transition-colors ${
-                                  isSelected
-                                    ? 'bg-[#D9480F] text-white'
-                                    : 'bg-white text-[#6B7280] border border-[#E5E7EB] hover:border-[#D9480F]'
-                                }`}
-                              >
-                                {gender}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-
-                      {/* Income Level */}
-                      <div>
-                        <label className="block text-xs font-medium text-[#111827] mb-2">Income Level</label>
-                        <div className="flex flex-wrap gap-1.5">
-                          {DEMOGRAPHICS.incomeLevel.map(income => {
-                            const isSelected = selectedIncome.includes(income);
-                            return (
-                              <button
-                                key={income}
-                                onClick={() => toggleArrayItem(selectedIncome, income, setSelectedIncome)}
-                                className={`px-2 py-1 text-[10px] rounded transition-colors ${
-                                  isSelected
-                                    ? 'bg-[#D9480F] text-white'
-                                    : 'bg-white text-[#6B7280] border border-[#E5E7EB] hover:border-[#D9480F]'
-                                }`}
-                              >
-                                {income}
+                                {tier}
                               </button>
                             );
                           })}
@@ -666,7 +577,7 @@ export function Step1CampaignSetup({ data, onUpdate, onCreateClient }: Step1Camp
 
                       {/* Audience Interests */}
                       <div>
-                        <label className="block text-xs font-medium text-[#111827] mb-2">Interests</label>
+                        <label className="block text-xs font-medium text-[#111827] mb-2">Audience Interests</label>
                         <div className="flex flex-wrap gap-1.5">
                           {AUDIENCE_INTERESTS.map(interest => {
                             const isSelected = selectedInterests.includes(interest);
@@ -797,7 +708,7 @@ export function Step1CampaignSetup({ data, onUpdate, onCreateClient }: Step1Camp
                                   {venue?.name}
                                 </div>
                                 <div className="flex items-center gap-1">
-                                  <MapPin className="w-3 h-3" />
+                                  <Users className="w-3 h-3" />
                                   {kiosk.impressions}
                                 </div>
                               </div>
@@ -805,15 +716,16 @@ export function Step1CampaignSetup({ data, onUpdate, onCreateClient }: Step1Camp
                               {/* Profile Data Preview */}
                               {kiosk.hasProfile && (
                                 <div className="flex flex-wrap gap-1.5 mt-2">
+                                  {kiosk.locationTier && (
+                                    <span className="px-1.5 py-0.5 bg-[#F3F4F6] text-[#6B7280] text-[10px] rounded flex items-center gap-1">
+                                      <Star className="w-2.5 h-2.5" />
+                                      {kiosk.locationTier}
+                                    </span>
+                                  )}
                                   {kiosk.footTraffic && (
                                     <span className="px-1.5 py-0.5 bg-[#F3F4F6] text-[#6B7280] text-[10px] rounded flex items-center gap-1">
                                       <TrendingUp className="w-2.5 h-2.5" />
                                       {kiosk.footTraffic}
-                                    </span>
-                                  )}
-                                  {kiosk.demographics?.incomeLevel && (
-                                    <span className="px-1.5 py-0.5 bg-[#F3F4F6] text-[#6B7280] text-[10px] rounded">
-                                      {kiosk.demographics.incomeLevel} Income
                                     </span>
                                   )}
                                   {kiosk.interests && kiosk.interests.length > 0 && (

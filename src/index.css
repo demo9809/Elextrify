@@ -1220,10 +1220,6 @@
     background-color: #16a34a;
   }
 
-  .bg-\[\#0369A1\] {
-    background-color: #0369a1;
-  }
-
   .bg-\[\#D9480F\] {
     background-color: #d9480f;
   }
@@ -1556,10 +1552,6 @@
     white-space: nowrap;
   }
 
-  .text-\[\#0C4A6E\] {
-    color: #0c4a6e;
-  }
-
   .text-\[\#1E40AF\] {
     color: #1e40af;
   }
@@ -1780,12 +1772,6 @@
   @media (hover: hover) {
     .hover\:bg-\[\#DCFCE7\]:hover {
       background-color: #dcfce7;
-    }
-  }
-
-  @media (hover: hover) {
-    .hover\:bg-\[\#E0F2FE\]:hover {
-      background-color: #e0f2fe;
     }
   }
 

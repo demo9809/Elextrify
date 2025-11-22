@@ -39,8 +39,8 @@ export function Sidebar({ activePage = 'campaigns', onNavigate }: SidebarProps) 
       <div className="border-b border-[#E5E7EB] px-6 h-16 flex items-center">
         <div className="flex items-center justify-between w-full">
           <div>
-            <h2 className="text-[#111827] font-semibold mb-0.5">CLEXTRIFY</h2>
-            <p className="text-xs text-[#6B7280]\">Media Buyer</p>
+            <h2 className="text-[#111827] font-semibold mb-0.5">Elextrify</h2>
+            <p className="text-xs text-[#6B7280]">Media Buyer</p>
           </div>
         </div>
       </div>
