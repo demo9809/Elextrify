@@ -291,6 +291,43 @@ export function KioskLocationProfile({
                 <X className="w-5 h-5" />
               </button>
             </div>
+
+            {/* Info Banner - Show in all modes */}
+            <div className="mt-4 bg-[#EFF6FF] border border-[#DBEAFE] rounded-lg p-4">
+              <div className="flex gap-3">
+                <div className="flex-shrink-0">
+                  <div className="w-8 h-8 bg-[#3B82F6] rounded-lg flex items-center justify-center">
+                    <MapPin className="w-4 h-4 text-white" />
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <h4 className="text-sm font-medium text-[#111827] mb-1">
+                    Why location data matters
+                  </h4>
+                  <p className="text-sm text-[#6B7280] leading-relaxed mb-2">
+                    Detailed location profiles help advertisers find the right audience. Better targeting means more relevant ads for your screens and better campaign performance.
+                  </p>
+                  <div className="flex flex-wrap gap-4 text-xs text-[#6B7280]">
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-1.5 h-1.5 bg-[#3B82F6] rounded-full"></div>
+                      <span>Venue type & location</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-1.5 h-1.5 bg-[#3B82F6] rounded-full"></div>
+                      <span>Audience demographics</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-1.5 h-1.5 bg-[#3B82F6] rounded-full"></div>
+                      <span>Foot traffic patterns</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-1.5 h-1.5 bg-[#3B82F6] rounded-full"></div>
+                      <span>Environment context</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Form Content */}

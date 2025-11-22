@@ -463,7 +463,7 @@ export function TerminalDashboard({ onViewDevice, onNavigateToRegistration, onOp
                         {!terminal.hasLocationProfile && (
                           <div className="flex items-center gap-1 text-xs text-[#F59E0B]">
                             <AlertCircle className="w-3 h-3" />
-                            <span>Profile needed</span>
+                            <span>Add location details</span>
                           </div>
                         )}
                       </div>
@@ -598,7 +598,7 @@ export function TerminalDashboard({ onViewDevice, onNavigateToRegistration, onOp
                           {!terminal.hasLocationProfile && (
                             <div className="flex items-center gap-1 text-xs text-[#F59E0B] mt-1">
                               <AlertCircle className="w-3 h-3 flex-shrink-0" />
-                              <span>Profile needed</span>
+                              <span>Add location details</span>
                             </div>
                           )}
                         </div>

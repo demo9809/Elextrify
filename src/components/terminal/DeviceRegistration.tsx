@@ -111,7 +111,7 @@ export function DeviceRegistration({ onBack, onDevicePaired }: DeviceRegistratio
         </div>
 
         {/* Unverified Devices */}
-        <div className="bg-white rounded-xl border border-[#E5E7EB] overflow-hidden">
+        <div className="bg-white rounded-xl border border-[#E5E7EB] overflow-visible">
           {/* Header */}
           <div className="px-6 py-4 border-b border-[#E5E7EB]">
             <h3 className="text-[#111827]">Unverified Devices ({devices.length})</h3>
@@ -537,22 +537,45 @@ interface PairingDropdownProps {
 }
 
 function PairingDropdown({ device, onSelectMode, isLast }: PairingDropdownProps) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.pairing-dropdown')) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isOpen]);
+
+  const handleSelectMode = (mode: 'generate' | 'enter') => {
+    onSelectMode(device, mode);
+    setIsOpen(false);
+  };
+
   return (
-    <div className="relative group">
+    <div className="relative pairing-dropdown">
       <button
+        onClick={() => setIsOpen(!isOpen)}
         disabled={device.readinessState !== 'ready'}
         className="px-4 h-9 bg-[#D9480F] text-white rounded-lg hover:bg-[#C23D0D] disabled:bg-[#E5E7EB] disabled:text-[#9CA3AF] disabled:cursor-not-allowed transition-colors text-sm"
       >
         Pair
       </button>
       
-      {/* Dropdown Menu - Flips up if near bottom */}
-      {device.readinessState === 'ready' && (
-        <div className={`absolute right-0 ${isLast ? 'bottom-full mb-1' : 'top-full mt-1'} w-64 bg-white border border-[#E5E7EB] rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10`}>
+      {/* Dropdown Menu - Click to toggle, auto-positions to avoid cropping */}
+      {device.readinessState === 'ready' && isOpen && (
+        <div className={`absolute right-0 ${isLast ? 'bottom-full mb-1' : 'top-full mt-1'} w-72 bg-white border border-[#E5E7EB] rounded-lg shadow-xl z-50`}>
           <div className="p-2 space-y-1">
             {/* Option 1: Generate Code */}
             <button
-              onClick={() => onSelectMode(device, 'generate')}
+              onClick={() => handleSelectMode('generate')}
               className="w-full px-3 py-3 text-left rounded-lg hover:bg-[#FFF7ED] transition-colors group/item"
             >
               <div className="flex items-start gap-3">
@@ -560,9 +583,9 @@ function PairingDropdown({ device, onSelectMode, isLast }: PairingDropdownProps)
                   <ArrowRight className="w-4 h-4 text-[#D9480F]" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-[#111827] mb-0.5">Generate Code</p>
+                  <p className="text-sm font-medium text-[#111827] mb-0.5">I'll enter code on kiosk</p>
                   <p className="text-xs text-[#6B7280] leading-relaxed">
-                    Platform generates code → Enter on kiosk screen
+                    Get a pairing code to type on the kiosk screen
                   </p>
                 </div>
               </div>
@@ -573,7 +596,7 @@ function PairingDropdown({ device, onSelectMode, isLast }: PairingDropdownProps)
 
             {/* Option 2: Enter Code */}
             <button
-              onClick={() => onSelectMode(device, 'enter')}
+              onClick={() => handleSelectMode('enter')}
               className="w-full px-3 py-3 text-left rounded-lg hover:bg-[#EFF6FF] transition-colors group/item"
             >
               <div className="flex items-start gap-3">
@@ -581,9 +604,9 @@ function PairingDropdown({ device, onSelectMode, isLast }: PairingDropdownProps)
                   <ArrowLeft className="w-4 h-4 text-[#3B82F6]" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-[#111827] mb-0.5">Enter Code</p>
+                  <p className="text-sm font-medium text-[#111827] mb-0.5">Kiosk shows a code</p>
                   <p className="text-xs text-[#6B7280] leading-relaxed">
-                    Kiosk displays code → Enter here on platform
+                    Enter the pairing code displayed on the kiosk
                   </p>
                 </div>
               </div>

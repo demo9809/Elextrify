@@ -413,10 +413,6 @@
     visibility: collapse;
   }
 
-  .invisible {
-    visibility: hidden;
-  }
-
   .absolute {
     position: absolute;
   }
@@ -779,6 +775,10 @@
     min-height: 100vh;
   }
 
+  .w-1\.5 {
+    width: calc(var(--spacing) * 1.5);
+  }
+
   .w-2 {
     width: calc(var(--spacing) * 2);
   }
@@ -833,10 +833,6 @@
 
   .w-24 {
     width: calc(var(--spacing) * 24);
-  }
-
-  .w-64 {
-    width: calc(var(--spacing) * 64);
   }
 
   .w-72 {
@@ -1102,6 +1098,10 @@
 
   .overflow-hidden {
     overflow: hidden;
+  }
+
+  .overflow-visible {
+    overflow: visible;
   }
 
   .overflow-x-auto {
@@ -1677,10 +1677,6 @@
     color: var(--color-white);
   }
 
-  .opacity-0 {
-    opacity: 0;
-  }
-
   .opacity-50 {
     opacity: .5;
   }
@@ -1756,18 +1752,6 @@
 
   .slide-in-from-right {
     --tw-enter-translate-x: 100%;
-  }
-
-  @media (hover: hover) {
-    .group-hover\:visible:is(:where(.group):hover *) {
-      visibility: visible;
-    }
-  }
-
-  @media (hover: hover) {
-    .group-hover\:opacity-100:is(:where(.group):hover *) {
-      opacity: 1;
-    }
   }
 
   @media (hover: hover) {

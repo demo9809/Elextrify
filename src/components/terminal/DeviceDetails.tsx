@@ -946,11 +946,11 @@ export function DeviceDetails({ terminal, onBack, onOpenLocationProfile }: Devic
               ) : (
                 <div className="space-y-4">
                   {/* Warning Badge */}
-                  <div className="flex items-center gap-2 p-3 bg-[#FEF3C7] rounded-lg">
+                  <div className="bg-[#FEF3C7] rounded-xl p-4 flex items-start gap-3 border border-[#FDE68A]">
                     <AlertCircle className="w-5 h-5 text-[#F59E0B]" />
                     <div>
-                      <p className="text-sm font-medium text-[#92400E]">Profile Needed</p>
-                      <p className="text-xs text-[#92400E]/70 mt-0.5">Complete location profiling for better targeting</p>
+                      <p className="text-sm font-medium text-[#92400E]">Add Location Details</p>
+                      <p className="text-xs text-[#92400E]/70 mt-0.5">Help advertisers target the right audience with location info</p>
                     </div>
                   </div>
 
