@@ -27,7 +27,7 @@ export function Sidebar({ activePage = 'welcome', onNavigate }: SidebarProps) {
     { id: 'customers', label: 'Customers', icon: Users, disabled: true },
     { id: 'campaigns', label: 'Campaigns', icon: Target, active: true },
     { id: 'terminals', label: 'Kiosk Management', icon: Monitor },
-    { id: 'media', label: 'Media', icon: Film, disabled: true },
+    { id: 'media', label: 'Media', icon: Film },
     { id: 'playlists', label: 'Playlists', icon: List },
     { id: 'analytics', label: 'Proof-of-Play Analytics', icon: BarChart3, disabled: true },
     { id: 'billing', label: 'Budget & Billing', icon: CreditCard, disabled: true },

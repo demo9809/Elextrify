@@ -117,7 +117,7 @@ export function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
           <div className="absolute -top-20 -right-20 w-96 h-96 bg-gradient-to-br from-[#D9480F]/10 to-[#F97316]/5 rounded-full blur-3xl" />
           <div className="absolute -bottom-10 -left-10 w-80 h-80 bg-gradient-to-br from-[#3B82F6]/10 to-[#8B5CF6]/5 rounded-full blur-3xl" />
           
-          <div className="relative bg-white rounded-3xl shadow-xl border border-[#E5E7EB] overflow-hidden">
+          <div className="relative bg-white rounded-3xl border border-[#E5E7EB] overflow-hidden">
             {/* Trial Banner */}
             <div className="bg-gradient-to-r from-[#FEF2F2] to-[#FFF7ED] border-b border-[#FEE2E2] px-8 py-4">
               <div className="flex items-center justify-between">

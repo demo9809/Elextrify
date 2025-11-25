@@ -16,9 +16,11 @@ import {
   Tag,
   CheckSquare,
   Square,
-  ListVideo
+  ListVideo,
+  Users
 } from 'lucide-react';
 import { PlaylistEditorRevised } from './PlaylistEditorRevised';
+import { mockClients } from '../../data/mockClients';
 
 interface Playlist {
   id: string;
@@ -32,6 +34,8 @@ interface Playlist {
   createdAt: string;
   updatedAt: string;
   usedInCampaigns: number;
+  clientId: string;
+  clientName: string;
 }
 
 interface PlaylistManagerProps {
@@ -42,6 +46,7 @@ export function PlaylistManager({ onClose }: PlaylistManagerProps) {
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'draft' | 'active' | 'archived'>('all');
+  const [clientFilter, setClientFilter] = useState<string>('all');
   const [selectedPlaylists, setSelectedPlaylists] = useState<string[]>([]);
   const [showEditor, setShowEditor] = useState(false);
   const [editingPlaylistId, setEditingPlaylistId] = useState<string | null>(null);
@@ -58,7 +63,9 @@ export function PlaylistManager({ onClose }: PlaylistManagerProps) {
       tags: ['Holiday', 'Seasonal'],
       createdAt: '2024-11-20',
       updatedAt: '2024-11-24',
-      usedInCampaigns: 3
+      usedInCampaigns: 3,
+      clientId: '1',
+      clientName: 'Acme Corporation'
     },
     {
       id: '2',
@@ -70,7 +77,9 @@ export function PlaylistManager({ onClose }: PlaylistManagerProps) {
       tags: ['Product', 'Launch'],
       createdAt: '2024-11-18',
       updatedAt: '2024-11-23',
-      usedInCampaigns: 1
+      usedInCampaigns: 1,
+      clientId: '1',
+      clientName: 'Acme Corporation'
     },
     {
       id: '3',
@@ -82,7 +91,9 @@ export function PlaylistManager({ onClose }: PlaylistManagerProps) {
       tags: ['Brand', 'Awareness'],
       createdAt: '2024-11-15',
       updatedAt: '2024-11-22',
-      usedInCampaigns: 0
+      usedInCampaigns: 0,
+      clientId: '2',
+      clientName: 'Brew Coffee Co.'
     },
     {
       id: '4',
@@ -94,7 +105,37 @@ export function PlaylistManager({ onClose }: PlaylistManagerProps) {
       tags: ['Sale', 'Seasonal'],
       createdAt: '2024-06-01',
       updatedAt: '2024-08-31',
-      usedInCampaigns: 5
+      usedInCampaigns: 5,
+      clientId: '3',
+      clientName: 'FitLife Gym'
+    },
+    {
+      id: '5',
+      name: 'Fitness Motivation Mix',
+      description: 'Energetic workout content',
+      status: 'active',
+      itemCount: 10,
+      duration: 300,
+      tags: ['Fitness', 'Motivation'],
+      createdAt: '2024-11-10',
+      updatedAt: '2024-11-20',
+      usedInCampaigns: 2,
+      clientId: '3',
+      clientName: 'FitLife Gym'
+    },
+    {
+      id: '6',
+      name: 'Coffee Culture Series',
+      description: 'Artisan coffee brewing content',
+      status: 'active',
+      itemCount: 7,
+      duration: 210,
+      tags: ['Food & Beverage', 'Educational'],
+      createdAt: '2024-11-05',
+      updatedAt: '2024-11-18',
+      usedInCampaigns: 4,
+      clientId: '2',
+      clientName: 'Brew Coffee Co.'
     }
   ]);
 
@@ -110,7 +151,9 @@ export function PlaylistManager({ onClose }: PlaylistManagerProps) {
     const matchesSearch = playlist.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          playlist.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = statusFilter === 'all' || playlist.status === statusFilter;
-    return matchesSearch && matchesStatus;
+    const matchesClient = clientFilter === 'all' || playlist.clientId === clientFilter;
+    
+    return matchesSearch && matchesStatus && matchesClient;
   });
 
   const formatDuration = (seconds: number) => {
@@ -255,6 +298,18 @@ export function PlaylistManager({ onClose }: PlaylistManagerProps) {
               <option value="active">Active</option>
               <option value="draft">Draft</option>
               <option value="archived">Archived</option>
+            </select>
+
+            {/* Client Filter */}
+            <select
+              value={clientFilter}
+              onChange={(e) => setClientFilter(e.target.value as any)}
+              className="h-10 px-4 border border-[#E5E7EB] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#D9480F] focus:border-transparent bg-white"
+            >
+              <option value="all">All Clients</option>
+              {mockClients.map(client => (
+                <option key={client.id} value={client.id}>{client.name}</option>
+              ))}
             </select>
 
             {/* Bulk Actions */}

@@ -3,10 +3,11 @@ import { CampaignScheduler } from './components/pages/CampaignScheduler';
 import { TerminalManagement } from './components/terminal/TerminalManagement';
 import { WelcomeScreen } from './components/welcome/WelcomeScreen';
 import { PlaylistManager } from './components/playlists/PlaylistManager';
+import { MediaManager } from './components/media/MediaManager';
 import { Sidebar } from './components/Sidebar';
 import { TopHeader } from './components/TopHeader';
 
-type Page = 'welcome' | 'campaigns' | 'terminals' | 'playlists';
+type Page = 'welcome' | 'campaigns' | 'terminals' | 'playlists' | 'media';
 
 function App() {
   const [currentPage, setCurrentPage] = useState<Page>('welcome');
@@ -19,6 +20,8 @@ function App() {
       setCurrentPage('terminals');
     } else if (route.includes('playlist')) {
       setCurrentPage('playlists');
+    } else if (route.includes('media')) {
+      setCurrentPage('media');
     }
     // Add more route mappings as needed
   };
@@ -35,6 +38,7 @@ function App() {
           {currentPage === 'campaigns' && <CampaignScheduler />}
           {currentPage === 'terminals' && <TerminalManagement />}
           {currentPage === 'playlists' && <PlaylistManager />}
+          {currentPage === 'media' && <MediaManager />}
         </div>
       </div>
     </div>

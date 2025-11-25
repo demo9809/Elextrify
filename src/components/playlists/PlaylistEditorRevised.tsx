@@ -17,8 +17,10 @@ import {
   Repeat,
   Upload,
   Video,
-  MoreVertical
+  MoreVertical,
+  Users
 } from 'lucide-react';
+import { mockClients } from '../../data/mockClients';
 
 interface MediaItem {
   id: string;
@@ -28,6 +30,8 @@ interface MediaItem {
   thumbnail?: string;
   fileSize: string;
   resolution: string;
+  clientId: string;
+  clientName: string;
 }
 
 interface TimelineItem extends MediaItem {
@@ -48,6 +52,8 @@ export function PlaylistEditorRevised({ playlistId, onClose, onSave }: PlaylistE
   const [playlistName, setPlaylistName] = useState(isNewPlaylist ? '' : 'Holiday Campaign 2025');
   const [description, setDescription] = useState(isNewPlaylist ? '' : 'Festive content for December promotions');
   const [status, setStatus] = useState<'draft' | 'active'>('draft');
+  const [selectedClient, setSelectedClient] = useState<string>(isNewPlaylist ? '' : '1');
+  const [showClientWarning, setShowClientWarning] = useState(false);
   const [loopEnabled, setLoopEnabled] = useState(true);
   const [shuffleEnabled, setShuffleEnabled] = useState(false);
   const [transitionDuration, setTransitionDuration] = useState(1);
@@ -62,7 +68,9 @@ export function PlaylistEditorRevised({ playlistId, onClose, onSave }: PlaylistE
         type: 'image',
         duration: 8,
         fileSize: '2.4 MB',
-        resolution: '1920x1080'
+        resolution: '1920x1080',
+        clientId: '1',
+        clientName: 'Acme Corporation'
       },
       {
         id: 'm2',
@@ -71,7 +79,9 @@ export function PlaylistEditorRevised({ playlistId, onClose, onSave }: PlaylistE
         type: 'video',
         duration: 15,
         fileSize: '18 MB',
-        resolution: '1920x1080'
+        resolution: '1920x1080',
+        clientId: '1',
+        clientName: 'Acme Corporation'
       },
       {
         id: 'm3',
@@ -80,7 +90,9 @@ export function PlaylistEditorRevised({ playlistId, onClose, onSave }: PlaylistE
         type: 'image',
         duration: 10,
         fileSize: '1.8 MB',
-        resolution: '1920x1080'
+        resolution: '1920x1080',
+        clientId: '1',
+        clientName: 'Acme Corporation'
       }
     ]
   );
@@ -93,7 +105,9 @@ export function PlaylistEditorRevised({ playlistId, onClose, onSave }: PlaylistE
       type: 'image',
       duration: 8,
       fileSize: '2.4 MB',
-      resolution: '1920x1080'
+      resolution: '1920x1080',
+      clientId: '1',
+      clientName: 'Acme Corporation'
     },
     {
       id: 'm2',
@@ -101,7 +115,9 @@ export function PlaylistEditorRevised({ playlistId, onClose, onSave }: PlaylistE
       type: 'video',
       duration: 15,
       fileSize: '18 MB',
-      resolution: '1920x1080'
+      resolution: '1920x1080',
+      clientId: '1',
+      clientName: 'Acme Corporation'
     },
     {
       id: 'm3',
@@ -109,7 +125,9 @@ export function PlaylistEditorRevised({ playlistId, onClose, onSave }: PlaylistE
       type: 'image',
       duration: 10,
       fileSize: '1.8 MB',
-      resolution: '1920x1080'
+      resolution: '1920x1080',
+      clientId: '1',
+      clientName: 'Acme Corporation'
     },
     {
       id: 'm4',
@@ -117,7 +135,9 @@ export function PlaylistEditorRevised({ playlistId, onClose, onSave }: PlaylistE
       type: 'video',
       duration: 30,
       fileSize: '25 MB',
-      resolution: '1920x1080'
+      resolution: '1920x1080',
+      clientId: '1',
+      clientName: 'Acme Corporation'
     },
     {
       id: 'm5',
@@ -125,7 +145,9 @@ export function PlaylistEditorRevised({ playlistId, onClose, onSave }: PlaylistE
       type: 'image',
       duration: 12,
       fileSize: '3.2 MB',
-      resolution: '1920x1080'
+      resolution: '1920x1080',
+      clientId: '1',
+      clientName: 'Acme Corporation'
     },
     {
       id: 'm6',
@@ -133,7 +155,9 @@ export function PlaylistEditorRevised({ playlistId, onClose, onSave }: PlaylistE
       type: 'video',
       duration: 20,
       fileSize: '22 MB',
-      resolution: '1920x1080'
+      resolution: '1920x1080',
+      clientId: '2',
+      clientName: 'Brew Coffee Co.'
     },
     {
       id: 'm7',
@@ -141,7 +165,9 @@ export function PlaylistEditorRevised({ playlistId, onClose, onSave }: PlaylistE
       type: 'video',
       duration: 25,
       fileSize: '20 MB',
-      resolution: '1920x1080'
+      resolution: '1920x1080',
+      clientId: '2',
+      clientName: 'Brew Coffee Co.'
     },
     {
       id: 'm8',
@@ -149,7 +175,9 @@ export function PlaylistEditorRevised({ playlistId, onClose, onSave }: PlaylistE
       type: 'image',
       duration: 10,
       fileSize: '2.8 MB',
-      resolution: '1920x1080'
+      resolution: '1920x1080',
+      clientId: '3',
+      clientName: 'FitLife Gym'
     }
   ]);
 
@@ -157,6 +185,29 @@ export function PlaylistEditorRevised({ playlistId, onClose, onSave }: PlaylistE
   const [draggedTimelineIndex, setDraggedTimelineIndex] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [mediaTypeFilter, setMediaTypeFilter] = useState<'all' | 'image' | 'video'>('all');
+
+  // Handle client change with warning
+  const handleClientChange = (newClientId: string) => {
+    if (timelineItems.length > 0 && selectedClient !== newClientId) {
+      setShowClientWarning(true);
+    } else {
+      setSelectedClient(newClientId);
+    }
+  };
+
+  const confirmClientChange = () => {
+    setTimelineItems([]);
+    setShowClientWarning(false);
+  };
+
+  // Filter media by selected client
+  const filteredMediaLibrary = mediaLibrary.filter(item => {
+    if (!selectedClient) return false; // Don't show media if no client selected
+    const matchesClient = item.clientId === selectedClient;
+    const matchesType = mediaTypeFilter === 'all' || item.type === mediaTypeFilter;
+    const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesClient && matchesType && matchesSearch;
+  });
 
   // Calculations
   const totalDuration = timelineItems.reduce((sum, item) => sum + (item.customDuration || item.duration), 0);
@@ -237,13 +288,6 @@ export function PlaylistEditorRevised({ playlistId, onClose, onSave }: PlaylistE
     }
   };
 
-  // Filter media
-  const filteredMedia = mediaLibrary.filter(item => {
-    const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesType = mediaTypeFilter === 'all' || item.type === mediaTypeFilter;
-    return matchesSearch && matchesType;
-  });
-
   return (
     <div className="min-h-screen bg-[#F9FAFB] flex flex-col">
       {/* Header */}
@@ -315,6 +359,56 @@ export function PlaylistEditorRevised({ playlistId, onClose, onSave }: PlaylistE
                   />
                 </div>
               </div>
+            </div>
+
+            {/* Client Selection */}
+            <div>
+              <h3 className="text-sm font-medium text-[#111827] mb-4">Client Selection</h3>
+              
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-xs font-medium text-[#6B7280] mb-2">
+                    Select Client
+                  </label>
+                  <select
+                    value={selectedClient}
+                    onChange={(e) => handleClientChange(e.target.value)}
+                    className="w-full h-9 px-3 border border-[#E5E7EB] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#D9480F] focus:border-transparent"
+                  >
+                    <option value="">Select a client</option>
+                    {mockClients.map(client => (
+                      <option key={client.id} value={client.id}>{client.name}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Client Warning */}
+              {showClientWarning && (
+                <div className="mt-4 bg-[#FEF2F2] border border-[#FEE2E2] rounded-lg p-3">
+                  <div className="flex items-start gap-2">
+                    <AlertCircle className="w-4 h-4 text-[#DC2626] flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-xs font-medium text-[#DC2626] mb-1">Warning</p>
+                      <p className="text-xs text-[#DC2626]">Changing the client will clear the current timeline. Are you sure?</p>
+                      <div className="flex items-center gap-2 mt-2">
+                        <button
+                          onClick={confirmClientChange}
+                          className="px-3 h-7 bg-[#D9480F] text-white rounded-lg hover:bg-[#C43F0D] transition-colors text-sm font-medium"
+                        >
+                          Yes, Change Client
+                        </button>
+                        <button
+                          onClick={() => setShowClientWarning(false)}
+                          className="px-3 h-7 bg-[#F9FAFB] border border-[#E5E7EB] text-[#111827] rounded-lg hover:bg-[#F3F4F6] transition-colors text-sm font-medium"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Transition Options */}
@@ -488,94 +582,193 @@ export function PlaylistEditorRevised({ playlistId, onClose, onSave }: PlaylistE
           <div className="flex-1 bg-[#F9FAFB] overflow-hidden flex flex-col">
             <div className="bg-white border-b border-[#E5E7EB] px-6 py-4 flex-shrink-0">
               <div className="flex items-center justify-between gap-4">
-                <h3 className="text-sm font-medium text-[#111827]">Library</h3>
-                
-                <div className="flex items-center gap-3 flex-1 max-w-2xl">
-                  {/* Tab Filters */}
-                  <div className="flex gap-1 bg-[#F9FAFB] rounded-lg p-1">
-                    <button
-                      onClick={() => setMediaTypeFilter('all')}
-                      className={`px-3 h-7 rounded text-xs font-medium transition-colors ${
-                        mediaTypeFilter === 'all'
-                          ? 'bg-white text-[#111827] shadow-sm'
-                          : 'text-[#6B7280] hover:text-[#111827]'
-                      }`}
-                    >
-                      All Media
-                    </button>
-                    <button
-                      onClick={() => setMediaTypeFilter('image')}
-                      className={`px-3 h-7 rounded text-xs font-medium transition-colors ${
-                        mediaTypeFilter === 'image'
-                          ? 'bg-white text-[#111827] shadow-sm'
-                          : 'text-[#6B7280] hover:text-[#111827]'
-                      }`}
-                    >
-                      Images
-                    </button>
-                    <button
-                      onClick={() => setMediaTypeFilter('video')}
-                      className={`px-3 h-7 rounded text-xs font-medium transition-colors ${
-                        mediaTypeFilter === 'video'
-                          ? 'bg-white text-[#111827] shadow-sm'
-                          : 'text-[#6B7280] hover:text-[#111827]'
-                      }`}
-                    >
-                      Videos
-                    </button>
-                  </div>
-
-                  {/* Search */}
-                  <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
-                    <input
-                      type="text"
-                      placeholder="Search..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full h-8 pl-9 pr-3 border border-[#E5E7EB] rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-[#D9480F] focus:border-transparent"
-                    />
-                  </div>
+                <div className="flex items-center gap-3">
+                  <h3 className="text-sm font-medium text-[#111827]">Media Library</h3>
+                  
+                  {/* Client Badge (shown when client is selected) */}
+                  {selectedClient && (
+                    <div className="flex items-center gap-2 px-3 py-1.5 bg-[#F9FAFB] border border-[#E5E7EB] rounded-lg">
+                      <Users className="w-3.5 h-3.5 text-[#6B7280]" />
+                      <span className="text-xs font-medium text-[#111827]">
+                        {mockClients.find(c => c.id === selectedClient)?.name}
+                      </span>
+                      <button
+                        onClick={() => {
+                          if (timelineItems.length > 0) {
+                            setShowClientWarning(true);
+                          } else {
+                            setSelectedClient('');
+                          }
+                        }}
+                        className="text-xs text-[#D9480F] hover:underline font-medium"
+                      >
+                        Change
+                      </button>
+                    </div>
+                  )}
                 </div>
+                
+                {selectedClient && (
+                  <div className="flex items-center gap-3 flex-1 max-w-2xl">
+                    {/* Tab Filters */}
+                    <div className="flex gap-1 bg-[#F9FAFB] rounded-lg p-1">
+                      <button
+                        onClick={() => setMediaTypeFilter('all')}
+                        className={`px-3 h-7 rounded text-xs font-medium transition-colors ${
+                          mediaTypeFilter === 'all'
+                            ? 'bg-white text-[#111827] shadow-sm'
+                            : 'text-[#6B7280] hover:text-[#111827]'
+                        }`}
+                      >
+                        All Media
+                      </button>
+                      <button
+                        onClick={() => setMediaTypeFilter('image')}
+                        className={`px-3 h-7 rounded text-xs font-medium transition-colors ${
+                          mediaTypeFilter === 'image'
+                            ? 'bg-white text-[#111827] shadow-sm'
+                            : 'text-[#6B7280] hover:text-[#111827]'
+                        }`}
+                      >
+                        Images
+                      </button>
+                      <button
+                        onClick={() => setMediaTypeFilter('video')}
+                        className={`px-3 h-7 rounded text-xs font-medium transition-colors ${
+                          mediaTypeFilter === 'video'
+                            ? 'bg-white text-[#111827] shadow-sm'
+                            : 'text-[#6B7280] hover:text-[#111827]'
+                        }`}
+                      >
+                        Videos
+                      </button>
+                    </div>
 
-                <span className="text-xs text-[#6B7280]">{filteredMedia.length} items</span>
+                    {/* Search */}
+                    <div className="relative flex-1">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
+                      <input
+                        type="text"
+                        placeholder="Search media..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full h-8 pl-9 pr-3 border border-[#E5E7EB] rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-[#D9480F] focus:border-transparent"
+                      />
+                    </div>
+
+                    <span className="text-xs text-[#6B7280]">{filteredMediaLibrary.length} items</span>
+                  </div>
+                )}
               </div>
             </div>
 
             {/* Media Grid */}
-            <div className="flex-1 overflow-y-auto p-6">
-              <div className="grid grid-cols-6 gap-4">
-                {filteredMedia.map((item) => (
-                  <div
-                    key={item.id}
-                    draggable
-                    onDragStart={(e) => handleDragStartFromLibrary(item, e)}
-                    onDragEnd={handleDragEnd}
-                    className="bg-white border border-[#E5E7EB] rounded-lg p-3 cursor-grab hover:border-[#D9480F] hover:shadow-md transition-all active:cursor-grabbing"
-                  >
-                    <div className="w-full aspect-video bg-[#F9FAFB] rounded mb-2 flex items-center justify-center">
-                      {item.type === 'video' ? (
-                        <Video className="w-6 h-6 text-[#6B7280]" />
-                      ) : (
-                        <ImageIcon className="w-6 h-6 text-[#6B7280]" />
-                      )}
+            <div className="flex-1 overflow-y-auto">
+              {!selectedClient ? (
+                // No Client Selected State
+                <div className="flex items-center justify-center h-full p-6">
+                  <div className="text-center max-w-md">
+                    <div className="w-20 h-20 bg-[#F9FAFB] rounded-2xl flex items-center justify-center mx-auto mb-6">
+                      <Users className="w-10 h-10 text-[#D1D5DB]" />
                     </div>
-                    <p className="text-xs font-medium text-[#111827] truncate mb-1" title={item.name}>
-                      {item.name}
+                    <h3 className="text-[#111827] font-semibold mb-2">
+                      Select a Client First
+                    </h3>
+                    <p className="text-sm text-[#6B7280] mb-6">
+                      Choose which client this playlist is for to see their media library. Media is filtered by client to keep content organized.
                     </p>
-                    <div className="flex items-center justify-between text-xs text-[#9CA3AF]">
-                      <span>{item.fileSize}</span>
-                      <span>{item.duration}s</span>
+                    
+                    {/* Quick Client Selector */}
+                    <div className="space-y-3">
+                      <label className="block text-xs font-medium text-[#6B7280] text-left">
+                        Select Client
+                      </label>
+                      <select
+                        value={selectedClient}
+                        onChange={(e) => setSelectedClient(e.target.value)}
+                        className="w-full h-11 px-4 border-2 border-[#E5E7EB] rounded-xl text-sm text-[#111827] focus:outline-none focus:ring-2 focus:ring-[#D9480F] focus:border-transparent"
+                      >
+                        <option value="">Choose a client...</option>
+                        {mockClients.map(client => (
+                          <option key={client.id} value={client.id}>
+                            {client.name} • {client.industry}
+                          </option>
+                        ))}
+                      </select>
+                      <p className="text-xs text-[#9CA3AF] text-left">
+                        You can also select a client from the left panel
+                      </p>
                     </div>
                   </div>
-                ))}
-              </div>
-
-              {filteredMedia.length === 0 && (
-                <div className="flex items-center justify-center h-full">
-                  <div className="text-center">
-                    <Film className="w-12 h-12 text-[#9CA3AF] mx-auto mb-4" />
-                    <p className="text-sm text-[#6B7280]">No media found</p>
+                </div>
+              ) : filteredMediaLibrary.length === 0 ? (
+                // Client Selected but No Media Found
+                <div className="flex items-center justify-center h-full p-6">
+                  <div className="text-center max-w-md">
+                    <div className="w-20 h-20 bg-[#F9FAFB] rounded-2xl flex items-center justify-center mx-auto mb-6">
+                      <Film className="w-10 h-10 text-[#D1D5DB]" />
+                    </div>
+                    <h3 className="text-[#111827] font-semibold mb-2">
+                      No Media Found
+                    </h3>
+                    <p className="text-sm text-[#6B7280] mb-2">
+                      {searchQuery 
+                        ? `No media matching "${searchQuery}" for ${mockClients.find(c => c.id === selectedClient)?.name}`
+                        : `No media available for ${mockClients.find(c => c.id === selectedClient)?.name}`
+                      }
+                    </p>
+                    <p className="text-sm text-[#9CA3AF] mb-6">
+                      Upload media for this client or select a different client to see their media library.
+                    </p>
+                    
+                    <div className="flex items-center justify-center gap-3">
+                      <button className="px-4 h-10 bg-[#D9480F] text-white rounded-lg hover:bg-[#C43F0D] transition-colors flex items-center gap-2 text-sm font-medium">
+                        <Upload className="w-4 h-4" />
+                        Upload Media
+                      </button>
+                      <button
+                        onClick={() => {
+                          if (timelineItems.length > 0) {
+                            setShowClientWarning(true);
+                          } else {
+                            setSelectedClient('');
+                          }
+                        }}
+                        className="px-4 h-10 bg-white border border-[#E5E7EB] text-[#111827] rounded-lg hover:bg-[#F9FAFB] transition-colors text-sm font-medium"
+                      >
+                        Change Client
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                // Media Grid (Client selected and has media)
+                <div className="p-6">
+                  <div className="grid grid-cols-6 gap-4">
+                    {filteredMediaLibrary.map((item) => (
+                      <div
+                        key={item.id}
+                        draggable
+                        onDragStart={(e) => handleDragStartFromLibrary(item, e)}
+                        onDragEnd={handleDragEnd}
+                        className="bg-white border border-[#E5E7EB] rounded-lg p-3 cursor-grab hover:border-[#D9480F] hover:shadow-md transition-all active:cursor-grabbing"
+                      >
+                        <div className="w-full aspect-video bg-[#F9FAFB] rounded mb-2 flex items-center justify-center">
+                          {item.type === 'video' ? (
+                            <Video className="w-6 h-6 text-[#6B7280]" />
+                          ) : (
+                            <ImageIcon className="w-6 h-6 text-[#6B7280]" />
+                          )}
+                        </div>
+                        <p className="text-xs font-medium text-[#111827] truncate mb-1" title={item.name}>
+                          {item.name}
+                        </p>
+                        <div className="flex items-center justify-between text-xs text-[#9CA3AF]">
+                          <span>{item.fileSize}</span>
+                          <span>{item.duration}s</span>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}
