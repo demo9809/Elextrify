@@ -240,30 +240,30 @@ export function CampaignScheduler() {
 
   return (
     <div className="min-h-screen bg-[#F9FAFB]">
-      <div className="p-8">
+      <div className="p-4 sm:p-6 md:p-8">
         {/* Header */}
-        <div className="mb-8 flex items-start justify-between">
+        <div className="mb-6 md:mb-8 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
           <div>
             <h1 className="text-[#111827] mb-2">Campaign Scheduler</h1>
-            <p className="text-[#6B7280]">
+            <p className="text-[#6B7280] text-sm md:text-base">
               Manage your DOOH advertising campaigns with multiple ad groups
             </p>
           </div>
           <button
             onClick={() => setShowWizard(true)}
-            className="flex items-center gap-2 px-6 h-11 bg-[#D9480F] text-white rounded-lg hover:bg-[#C23D0D] transition-colors"
+            className="flex items-center justify-center gap-2 px-6 h-11 bg-[#D9480F] text-white rounded-lg hover:bg-[#C23D0D] transition-colors w-full sm:w-auto"
           >
             <Plus className="w-5 h-5" />
-            New Campaign
+            <span>New Campaign</span>
           </button>
         </div>
 
         {/* Filters and Search */}
         <div className="bg-white rounded-xl border border-[#E5E7EB] overflow-hidden">
           {/* Search and Actions Bar */}
-          <div className="px-6 py-4 border-b border-[#E5E7EB] flex items-center gap-4">
+          <div className="px-4 sm:px-6 py-3 md:py-4 border-b border-[#E5E7EB] flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
             {/* Search */}
-            <div className="flex-1 max-w-[320px]">
+            <div className="flex-1 w-full sm:max-w-[320px]">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
                 <input
@@ -276,67 +276,67 @@ export function CampaignScheduler() {
               </div>
             </div>
 
-            {/* Filters Button */}
-            <button 
-              onClick={() => setShowFilterModal(true)}
-              className={`relative flex items-center gap-2 h-10 px-4 bg-white border rounded-lg text-sm transition-colors ${
-                hasActiveFilters 
-                  ? 'border-[#D9480F] text-[#D9480F] bg-[#FEF2F2]' 
-                  : 'border-[#E5E7EB] text-[#111827] hover:bg-[#F9FAFB]'
-              }`}
-            >
-              <Filter className="w-4 h-4" />
-              Filters
-              {hasActiveFilters && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#D9480F] text-white text-xs rounded-full flex items-center justify-center">
-                  {filters.clients.length + filters.statuses.length + filters.venueTypes.length + (filters.dateRange ? 1 : 0)}
-                </span>
-              )}
-            </button>
-
-            <div className="flex-1"></div>
-
-            {/* Export Button */}
-            <button className="flex items-center gap-2 h-10 px-4 bg-white border border-[#E5E7EB] rounded-lg text-sm text-[#D9480F] hover:bg-[#FEF2F2] transition-colors">
-              <Download className="w-4 h-4" />
-              Export
-            </button>
-
-            {/* View Toggle */}
-            <div className="flex items-center gap-1 border border-[#E5E7EB] rounded-lg p-1">
+            <div className="flex items-center gap-2 sm:gap-4">
+              {/* Filters Button */}
               <button 
-                onClick={() => setViewType('list')}
-                className={`w-9 h-9 flex items-center justify-center rounded-md transition-colors ${
-                  viewType === 'list' 
-                    ? 'bg-[#FEF2F2] text-[#D9480F]' 
-                    : 'text-[#6B7280] hover:bg-[#F9FAFB]'
+                onClick={() => setShowFilterModal(true)}
+                className={`relative flex items-center justify-center gap-2 h-10 px-4 bg-white border rounded-lg text-sm transition-colors flex-1 sm:flex-none ${
+                  hasActiveFilters 
+                    ? 'border-[#D9480F] text-[#D9480F] bg-[#FEF2F2]' 
+                    : 'border-[#E5E7EB] text-[#111827] hover:bg-[#F9FAFB]'
                 }`}
-                title="List view"
               >
-                <LayoutGrid className="w-5 h-5" />
+                <Filter className="w-4 h-4" />
+                <span className="hidden sm:inline">Filters</span>
+                {hasActiveFilters && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#D9480F] text-white text-xs rounded-full flex items-center justify-center">
+                    {filters.clients.length + filters.statuses.length + filters.venueTypes.length + (filters.dateRange ? 1 : 0)}
+                  </span>
+                )}
               </button>
-              <button 
-                onClick={() => setViewType('grid')}
-                className={`w-9 h-9 flex items-center justify-center rounded-md transition-colors ${
-                  viewType === 'grid' 
-                    ? 'bg-[#FEF2F2] text-[#D9480F]' 
-                    : 'text-[#6B7280] hover:bg-[#F9FAFB]'
-                }`}
-                title="Grid view"
-              >
-                <Grid3x3 className="w-5 h-5" />
+
+              {/* Export Button - Hidden on mobile */}
+              <button className="hidden md:flex items-center gap-2 h-10 px-4 bg-white border border-[#E5E7EB] rounded-lg text-sm text-[#D9480F] hover:bg-[#FEF2F2] transition-colors">
+                <Download className="w-4 h-4" />
+                Export
               </button>
+
+              {/* View Toggle - Hidden on mobile */}
+              <div className="hidden md:flex items-center gap-1 border border-[#E5E7EB] rounded-lg p-1">
+                <button 
+                  onClick={() => setViewType('list')}
+                  className={`w-9 h-9 flex items-center justify-center rounded-md transition-colors ${
+                    viewType === 'list' 
+                      ? 'bg-[#FEF2F2] text-[#D9480F]' 
+                      : 'text-[#6B7280] hover:bg-[#F9FAFB]'
+                  }`}
+                  title="List view"
+                >
+                  <LayoutGrid className="w-5 h-5" />
+                </button>
+                <button 
+                  onClick={() => setViewType('grid')}
+                  className={`w-9 h-9 flex items-center justify-center rounded-md transition-colors ${
+                    viewType === 'grid' 
+                      ? 'bg-[#FEF2F2] text-[#D9480F]' 
+                      : 'text-[#6B7280] hover:bg-[#F9FAFB]'
+                  }`}
+                  title="Grid view"
+                >
+                  <Grid3x3 className="w-5 h-5" />
+                </button>
+              </div>
             </div>
           </div>
 
-          {/* Tabs */}
-          <div className="px-6 border-b border-[#E5E7EB] flex items-center gap-6">
+          {/* Tabs - Horizontal scroll on mobile */}
+          <div className="px-4 sm:px-6 border-b border-[#E5E7EB] flex items-center gap-4 sm:gap-6 overflow-x-auto no-scrollbar">
             {tabs.map(tab => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`
-                  relative py-4 text-sm font-medium transition-colors
+                  relative py-3 md:py-4 text-sm font-medium transition-colors whitespace-nowrap flex-shrink-0
                   ${activeTab === tab.id 
                     ? 'text-[#D9480F]' 
                     : 'text-[#6B7280] hover:text-[#111827]'
@@ -357,8 +357,8 @@ export function CampaignScheduler() {
           {/* Content - List or Grid View */}
           {viewType === 'list' ? (
             <>
-              {/* Table Header */}
-              <div className="px-6 py-3 bg-[#F9FAFB] border-b border-[#E5E7EB]">
+              {/* Table Header - Hidden on mobile */}
+              <div className="hidden md:block px-6 py-3 bg-[#F9FAFB] border-b border-[#E5E7EB]">
                 <div className="grid grid-cols-12 gap-4">
                   <div className="col-span-4 text-xs text-[#6B7280]">Campaign</div>
                   <div className="col-span-2 text-xs text-[#6B7280]">Status</div>
@@ -368,10 +368,10 @@ export function CampaignScheduler() {
                 </div>
               </div>
 
-              {/* Table Body */}
+              {/* Table Body / Mobile Cards */}
               <div className="divide-y divide-[#E5E7EB]">
                 {filteredCampaigns.length === 0 ? (
-                  <div className="px-6 py-12 text-center">
+                  <div className="px-4 sm:px-6 py-12 text-center">
                     <Calendar className="w-12 h-12 text-[#E5E7EB] mx-auto mb-3" />
                     <p className="text-[#6B7280] mb-2">No campaigns found</p>
                     <p className="text-sm text-[#9CA3AF]">
@@ -385,74 +385,141 @@ export function CampaignScheduler() {
                   </div>
                 ) : (
                   filteredCampaigns.map(campaign => (
-                    <div key={campaign.id} className="px-6 py-4 hover:bg-[#F9FAFB] transition-colors">
-                      <div className="grid grid-cols-12 gap-4 items-center">
-                        {/* Campaign Name */}
-                        <div className="col-span-4">
-                          <p className="text-sm text-[#111827] font-medium mb-1">
-                            {campaign.campaignName}
-                          </p>
-                          <p className="text-xs text-[#6B7280]">
-                            Client : {campaign.clientName}
-                          </p>
-                        </div>
+                    <div key={campaign.id}>
+                      {/* Desktop Table Row */}
+                      <div className="hidden md:block px-6 py-4 hover:bg-[#F9FAFB] transition-colors">
+                        <div className="grid grid-cols-12 gap-4 items-center">
+                          {/* Campaign Name */}
+                          <div className="col-span-4">
+                            <p className="text-sm text-[#111827] font-medium mb-1">
+                              {campaign.campaignName}
+                            </p>
+                            <p className="text-xs text-[#6B7280]">
+                              Client: {campaign.clientName}
+                            </p>
+                          </div>
 
-                        {/* Status */}
-                        <div className="col-span-2">
-                          <span className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(campaign.status)}`}>
+                          {/* Status */}
+                          <div className="col-span-2">
+                            <span className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(campaign.status)}`}>
+                              {getStatusLabel(campaign.status)}
+                            </span>
+                          </div>
+
+                          {/* Ad Groups */}
+                          <div className="col-span-3">
+                            <p className="text-sm text-[#111827] mb-1">
+                              {campaign.adGroupsCount} ad group{campaign.adGroupsCount !== 1 ? 's' : ''}
+                            </p>
+                            <p className="text-xs text-[#6B7280]">
+                              {campaign.adGroupsDescription}
+                            </p>
+                          </div>
+
+                          {/* Impressions */}
+                          <div className="col-span-2">
+                            <p className="text-sm text-[#111827]">
+                              {campaign.impressions?.toLocaleString() || '—'}
+                            </p>
+                          </div>
+
+                          {/* Actions */}
+                          <div className="col-span-1 flex items-center justify-end gap-1">
+                            <button
+                              className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#F0F9FF] text-[#6B7280] hover:text-[#D9480F] transition-colors"
+                              title={campaign.status === 'active' ? 'Pause' : 'Resume'}
+                              onClick={() => handleTogglePause(campaign.id)}
+                            >
+                              {campaign.status === 'active' ? (
+                                <Pause className="w-4 h-4" />
+                              ) : (
+                                <Play className="w-4 h-4" />
+                              )}
+                            </button>
+                            <button
+                              className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#F0F9FF] text-[#6B7280] hover:text-[#D9480F] transition-colors"
+                              title="Edit"
+                              onClick={() => handleEditCampaign(campaign)}
+                            >
+                              <Edit className="w-4 h-4" />
+                            </button>
+                            <button
+                              className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#FEE2E2] text-[#6B7280] hover:text-[#DC2626] transition-colors"
+                              title="Delete"
+                              onClick={() => handleDeleteCampaign(campaign.id)}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                            <button
+                              className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#F0F9FF] text-[#6B7280] transition-colors"
+                              title="More"
+                            >
+                              <MoreVertical className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Mobile Card */}
+                      <div className="md:hidden px-4 py-4">
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex-1 min-w-0">
+                            <h4 className="text-sm font-medium text-[#111827] mb-1">
+                              {campaign.campaignName}
+                            </h4>
+                            <p className="text-xs text-[#6B7280]">
+                              {campaign.clientName}
+                            </p>
+                          </div>
+                          <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ml-2 flex-shrink-0 ${getStatusColor(campaign.status)}`}>
                             {getStatusLabel(campaign.status)}
                           </span>
                         </div>
 
-                        {/* Ad Groups */}
-                        <div className="col-span-3">
-                          <p className="text-sm text-[#111827] mb-1">
-                            {campaign.adGroupsCount} ad group{campaign.adGroupsCount !== 1 ? 's' : ''}
-                          </p>
-                          <p className="text-xs text-[#6B7280]">
-                            {campaign.adGroupsDescription}
-                          </p>
+                        <div className="space-y-2 mb-3 pb-3 border-b border-[#E5E7EB]">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-[#6B7280]">Ad Groups</span>
+                            <span className="text-sm text-[#111827]">
+                              {campaign.adGroupsCount} group{campaign.adGroupsCount !== 1 ? 's' : ''}
+                            </span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-[#6B7280]">Impressions</span>
+                            <span className="text-sm text-[#111827]">
+                              {campaign.impressions?.toLocaleString() || '—'}
+                            </span>
+                          </div>
                         </div>
 
-                        {/* Impressions */}
-                        <div className="col-span-2">
-                          <p className="text-sm text-[#111827]">
-                            {campaign.impressions?.toLocaleString() || '—'}
-                          </p>
-                        </div>
-
-                        {/* Actions */}
-                        <div className="col-span-1 flex items-center justify-end gap-1">
+                        <div className="flex items-center gap-2">
                           <button
-                            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#F0F9FF] text-[#6B7280] hover:text-[#D9480F] transition-colors"
-                            title={campaign.status === 'active' ? 'Pause' : 'Resume'}
                             onClick={() => handleTogglePause(campaign.id)}
+                            className="flex-1 flex items-center justify-center gap-2 h-9 px-3 bg-white border border-[#E5E7EB] rounded-lg text-xs text-[#6B7280] hover:text-[#D9480F] hover:border-[#D9480F] transition-colors"
                           >
                             {campaign.status === 'active' ? (
-                              <Pause className="w-4 h-4" />
+                              <>
+                                <Pause className="w-4 h-4" />
+                                <span>Pause</span>
+                              </>
                             ) : (
-                              <Play className="w-4 h-4" />
+                              <>
+                                <Play className="w-4 h-4" />
+                                <span>Resume</span>
+                              </>
                             )}
                           </button>
                           <button
-                            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#F0F9FF] text-[#6B7280] hover:text-[#D9480F] transition-colors"
-                            title="Edit"
                             onClick={() => handleEditCampaign(campaign)}
+                            className="flex-1 flex items-center justify-center gap-2 h-9 px-3 bg-[#D9480F] text-white rounded-lg text-xs hover:bg-[#C23D0D] transition-colors"
                           >
                             <Edit className="w-4 h-4" />
+                            <span>Edit</span>
                           </button>
                           <button
-                            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#FEE2E2] text-[#6B7280] hover:text-[#DC2626] transition-colors"
-                            title="Delete"
                             onClick={() => handleDeleteCampaign(campaign.id)}
+                            className="w-9 h-9 flex items-center justify-center rounded-lg bg-white border border-[#E5E7EB] text-[#DC2626] hover:bg-[#FEE2E2] transition-colors"
                           >
                             <Trash2 className="w-4 h-4" />
-                          </button>
-                          <button
-                            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#F0F9FF] text-[#6B7280] transition-colors"
-                            title="More"
-                          >
-                            <MoreVertical className="w-4 h-4" />
                           </button>
                         </div>
                       </div>
@@ -463,7 +530,7 @@ export function CampaignScheduler() {
             </>
           ) : (
             /* Grid View */
-            <div className="p-6">
+            <div className="p-4 sm:p-6">
               {filteredCampaigns.length === 0 ? (
                 <div className="py-12 text-center">
                   <Calendar className="w-12 h-12 text-[#E5E7EB] mx-auto mb-3" />
@@ -478,11 +545,11 @@ export function CampaignScheduler() {
                   </p>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                   {filteredCampaigns.map(campaign => (
                     <div 
                       key={campaign.id} 
-                      className="bg-white border border-[#E5E7EB] rounded-xl p-6 hover:shadow-lg transition-shadow"
+                      className="bg-white border border-[#E5E7EB] rounded-xl p-4 md:p-6 hover:shadow-lg transition-shadow"
                     >
                       {/* Header */}
                       <div className="flex items-start justify-between mb-4">

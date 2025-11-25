@@ -110,24 +110,24 @@ export function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#F9FAFB] via-white to-[#FFF7ED]">
-      <div className="max-w-7xl mx-auto px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-6 sm:py-8 md:py-12">
         {/* Hero Section */}
-        <div className="relative mb-12">
-          {/* Background Decoration */}
-          <div className="absolute -top-20 -right-20 w-96 h-96 bg-gradient-to-br from-[#D9480F]/10 to-[#F97316]/5 rounded-full blur-3xl" />
-          <div className="absolute -bottom-10 -left-10 w-80 h-80 bg-gradient-to-br from-[#3B82F6]/10 to-[#8B5CF6]/5 rounded-full blur-3xl" />
+        <div className="relative mb-6 sm:mb-8 md:mb-12">
+          {/* Background Decoration - Hide on mobile */}
+          <div className="hidden lg:block absolute -top-20 -right-20 w-96 h-96 bg-gradient-to-br from-[#D9480F]/10 to-[#F97316]/5 rounded-full blur-3xl" />
+          <div className="hidden lg:block absolute -bottom-10 -left-10 w-80 h-80 bg-gradient-to-br from-[#3B82F6]/10 to-[#8B5CF6]/5 rounded-full blur-3xl" />
           
-          <div className="relative bg-white rounded-3xl border border-[#E5E7EB] overflow-hidden">
+          <div className="relative bg-white rounded-2xl md:rounded-3xl border border-[#E5E7EB] overflow-hidden">
             {/* Trial Banner */}
-            <div className="bg-gradient-to-r from-[#FEF2F2] to-[#FFF7ED] border-b border-[#FEE2E2] px-8 py-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[#D9480F] to-[#F97316] rounded-xl flex items-center justify-center">
-                    <Sparkles className="w-6 h-6 text-white" />
+            <div className="bg-gradient-to-r from-[#FEF2F2] to-[#FFF7ED] border-b border-[#FEE2E2] px-4 sm:px-6 md:px-8 py-3 md:py-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-[#D9480F] to-[#F97316] rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                   </div>
                   <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <p className="text-sm font-semibold text-[#111827]">You're on the Free Trial</p>
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
+                      <p className="text-xs sm:text-sm font-semibold text-[#111827]">You're on the Free Trial</p>
                       <span className="px-2 py-0.5 bg-[#D9480F] text-white text-xs font-medium rounded-full">
                         30 days remaining
                       </span>
@@ -137,21 +137,23 @@ export function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <button className="px-5 h-10 bg-[#D9480F] text-white rounded-lg hover:bg-[#C43F0D] transition-colors font-medium text-sm flex items-center gap-2">
-                    Upgrade Your Plan
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <button className="flex-1 sm:flex-none px-4 sm:px-5 h-10 bg-[#D9480F] text-white rounded-lg hover:bg-[#C43F0D] transition-colors font-medium text-sm flex items-center justify-center gap-2">
+                    <span className="hidden sm:inline">Upgrade Your Plan</span>
+                    <span className="sm:hidden">Upgrade</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
-                  <button className="px-5 h-10 bg-white border border-[#E5E7EB] text-[#111827] rounded-lg hover:bg-[#F9FAFB] transition-colors font-medium text-sm">
-                    Compare Plans
+                  <button className="flex-1 sm:flex-none px-4 sm:px-5 h-10 bg-white border border-[#E5E7EB] text-[#111827] rounded-lg hover:bg-[#F9FAFB] transition-colors font-medium text-sm">
+                    <span className="hidden sm:inline">Compare Plans</span>
+                    <span className="sm:hidden">Plans</span>
                   </button>
                 </div>
               </div>
             </div>
 
             {/* Hero Content */}
-            <div className="px-8 py-12">
-              <div className="grid grid-cols-2 gap-12">
+            <div className="px-4 sm:px-6 md:px-8 py-6 sm:py-8 md:py-12">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
                 {/* Left Column */}
                 <div>
                   <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#FFF7ED] border border-[#FDBA74] rounded-full mb-6">
@@ -244,15 +246,15 @@ export function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
         </div>
 
         {/* Quick Actions Grid */}
-        <div className="mb-12">
-          <div className="flex items-center justify-between mb-6">
+        <div className="mb-6 sm:mb-8 md:mb-12">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6">
             <div>
-              <h2 className="text-2xl font-semibold text-[#111827] mb-2">Quick Start Actions</h2>
+              <h2 className="text-xl sm:text-2xl font-semibold text-[#111827] mb-1 sm:mb-2">Quick Start Actions</h2>
               <p className="text-sm text-[#6B7280]">Complete these steps to launch your first campaign</p>
             </div>
           </div>
 
-          <div className="grid grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-4">
             {quickActions.map((action, index) => {
               const isCompleted = completedSteps.includes(action.id);
               const Icon = action.icon;
@@ -266,43 +268,43 @@ export function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
                     }
                     onNavigate(action.path);
                   }}
-                  className="group relative bg-white border-2 border-[#E5E7EB] rounded-2xl p-6 hover:border-[#D9480F] hover:shadow-xl transition-all duration-300 text-left overflow-hidden"
+                  className="group relative bg-white border-2 border-[#E5E7EB] rounded-xl md:rounded-2xl p-4 sm:p-6 hover:border-[#D9480F] hover:shadow-xl transition-all duration-300 text-left overflow-hidden"
                 >
                   {/* Background Gradient */}
                   <div className={`absolute inset-0 bg-gradient-to-br ${action.color} opacity-0 group-hover:opacity-5 transition-opacity`} />
                   
                   {/* Popular Badge */}
                   {action.popular && (
-                    <div className="absolute top-3 right-3 px-2 py-1 bg-[#D9480F] text-white text-xs font-medium rounded-full flex items-center gap-1">
+                    <div className="absolute top-2 sm:top-3 right-2 sm:right-3 px-2 py-1 bg-[#D9480F] text-white text-xs font-medium rounded-full flex items-center gap-1">
                       <TrendingUp className="w-3 h-3" />
-                      Popular
+                      <span className="hidden sm:inline">Popular</span>
                     </div>
                   )}
 
                   {/* Completion Badge */}
                   {isCompleted && (
-                    <div className="absolute top-3 right-3 w-6 h-6 bg-[#10B981] rounded-full flex items-center justify-center">
+                    <div className="absolute top-2 sm:top-3 right-2 sm:right-3 w-6 h-6 bg-[#10B981] rounded-full flex items-center justify-center">
                       <CheckCircle2 className="w-4 h-4 text-white" />
                     </div>
                   )}
 
                   {/* Step Number */}
-                  <div className="w-8 h-8 bg-[#F9FAFB] rounded-lg flex items-center justify-center mb-4 group-hover:bg-[#FFF7ED] transition-colors">
-                    <span className="text-sm font-bold text-[#6B7280] group-hover:text-[#D9480F]">
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 bg-[#F9FAFB] rounded-lg flex items-center justify-center mb-3 sm:mb-4 group-hover:bg-[#FFF7ED] transition-colors">
+                    <span className="text-xs sm:text-sm font-bold text-[#6B7280] group-hover:text-[#D9480F]">
                       {index + 1}
                     </span>
                   </div>
 
                   {/* Icon */}
-                  <div className={`w-12 h-12 bg-gradient-to-br ${action.color} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                    <Icon className="w-6 h-6 text-white" />
+                  <div className={`w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br ${action.color} rounded-xl flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform`}>
+                    <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                   </div>
 
                   {/* Content */}
-                  <h3 className="font-semibold text-[#111827] mb-2 group-hover:text-[#D9480F] transition-colors">
+                  <h3 className="text-sm sm:text-base font-semibold text-[#111827] mb-1 sm:mb-2 group-hover:text-[#D9480F] transition-colors">
                     {action.title}
                   </h3>
-                  <p className="text-xs text-[#6B7280] mb-4">
+                  <p className="text-xs text-[#6B7280] mb-3 sm:mb-4">
                     {action.description}
                   </p>
 
@@ -326,20 +328,20 @@ export function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
         </div>
 
         {/* Learning Resources */}
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
           {learningResources.map((resource, index) => {
             const Icon = resource.icon;
             return (
               <button
                 key={index}
-                className="bg-white border border-[#E5E7EB] rounded-2xl p-6 hover:border-[#D9480F] hover:shadow-lg transition-all text-left group"
+                className="bg-white border border-[#E5E7EB] rounded-xl md:rounded-2xl p-4 sm:p-6 hover:border-[#D9480F] hover:shadow-lg transition-all text-left group"
               >
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-[#F9FAFB] rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-[#FFF7ED] transition-colors">
-                    <Icon className="w-6 h-6 text-[#6B7280] group-hover:text-[#D9480F] transition-colors" />
+                <div className="flex items-start gap-3 sm:gap-4">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#F9FAFB] rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-[#FFF7ED] transition-colors">
+                    <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-[#6B7280] group-hover:text-[#D9480F] transition-colors" />
                   </div>
-                  <div className="flex-1">
-                    <h4 className="font-semibold text-[#111827] mb-1 group-hover:text-[#D9480F] transition-colors">
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-sm sm:text-base font-semibold text-[#111827] mb-1 group-hover:text-[#D9480F] transition-colors">
                       {resource.title}
                     </h4>
                     <p className="text-xs text-[#6B7280] mb-2">

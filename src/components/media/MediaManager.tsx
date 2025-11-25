@@ -230,93 +230,93 @@ export function MediaManager() {
 
   return (
     <div className="min-h-screen bg-[#F9FAFB]">
-      <div className="p-8">
+      <div className="p-4 sm:p-6 md:p-8">
         {/* Header */}
-        <div className="mb-8 flex items-start justify-between">
+        <div className="mb-6 md:mb-8 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
           <div>
             <h1 className="text-[#111827] mb-2">Media Library</h1>
-            <p className="text-[#6B7280]">
+            <p className="text-[#6B7280] text-sm md:text-base">
               Upload and manage images, videos, audio, and HTML5 content
             </p>
           </div>
           <button
             onClick={() => setShowUpload(true)}
-            className="flex items-center gap-2 px-6 h-11 bg-[#D9480F] text-white rounded-lg hover:bg-[#C23D0D] transition-colors"
+            className="flex items-center justify-center gap-2 px-6 h-11 bg-[#D9480F] text-white rounded-lg hover:bg-[#C23D0D] transition-colors w-full sm:w-auto"
           >
             <Upload className="w-5 h-5" />
-            Upload Media
+            <span>Upload Media</span>
           </button>
         </div>
 
-        {/* Insights Cards */}
-        <div className="grid grid-cols-6 gap-6 mb-8">
-          <div className="bg-white rounded-xl border border-[#E5E7EB] p-6 h-[120px] flex flex-col justify-between">
+        {/* Insights Cards - Responsive Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 md:gap-6 mb-6 md:mb-8">
+          <div className="bg-white rounded-xl border border-[#E5E7EB] p-4 md:p-6 h-[100px] md:h-[120px] flex flex-col justify-between">
             <div className="flex items-center justify-between mb-2">
-              <p className="text-sm text-[#6B7280]">Total Media</p>
-              <div className="w-8 h-8 bg-[#F9FAFB] rounded-lg flex items-center justify-center">
-                <FileText className="w-4 h-4 text-[#6B7280]" />
+              <p className="text-xs md:text-sm text-[#6B7280]">Total Media</p>
+              <div className="w-7 h-7 md:w-8 md:h-8 bg-[#F9FAFB] rounded-lg flex items-center justify-center">
+                <FileText className="w-3.5 h-3.5 md:w-4 md:h-4 text-[#6B7280]" />
               </div>
             </div>
-            <p className="text-2xl font-semibold text-[#111827]">{stats.total}</p>
+            <p className="text-xl md:text-2xl font-semibold text-[#111827]">{stats.total}</p>
           </div>
 
-          <div className="bg-white rounded-xl border border-[#E5E7EB] p-6 h-[120px] flex flex-col justify-between">
+          <div className="bg-white rounded-xl border border-[#E5E7EB] p-4 md:p-6 h-[100px] md:h-[120px] flex flex-col justify-between">
             <div className="flex items-center justify-between mb-2">
-              <p className="text-sm text-[#6B7280]">Images</p>
-              <div className="w-8 h-8 bg-[#F3F0FF] rounded-lg flex items-center justify-center">
-                <ImageIcon className="w-4 h-4 text-[#8B5CF6]" />
+              <p className="text-xs md:text-sm text-[#6B7280]">Images</p>
+              <div className="w-7 h-7 md:w-8 md:h-8 bg-[#F3F0FF] rounded-lg flex items-center justify-center">
+                <ImageIcon className="w-3.5 h-3.5 md:w-4 md:h-4 text-[#8B5CF6]" />
               </div>
             </div>
-            <p className="text-2xl font-semibold text-[#111827]">{stats.images}</p>
+            <p className="text-xl md:text-2xl font-semibold text-[#111827]">{stats.images}</p>
           </div>
 
-          <div className="bg-white rounded-xl border border-[#E5E7EB] p-6 h-[120px] flex flex-col justify-between">
+          <div className="bg-white rounded-xl border border-[#E5E7EB] p-4 md:p-6 h-[100px] md:h-[120px] flex flex-col justify-between">
             <div className="flex items-center justify-between mb-2">
-              <p className="text-sm text-[#6B7280]">Videos</p>
-              <div className="w-8 h-8 bg-[#EFF6FF] rounded-lg flex items-center justify-center">
-                <Video className="w-4 h-4 text-[#3B82F6]" />
+              <p className="text-xs md:text-sm text-[#6B7280]">Videos</p>
+              <div className="w-7 h-7 md:w-8 md:h-8 bg-[#EFF6FF] rounded-lg flex items-center justify-center">
+                <Video className="w-3.5 h-3.5 md:w-4 md:h-4 text-[#3B82F6]" />
               </div>
             </div>
-            <p className="text-2xl font-semibold text-[#111827]">{stats.videos}</p>
+            <p className="text-xl md:text-2xl font-semibold text-[#111827]">{stats.videos}</p>
           </div>
 
-          <div className="bg-white rounded-xl border border-[#E5E7EB] p-6 h-[120px] flex flex-col justify-between">
+          <div className="bg-white rounded-xl border border-[#E5E7EB] p-4 md:p-6 h-[100px] md:h-[120px] flex flex-col justify-between">
             <div className="flex items-center justify-between mb-2">
-              <p className="text-sm text-[#6B7280]">Audio</p>
-              <div className="w-8 h-8 bg-[#FDF2F8] rounded-lg flex items-center justify-center">
-                <Music className="w-4 h-4 text-[#EC4899]" />
+              <p className="text-xs md:text-sm text-[#6B7280]">Audio</p>
+              <div className="w-7 h-7 md:w-8 md:h-8 bg-[#FDF2F8] rounded-lg flex items-center justify-center">
+                <Music className="w-3.5 h-3.5 md:w-4 md:h-4 text-[#EC4899]" />
               </div>
             </div>
-            <p className="text-2xl font-semibold text-[#111827]">{stats.audio}</p>
+            <p className="text-xl md:text-2xl font-semibold text-[#111827]">{stats.audio}</p>
           </div>
 
-          <div className="bg-white rounded-xl border border-[#E5E7EB] p-6 h-[120px] flex flex-col justify-between">
+          <div className="bg-white rounded-xl border border-[#E5E7EB] p-4 md:p-6 h-[100px] md:h-[120px] flex flex-col justify-between">
             <div className="flex items-center justify-between mb-2">
-              <p className="text-sm text-[#6B7280]">HTML5</p>
-              <div className="w-8 h-8 bg-[#ECFDF5] rounded-lg flex items-center justify-center">
-                <Globe className="w-4 h-4 text-[#10B981]" />
+              <p className="text-xs md:text-sm text-[#6B7280]">HTML5</p>
+              <div className="w-7 h-7 md:w-8 md:h-8 bg-[#ECFDF5] rounded-lg flex items-center justify-center">
+                <Globe className="w-3.5 h-3.5 md:w-4 md:h-4 text-[#10B981]" />
               </div>
             </div>
-            <p className="text-2xl font-semibold text-[#111827]">{stats.html5}</p>
+            <p className="text-xl md:text-2xl font-semibold text-[#111827]">{stats.html5}</p>
           </div>
 
-          <div className="bg-white rounded-xl border border-[#E5E7EB] p-6 h-[120px] flex flex-col justify-between">
+          <div className="bg-white rounded-xl border border-[#E5E7EB] p-4 md:p-6 h-[100px] md:h-[120px] flex flex-col justify-between">
             <div className="flex items-center justify-between mb-2">
-              <p className="text-sm text-[#6B7280]">Storage Used</p>
-              <div className="w-8 h-8 bg-[#F9FAFB] rounded-lg flex items-center justify-center">
-                <Download className="w-4 h-4 text-[#6B7280]" />
+              <p className="text-xs md:text-sm text-[#6B7280]">Storage Used</p>
+              <div className="w-7 h-7 md:w-8 md:h-8 bg-[#F9FAFB] rounded-lg flex items-center justify-center">
+                <Download className="w-3.5 h-3.5 md:w-4 md:h-4 text-[#6B7280]" />
               </div>
             </div>
-            <p className="text-2xl font-semibold text-[#111827]">{stats.storage}</p>
+            <p className="text-xl md:text-2xl font-semibold text-[#111827]">{stats.storage}</p>
           </div>
         </div>
 
         {/* Main Container */}
         <div className="bg-white rounded-xl border border-[#E5E7EB] overflow-hidden">
           {/* Search and Actions Bar */}
-          <div className="px-6 py-4 border-b border-[#E5E7EB] flex items-center gap-4">
+          <div className="px-4 sm:px-6 py-3 md:py-4 border-b border-[#E5E7EB] flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
             {/* Search */}
-            <div className="flex-1 max-w-[320px]">
+            <div className="flex-1 w-full sm:max-w-[320px]">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
                 <input
@@ -429,7 +429,7 @@ export function MediaManager() {
           </div>
 
           {/* Tabs - Media Type Filter */}
-          <div className="px-6 py-4 border-b border-[#E5E7EB] flex items-center gap-2">
+          <div className="px-4 sm:px-6 py-3 md:py-4 border-b border-[#E5E7EB] flex items-center gap-2">
             {tabs.map(tab => (
               <button
                 key={tab.id}
@@ -449,7 +449,7 @@ export function MediaManager() {
 
           {/* Filter Panel */}
           {showFilters && (
-            <div className="px-6 py-4 border-b border-[#E5E7EB] bg-[#F9FAFB]">
+            <div className="px-4 sm:px-6 py-3 md:py-4 border-b border-[#E5E7EB] bg-[#F9FAFB]">
               <div className="grid grid-cols-2 gap-6">
                 {/* Status Filter */}
                 <div>
@@ -535,8 +535,8 @@ export function MediaManager() {
 
           {/* Content */}
           {viewMode === 'grid' ? (
-            <div className="p-6">
-              <div className="grid grid-cols-4 gap-6">
+            <div className="p-4 sm:p-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
                 {filteredMedia.map(item => (
                   <MediaGridCard
                     key={item.id}
@@ -567,7 +567,7 @@ export function MediaManager() {
           ) : (
             <>
               {/* Table Header */}
-              <div className="px-6 py-3 bg-[#F9FAFB] border-b border-[#E5E7EB]">
+              <div className="px-4 sm:px-6 py-3 bg-[#F9FAFB] border-b border-[#E5E7EB]">
                 <div className="grid grid-cols-12 gap-4">
                   <div className="col-span-1 flex items-center">
                     <input
@@ -588,7 +588,7 @@ export function MediaManager() {
               {/* Table Body */}
               <div className="divide-y divide-[#E5E7EB]">
                 {filteredMedia.length === 0 ? (
-                  <div className="px-6 py-12 text-center">
+                  <div className="px-4 sm:px-6 py-12 text-center">
                     <FileText className="w-12 h-12 text-[#E5E7EB] mx-auto mb-3" />
                     <p className="text-[#6B7280] mb-2">No media found</p>
                     <p className="text-sm text-[#9CA3AF]">
@@ -781,7 +781,7 @@ function MediaTableRow({
   };
 
   return (
-    <div className="px-6 py-4 hover:bg-[#F9FAFB] cursor-pointer transition-colors" onClick={onClick}>
+    <div className="px-4 sm:px-6 py-4 hover:bg-[#F9FAFB] cursor-pointer transition-colors" onClick={onClick}>
       <div className="grid grid-cols-12 gap-4">
         <div className="col-span-1 flex items-center" onClick={(e) => e.stopPropagation()}>
           <input

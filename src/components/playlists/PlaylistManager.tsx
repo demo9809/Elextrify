@@ -209,65 +209,65 @@ export function PlaylistManager({ onClose }: PlaylistManagerProps) {
   return (
     <div className="min-h-screen bg-[#F9FAFB]">
       {/* Header */}
-      <div className="bg-white border-b border-[#E5E7EB] px-8 py-6">
-        <div className="flex items-center justify-between mb-6">
+      <div className="bg-white border-b border-[#E5E7EB] px-4 sm:px-6 md:px-8 py-4 sm:py-5 md:py-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 gap-4">
           <div>
             <h1 className="text-[#111827] mb-2">Playlists</h1>
-            <p className="text-[#6B7280]">Manage content playlists for your campaigns</p>
+            <p className="text-[#6B7280] text-sm md:text-base">Manage content playlists for your campaigns</p>
           </div>
           <button
             onClick={handleCreatePlaylist}
-            className="px-6 h-11 bg-[#D9480F] text-white rounded-lg hover:bg-[#C43F0D] transition-colors flex items-center gap-2 font-medium"
+            className="w-full sm:w-auto px-6 h-11 bg-[#D9480F] text-white rounded-lg hover:bg-[#C43F0D] transition-colors flex items-center justify-center gap-2 font-medium"
           >
             <Plus className="w-5 h-5" />
             Create Playlist
           </button>
         </div>
 
-        {/* Statistics Cards */}
-        <div className="grid grid-cols-4 gap-6">
+        {/* Statistics Cards - Responsive Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
           {/* Total Playlists */}
-          <div className="bg-white border border-[#E5E7EB] rounded-xl p-4">
+          <div className="bg-white border border-[#E5E7EB] rounded-xl p-3 sm:p-4">
             <div className="flex items-center gap-2 mb-2">
-              <div className="w-8 h-8 bg-[#F3F4F6] rounded-lg flex items-center justify-center">
-                <ListVideo className="w-4 h-4 text-[#6B7280]" />
+              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-[#F3F4F6] rounded-lg flex items-center justify-center">
+                <ListVideo className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#6B7280]" />
               </div>
-              <p className="text-xs text-[#6B7280]">Total Playlists</p>
+              <p className="text-xs text-[#6B7280]">Total</p>
             </div>
-            <p className="text-[#111827] text-2xl font-semibold">{totalPlaylists}</p>
+            <p className="text-[#111827] text-xl sm:text-2xl font-semibold">{totalPlaylists}</p>
           </div>
 
           {/* Active Playlists */}
-          <div className="bg-white border border-[#E5E7EB] rounded-xl p-4">
+          <div className="bg-white border border-[#E5E7EB] rounded-xl p-3 sm:p-4">
             <div className="flex items-center gap-2 mb-2">
-              <div className="w-8 h-8 bg-[#DCFCE7] rounded-lg flex items-center justify-center">
-                <Play className="w-4 h-4 text-[#16A34A]" />
+              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-[#DCFCE7] rounded-lg flex items-center justify-center">
+                <Play className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#16A34A]" />
               </div>
               <p className="text-xs text-[#6B7280]">Active</p>
             </div>
-            <p className="text-[#111827] text-2xl font-semibold">{activePlaylists}</p>
+            <p className="text-[#111827] text-xl sm:text-2xl font-semibold">{activePlaylists}</p>
           </div>
 
           {/* Total Duration */}
-          <div className="bg-white border border-[#E5E7EB] rounded-xl p-4">
+          <div className="bg-white border border-[#E5E7EB] rounded-xl p-3 sm:p-4">
             <div className="flex items-center gap-2 mb-2">
-              <div className="w-8 h-8 bg-[#FFF7ED] rounded-lg flex items-center justify-center">
-                <Clock className="w-4 h-4 text-[#D9480F]" />
+              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-[#FFF7ED] rounded-lg flex items-center justify-center">
+                <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#D9480F]" />
               </div>
-              <p className="text-xs text-[#6B7280]">Total Duration</p>
+              <p className="text-xs text-[#6B7280]">Duration</p>
             </div>
-            <p className="text-[#111827] text-2xl font-semibold">{formatDuration(totalDuration)}</p>
+            <p className="text-[#111827] text-xl sm:text-2xl font-semibold">{formatDuration(totalDuration)}</p>
           </div>
 
           {/* Total Items */}
-          <div className="bg-white border border-[#E5E7EB] rounded-xl p-4">
+          <div className="bg-white border border-[#E5E7EB] rounded-xl p-3 sm:p-4">
             <div className="flex items-center gap-2 mb-2">
-              <div className="w-8 h-8 bg-[#F3E8FF] rounded-lg flex items-center justify-center">
-                <Film className="w-4 h-4 text-[#9333EA]" />
+              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-[#F3E8FF] rounded-lg flex items-center justify-center">
+                <Film className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#9333EA]" />
               </div>
-              <p className="text-xs text-[#6B7280]">Total Items</p>
+              <p className="text-xs text-[#6B7280]">Items</p>
             </div>
-            <p className="text-[#111827] text-2xl font-semibold">{totalItems}</p>
+            <p className="text-[#111827] text-xl sm:text-2xl font-semibold">{totalItems}</p>
           </div>
         </div>
       </div>

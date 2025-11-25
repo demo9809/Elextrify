@@ -101,11 +101,11 @@ export function DeviceRegistration({ onBack, onDevicePaired }: DeviceRegistratio
 
   return (
     <div className="min-h-screen bg-[#F9FAFB]">
-      <div className="p-8">
+      <div className="p-4 sm:p-6 md:p-8">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-6 md:mb-8">
           <h1 className="text-[#111827] mb-2">Device Registration</h1>
-          <p className="text-[#6B7280]">
+          <p className="text-[#6B7280] text-sm md:text-base">
             Pair unverified devices that have pinged the API
           </p>
         </div>
@@ -113,12 +113,12 @@ export function DeviceRegistration({ onBack, onDevicePaired }: DeviceRegistratio
         {/* Unverified Devices */}
         <div className="bg-white rounded-xl border border-[#E5E7EB] overflow-visible">
           {/* Header */}
-          <div className="px-6 py-4 border-b border-[#E5E7EB]">
+          <div className="px-4 sm:px-6 py-3 md:py-4 border-b border-[#E5E7EB]">
             <h3 className="text-[#111827]">Unverified Devices ({devices.length})</h3>
           </div>
 
           {devices.length === 0 ? (
-            <div className="px-6 py-12 text-center">
+            <div className="px-4 sm:px-6 py-12 text-center">
               <CheckCircle className="w-12 h-12 text-[#16A34A] mx-auto mb-3" />
               <p className="text-[#111827] font-medium mb-2">All devices are paired</p>
               <p className="text-sm text-[#9CA3AF]">
@@ -127,8 +127,8 @@ export function DeviceRegistration({ onBack, onDevicePaired }: DeviceRegistratio
             </div>
           ) : (
             <>
-              {/* Table Header */}
-              <div className="px-6 py-3 bg-[#F9FAFB] border-b border-[#E5E7EB]">
+              {/* Table Header - Desktop only */}
+              <div className="hidden md:block px-6 py-3 bg-[#F9FAFB] border-b border-[#E5E7EB]">
                 <div className="grid grid-cols-12 gap-4">
                   <div className="col-span-3 text-xs text-[#6B7280]">Device ID</div>
                   <div className="col-span-2 text-xs text-[#6B7280]">Model</div>
@@ -139,64 +139,125 @@ export function DeviceRegistration({ onBack, onDevicePaired }: DeviceRegistratio
                 </div>
               </div>
 
-              {/* Table Body */}
+              {/* Table Body / Mobile Cards */}
               <div className="divide-y divide-[#E5E7EB]">
                 {devices.map((device, index) => (
-                  <div key={device.id} className="px-6 py-4 hover:bg-[#F9FAFB] transition-colors">
-                    <div className="grid grid-cols-12 gap-4 items-center">
-                      {/* Device ID */}
-                      <div className="col-span-3">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-[#F3F4F6] rounded-lg flex items-center justify-center">
-                            <Monitor className="w-5 h-5 text-[#6B7280]" />
-                          </div>
-                          <div>
-                            <p className="text-sm text-[#111827] font-medium font-mono">
-                              {device.deviceId}
-                            </p>
+                  <div key={device.id}>
+                    {/* Desktop Table Row */}
+                    <div className="hidden md:block px-6 py-4 hover:bg-[#F9FAFB] transition-colors">
+                      <div className="grid grid-cols-12 gap-4 items-center">
+                        {/* Device ID */}
+                        <div className="col-span-3">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-[#F3F4F6] rounded-lg flex items-center justify-center">
+                              <Monitor className="w-5 h-5 text-[#6B7280]" />
+                            </div>
+                            <div>
+                              <p className="text-sm text-[#111827] font-medium font-mono">
+                                {device.deviceId}
+                              </p>
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      {/* Model */}
-                      <div className="col-span-2">
-                        <p className="text-sm text-[#6B7280]">{device.model}</p>
-                      </div>
+                        {/* Model */}
+                        <div className="col-span-2">
+                          <p className="text-sm text-[#6B7280]">{device.model}</p>
+                        </div>
 
-                      {/* Network Info */}
-                      <div className="col-span-2">
-                        <p className="text-xs text-[#6B7280] font-mono mb-0.5">
-                          IP: {device.ipAddress}
-                        </p>
-                        <p className="text-xs text-[#9CA3AF] font-mono">
-                          MAC: {device.macAddress}
-                        </p>
-                      </div>
+                        {/* Network Info */}
+                        <div className="col-span-2">
+                          <p className="text-xs text-[#6B7280] font-mono mb-0.5">
+                            IP: {device.ipAddress}
+                          </p>
+                          <p className="text-xs text-[#9CA3AF] font-mono">
+                            MAC: {device.macAddress}
+                          </p>
+                        </div>
 
-                      {/* Readiness */}
-                      <div className="col-span-2">
-                        <span className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${getReadinessColor(device.readinessState)}`}>
+                        {/* Readiness */}
+                        <div className="col-span-2">
+                          <span className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${getReadinessColor(device.readinessState)}`}>
+                            {device.readinessState.charAt(0).toUpperCase() + device.readinessState.slice(1)}
+                          </span>
+                        </div>
+
+                        {/* Discovered */}
+                        <div className="col-span-2">
+                          <div className="flex items-center gap-1.5">
+                            <Clock className="w-3.5 h-3.5 text-[#6B7280]" />
+                            <span className="text-sm text-[#6B7280]">
+                              {formatDiscoveredAt(device.discoveredAt)}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Action - Dropdown Menu */}
+                        <div className="col-span-1 flex justify-end">
+                          <PairingDropdown
+                            device={device}
+                            onSelectMode={handleStartPairing}
+                            isLast={index >= devices.length - 2}
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Mobile Card */}
+                    <div className="md:hidden px-4 py-4">
+                      {/* Top Row: Icon, Device ID, Model */}
+                      <div className="flex items-start gap-3 mb-3">
+                        <div className="w-10 h-10 bg-[#F3F4F6] rounded-lg flex items-center justify-center flex-shrink-0">
+                          <Monitor className="w-5 h-5 text-[#6B7280]" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm text-[#111827] font-medium font-mono mb-1">
+                            {device.deviceId}
+                          </p>
+                          <p className="text-xs text-[#6B7280]">{device.model}</p>
+                        </div>
+                        <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium flex-shrink-0 ${getReadinessColor(device.readinessState)}`}>
                           {device.readinessState.charAt(0).toUpperCase() + device.readinessState.slice(1)}
                         </span>
                       </div>
 
-                      {/* Discovered */}
-                      <div className="col-span-2">
-                        <div className="flex items-center gap-1.5">
-                          <Clock className="w-3.5 h-3.5 text-[#6B7280]" />
-                          <span className="text-sm text-[#6B7280]">
-                            {formatDiscoveredAt(device.discoveredAt)}
-                          </span>
+                      {/* Middle Section: Network Info */}
+                      <div className="space-y-2 mb-3 pb-3 border-b border-[#E5E7EB]">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-[#6B7280]">IP Address</span>
+                          <span className="text-xs text-[#111827] font-mono">{device.ipAddress}</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-[#6B7280]">MAC Address</span>
+                          <span className="text-xs text-[#111827] font-mono">{device.macAddress}</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-[#6B7280]">Discovered</span>
+                          <div className="flex items-center gap-1.5">
+                            <Clock className="w-3 h-3 text-[#6B7280]" />
+                            <span className="text-xs text-[#111827]">
+                              {formatDiscoveredAt(device.discoveredAt)}
+                            </span>
+                          </div>
                         </div>
                       </div>
 
-                      {/* Action - Dropdown Menu */}
-                      <div className="col-span-1 flex justify-end">
-                        <PairingDropdown
-                          device={device}
-                          onSelectMode={handleStartPairing}
-                          isLast={index >= devices.length - 2}
-                        />
+                      {/* Bottom Section: Action Button */}
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => handleStartPairing(device, 'generate')}
+                          className="flex-1 flex items-center justify-center gap-2 h-10 px-4 bg-[#D9480F] text-white rounded-lg text-sm hover:bg-[#C23D0D] transition-colors"
+                        >
+                          <ArrowRight className="w-4 h-4" />
+                          <span>Pair Device</span>
+                        </button>
+                        <button
+                          onClick={() => handleStartPairing(device, 'enter')}
+                          className="w-10 h-10 flex items-center justify-center rounded-lg bg-white border border-[#E5E7EB] text-[#6B7280] hover:bg-[#F9FAFB] transition-colors"
+                          title="Enter code manually"
+                        >
+                          <Monitor className="w-4 h-4" />
+                        </button>
                       </div>
                     </div>
                   </div>
