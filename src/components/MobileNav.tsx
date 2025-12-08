@@ -8,7 +8,8 @@ import {
   List,
   Menu,
   X,
-  Shield
+  Settings,
+  ChevronDown
 } from 'lucide-react';
 
 interface MobileNavProps {
@@ -18,6 +19,7 @@ interface MobileNavProps {
 
 export function MobileNav({ activePage = 'welcome', onNavigate }: MobileNavProps) {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [settingsExpanded, setSettingsExpanded] = React.useState(false);
 
   const menuItems = [
     { id: 'welcome', label: 'Welcome', icon: Home },
@@ -26,12 +28,23 @@ export function MobileNav({ activePage = 'welcome', onNavigate }: MobileNavProps
     { id: 'terminals', label: 'Kiosks', icon: Monitor },
     { id: 'media', label: 'Media', icon: Film },
     { id: 'playlists', label: 'Playlists', icon: List },
-    { id: 'users', label: 'Users & Permissions', icon: Shield },
   ];
+
+  const settingsItems = [
+    { id: 'settings-users', label: 'Users & Permissions' },
+    { id: 'settings-language', label: 'Language Settings' },
+    { id: 'settings-general', label: 'General Configurations' },
+    { id: 'settings-billing', label: 'Billing & Subscription', disabled: true },
+    { id: 'settings-integrations', label: 'Integrations / Webhooks', disabled: true },
+    { id: 'settings-notifications', label: 'Email / Notifications', disabled: true },
+  ];
+
+  const isSettingsActive = activePage === 'settings' || activePage?.startsWith('settings-');
 
   const handleNavigate = (id: string) => {
     onNavigate?.(id);
     setIsMenuOpen(false);
+    setSettingsExpanded(false);
   };
 
   return (
@@ -104,6 +117,52 @@ export function MobileNav({ activePage = 'welcome', onNavigate }: MobileNavProps
                     </button>
                   );
                 })}
+
+                {/* Settings Section */}
+                <div className="pt-2">
+                  <button
+                    onClick={() => setSettingsExpanded(!settingsExpanded)}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-left ${
+                      isSettingsActive
+                        ? 'bg-[#FEF2F2] text-[#D9480F]'
+                        : 'text-[#6B7280] hover:bg-[#F9FAFB]'
+                    }`}
+                  >
+                    <Settings className={`w-5 h-5 ${isSettingsActive ? 'text-[#D9480F]' : 'text-[#6B7280]'}`} />
+                    <span className={`text-base flex-1 ${isSettingsActive ? 'font-medium' : ''}`}>
+                      Settings
+                    </span>
+                    <ChevronDown className={`w-4 h-4 transition-transform ${
+                      settingsExpanded ? 'rotate-180' : ''
+                    } ${isSettingsActive ? 'text-[#D9480F]' : 'text-[#6B7280]'}`} />
+                  </button>
+
+                  {/* Settings Submenu */}
+                  {settingsExpanded && (
+                    <div className="mt-1 ml-8 space-y-1">
+                      {settingsItems.map((item) => {
+                        const isActive = item.id === activePage;
+                        
+                        return (
+                          <button
+                            key={item.id}
+                            onClick={() => !item.disabled && handleNavigate(item.id)}
+                            disabled={item.disabled}
+                            className={`w-full text-left px-4 py-2 rounded-lg transition-colors text-sm ${
+                              item.disabled
+                                ? 'text-[#D1D5DB] cursor-not-allowed opacity-50'
+                                : isActive
+                                  ? 'bg-[#FEF2F2] text-[#D9480F] font-medium'
+                                  : 'text-[#6B7280] hover:bg-[#F9FAFB]'
+                            }`}
+                          >
+                            {item.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
               </nav>
             </div>
 

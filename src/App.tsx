@@ -11,11 +11,17 @@ import UserDetails from './components/users/UserDetails';
 import RolesManagement from './components/users/RolesManagement';
 import CreateEditRole from './components/users/CreateEditRole';
 import ActivityLog from './components/users/ActivityLog';
+import SettingsHub from './components/settings/SettingsHub';
+import LanguageSettings from './components/settings/LanguageSettings';
+import GeneralSettings from './components/settings/GeneralSettings';
+import BillingSettings from './components/settings/BillingSettings';
+import IntegrationsSettings from './components/settings/IntegrationsSettings';
+import NotificationSettings from './components/settings/NotificationSettings';
 import { Sidebar } from './components/Sidebar';
 import { MobileNav } from './components/MobileNav';
 import { TopHeader } from './components/TopHeader';
 
-type Page = 'welcome' | 'campaigns' | 'terminals' | 'playlists' | 'media' | 'customers' | 'users';
+type Page = 'welcome' | 'campaigns' | 'terminals' | 'playlists' | 'media' | 'customers' | 'settings' | 'settings-users' | 'settings-language' | 'settings-general' | 'settings-billing' | 'settings-integrations' | 'settings-notifications';
 
 function AppContent() {
   const location = useLocation();
@@ -30,7 +36,13 @@ function AppContent() {
     if (path.includes('/playlists')) return 'playlists';
     if (path.includes('/media')) return 'media';
     if (path.includes('/customers') || path.includes('/clients')) return 'customers';
-    if (path.includes('/users')) return 'users';
+    if (path.includes('/settings/language')) return 'settings-language';
+    if (path.includes('/settings/general')) return 'settings-general';
+    if (path.includes('/settings/billing')) return 'settings-billing';
+    if (path.includes('/settings/integrations')) return 'settings-integrations';
+    if (path.includes('/settings/notifications')) return 'settings-notifications';
+    if (path.includes('/settings')) return 'settings';
+    if (path.includes('/users')) return 'settings-users';
     return 'welcome';
   };
 
@@ -46,6 +58,13 @@ function AppContent() {
       media: '/media',
       customers: '/customers',
       users: '/users',
+      settings: '/settings',
+      'settings-users': '/users',
+      'settings-language': '/settings/language',
+      'settings-general': '/settings/general',
+      'settings-billing': '/settings/billing',
+      'settings-integrations': '/settings/integrations',
+      'settings-notifications': '/settings/notifications',
     };
     navigate(routeMap[page] || '/');
   };
@@ -94,6 +113,12 @@ function AppContent() {
             <Route path="/users/roles/new" element={<CreateEditRole />} />
             <Route path="/users/roles/:roleId/edit" element={<CreateEditRole />} />
             <Route path="/users/activity" element={<ActivityLog />} />
+            <Route path="/settings" element={<SettingsHub />} />
+            <Route path="/settings/language" element={<LanguageSettings />} />
+            <Route path="/settings/general" element={<GeneralSettings />} />
+            <Route path="/settings/billing" element={<BillingSettings />} />
+            <Route path="/settings/integrations" element={<IntegrationsSettings />} />
+            <Route path="/settings/notifications" element={<NotificationSettings />} />
           </Routes>
         </div>
       </div>

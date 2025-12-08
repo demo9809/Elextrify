@@ -30,6 +30,7 @@ interface SidebarProps {
 
 export function Sidebar({ activePage = 'welcome', onNavigate, isCollapsed = false, onToggleCollapse }: SidebarProps) {
   const [showUserMenu, setShowUserMenu] = React.useState(false);
+  const [settingsExpanded, setSettingsExpanded] = React.useState(false);
 
   const menuItems = [
     { id: 'welcome', label: 'Welcome', icon: Home },
@@ -39,12 +40,29 @@ export function Sidebar({ activePage = 'welcome', onNavigate, isCollapsed = fals
     { id: 'terminals', label: 'Kiosk Management', icon: Monitor },
     { id: 'media', label: 'Media', icon: Film },
     { id: 'playlists', label: 'Playlists', icon: List },
-    { id: 'users', label: 'Users & Permissions', icon: Shield },
     { id: 'analytics', label: 'Proof-of-Play Analytics', icon: BarChart3, disabled: true },
     { id: 'billing', label: 'Budget & Billing', icon: CreditCard, disabled: true },
     { id: 'reports', label: 'Reports & Insights', icon: FileText, disabled: true },
-    { id: 'settings', label: 'Account & Settings', icon: Settings, disabled: true },
   ];
+
+  const settingsItems = [
+    { id: 'settings-users', label: 'Users & Permissions', route: '/settings/users' },
+    { id: 'settings-language', label: 'Language Settings', route: '/settings/language' },
+    { id: 'settings-general', label: 'General Configurations', route: '/settings/general' },
+    { id: 'settings-billing', label: 'Billing & Subscription', route: '/settings/billing', disabled: true },
+    { id: 'settings-integrations', label: 'Integrations / Webhooks', route: '/settings/integrations', disabled: true },
+    { id: 'settings-notifications', label: 'Email / Notifications', route: '/settings/notifications', disabled: true },
+  ];
+
+  // Check if current page is a settings page
+  const isSettingsActive = activePage === 'settings' || activePage.startsWith('settings-');
+
+  // Auto-expand settings if a settings page is active
+  React.useEffect(() => {
+    if (isSettingsActive && !isCollapsed) {
+      setSettingsExpanded(true);
+    }
+  }, [isSettingsActive, isCollapsed]);
 
   return (
     <div 
@@ -133,6 +151,79 @@ export function Sidebar({ activePage = 'welcome', onNavigate, isCollapsed = fals
               </div>
             );
           })}
+
+          {/* Settings Menu Item with Submenu */}
+          <div className="relative group">
+            <button
+              onClick={() => {
+                if (isCollapsed) {
+                  onNavigate?.('settings');
+                } else {
+                  setSettingsExpanded(!settingsExpanded);
+                }
+              }}
+              className={`
+                w-full flex items-center rounded-lg transition-colors text-left
+                ${isCollapsed ? 'justify-center px-0 py-3' : 'gap-3 px-4 py-2.5'}
+                ${isSettingsActive 
+                  ? 'bg-[#FEF2F2] text-[#D9480F]' 
+                  : 'text-[#6B7280] hover:bg-[#F9FAFB]'
+                }
+                ${isSettingsActive && !isCollapsed ? 'border-l-4 border-[#D9480F] -ml-[4px] pl-[20px]' : ''}
+              `}
+              title={isCollapsed ? 'Settings' : undefined}
+            >
+              <Settings className={`w-5 h-5 ${ 
+                isSettingsActive ? 'text-[#D9480F]' : 'text-[#6B7280]'
+              }`} />
+              {!isCollapsed && (
+                <>
+                  <span className={`text-sm flex-1 ${isSettingsActive ? 'font-medium' : ''}`}>
+                    Settings
+                  </span>
+                  <ChevronDown className={`w-4 h-4 transition-transform ${
+                    settingsExpanded ? 'rotate-180' : ''
+                  } ${isSettingsActive ? 'text-[#D9480F]' : 'text-[#6B7280]'}`} />
+                </>
+              )}
+            </button>
+
+            {/* Tooltip for collapsed state */}
+            {isCollapsed && (
+              <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-[#111827] text-white text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 pointer-events-none">
+                Settings
+                <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-[#111827]"></div>
+              </div>
+            )}
+
+            {/* Submenu - only show when expanded and not collapsed */}
+            {settingsExpanded && !isCollapsed && (
+              <div className="mt-1 ml-4 pl-4 border-l-2 border-[#E5E7EB] space-y-1">
+                {settingsItems.map((subItem) => {
+                  const isSubActive = activePage === subItem.id;
+                  
+                  return (
+                    <button
+                      key={subItem.id}
+                      onClick={() => !subItem.disabled && onNavigate?.(subItem.id)}
+                      disabled={subItem.disabled}
+                      className={`
+                        w-full flex items-center gap-3 px-4 py-2 rounded-lg text-left text-sm transition-colors
+                        ${subItem.disabled 
+                          ? 'text-[#D1D5DB] cursor-not-allowed opacity-50' 
+                          : isSubActive 
+                            ? 'bg-[#FEF2F2] text-[#D9480F] font-medium' 
+                            : 'text-[#6B7280] hover:bg-[#F9FAFB]'
+                        }
+                      `}
+                    >
+                      {subItem.label}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </nav>
       </div>
 
