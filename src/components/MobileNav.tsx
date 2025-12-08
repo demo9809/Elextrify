@@ -7,7 +7,8 @@ import {
   Film,
   List,
   Menu,
-  X
+  X,
+  Shield
 } from 'lucide-react';
 
 interface MobileNavProps {
@@ -25,6 +26,7 @@ export function MobileNav({ activePage = 'welcome', onNavigate }: MobileNavProps
     { id: 'terminals', label: 'Kiosks', icon: Monitor },
     { id: 'media', label: 'Media', icon: Film },
     { id: 'playlists', label: 'Playlists', icon: List },
+    { id: 'users', label: 'Users & Permissions', icon: Shield },
   ];
 
   const handleNavigate = (id: string) => {

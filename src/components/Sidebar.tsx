@@ -16,7 +16,8 @@ import {
   User,
   HelpCircle,
   PanelLeftClose,
-  PanelLeft
+  PanelLeft,
+  Shield
 } from 'lucide-react';
 import React from 'react';
 
@@ -38,6 +39,7 @@ export function Sidebar({ activePage = 'welcome', onNavigate, isCollapsed = fals
     { id: 'terminals', label: 'Kiosk Management', icon: Monitor },
     { id: 'media', label: 'Media', icon: Film },
     { id: 'playlists', label: 'Playlists', icon: List },
+    { id: 'users', label: 'Users & Permissions', icon: Shield },
     { id: 'analytics', label: 'Proof-of-Play Analytics', icon: BarChart3, disabled: true },
     { id: 'billing', label: 'Budget & Billing', icon: CreditCard, disabled: true },
     { id: 'reports', label: 'Reports & Insights', icon: FileText, disabled: true },
