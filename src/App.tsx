@@ -51,13 +51,13 @@ function App() {
 
       {/* Main Content */}
       <div 
-        className={`flex flex-col min-h-screen transition-all duration-300 pt-14 lg:pt-0 ${
+        className={`flex flex-col min-h-screen transition-all duration-300 pt-14 lg:pt-16 ${
           isSidebarCollapsed ? 'lg:ml-[72px]' : 'lg:ml-[240px]'
         }`}
       >
         {/* Desktop Header - hidden on mobile */}
         <div className="hidden lg:block">
-          <TopHeader />
+          <TopHeader isSidebarCollapsed={isSidebarCollapsed} />
         </div>
 
         <div className="flex-1">

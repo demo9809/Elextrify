@@ -620,10 +620,6 @@
     z-index: 10;
   }
 
-  .z-20 {
-    z-index: 20;
-  }
-
   .z-30 {
     z-index: 30;
   }
@@ -3475,6 +3471,18 @@
   }
 
   @media (width >= 64rem) {
+    .lg\:left-\[72px\] {
+      left: 72px;
+    }
+  }
+
+  @media (width >= 64rem) {
+    .lg\:left-\[240px\] {
+      left: 240px;
+    }
+  }
+
+  @media (width >= 64rem) {
     .lg\:ml-\[72px\] {
       margin-left: 72px;
     }
@@ -3541,8 +3549,8 @@
   }
 
   @media (width >= 64rem) {
-    .lg\:pt-0 {
-      padding-top: calc(var(--spacing) * 0);
+    .lg\:pt-16 {
+      padding-top: calc(var(--spacing) * 16);
     }
   }
 
