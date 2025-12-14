@@ -11,10 +11,14 @@ export interface User {
   status: UserStatus;
   lastLogin?: string;
   mfaEnabled: boolean;
+  mfaVerifiedAt?: string; // Last time MFA was verified
+  mfaMethod?: 'authenticator' | 'sms'; // MFA method type
+  mfaBackupCodes?: string[]; // Backup recovery codes
   createdAt: string;
   assignedClients?: string[];
   phoneNumber?: string;
   jobTitle?: string;
+  permissionOverrides?: PermissionSet; // User-specific permission overrides
 }
 
 export interface UserInvite {
@@ -55,6 +59,23 @@ export interface PermissionSet {
   [module: string]: {
     [action: string]: boolean;
   };
+}
+
+export interface PermissionOverride {
+  module: string;
+  action: string;
+  value: boolean;
+  overriddenAt: string;
+  overriddenBy: string;
+}
+
+export interface MFASettings {
+  enabled: boolean;
+  enforceForAllUsers: boolean;
+  enforceForRoles: UserRole[];
+  sessionTimeout: number; // in minutes
+  allowOptional: boolean;
+  gracePeriod: number; // days before enforcement
 }
 
 export interface ActivityLogEntry {

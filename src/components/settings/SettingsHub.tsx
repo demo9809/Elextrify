@@ -19,7 +19,15 @@ export default function SettingsHub() {
       title: 'Users & Permissions',
       description: 'Manage team members, roles, and access control',
       icon: Shield,
-      route: '/settings/users',
+      route: '/users',
+      available: true,
+    },
+    {
+      id: 'security',
+      title: 'Security & Authentication',
+      description: 'Configure MFA policies, session security, and authentication settings',
+      icon: Lock,
+      route: '/settings/security',
       available: true,
     },
     {

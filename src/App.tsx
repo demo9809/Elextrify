@@ -17,6 +17,7 @@ import GeneralSettings from './components/settings/GeneralSettings';
 import BillingSettings from './components/settings/BillingSettings';
 import IntegrationsSettings from './components/settings/IntegrationsSettings';
 import NotificationSettings from './components/settings/NotificationSettings';
+import SecuritySettings from './components/settings/SecuritySettings';
 import { Sidebar } from './components/Sidebar';
 import { MobileNav } from './components/MobileNav';
 import { TopHeader } from './components/TopHeader';
@@ -119,6 +120,7 @@ function AppContent() {
             <Route path="/settings/billing" element={<BillingSettings />} />
             <Route path="/settings/integrations" element={<IntegrationsSettings />} />
             <Route path="/settings/notifications" element={<NotificationSettings />} />
+            <Route path="/settings/security" element={<SecuritySettings />} />
           </Routes>
         </div>
       </div>

@@ -20,21 +20,35 @@ import {
   Key
 } from 'lucide-react';
 import { mockUsers, mockActivityLog, getRoleLabel, getStatusLabel, getStatusColor, getRoleColor, mockRoles, PERMISSION_MODULES } from '../../data/mockUsers';
-import { User, ActivityLogEntry } from '../../types/users';
+import { User, ActivityLogEntry, PermissionSet } from '../../types/users';
+import EffectivePermissionsEditor from './EffectivePermissionsEditor';
+import MFAManagementSection from './MFAManagementSection';
 
-type TabType = 'profile' | 'permissions' | 'clients' | 'activity';
+type TabType = 'profile' | 'permissions' | 'effective-permissions' | 'clients' | 'activity';
 
 export default function UserDetails() {
   const { userId } = useParams<{ userId: string }>();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabType>('profile');
   const [status, setStatus] = useState<string>('active');
+  const [currentUser, setCurrentUser] = useState<User | undefined>(
+    mockUsers.find(u => u.id === userId)
+  );
 
-  const user = mockUsers.find(u => u.id === userId);
   const userActivities = mockActivityLog.filter(log => log.userId === userId);
-  const userRole = mockRoles.find(r => r.name.toLowerCase().replace(' ', '-') === user?.role);
+  const userRole = mockRoles.find(r => r.name.toLowerCase().replace(' ', '-') === currentUser?.role);
 
-  if (!user) {
+  const handleUserUpdate = (updates: Partial<User>) => {
+    if (currentUser) {
+      setCurrentUser({ ...currentUser, ...updates });
+    }
+  };
+
+  const handlePermissionOverrideSave = (permissionOverrides: PermissionSet) => {
+    handleUserUpdate({ permissionOverrides });
+  };
+
+  if (!currentUser) {
     return (
       <div className="flex flex-col items-center justify-center h-full bg-gray-50 p-8">
         <Users className="w-16 h-16 text-gray-400 mb-4" />
@@ -54,6 +68,7 @@ export default function UserDetails() {
   const tabs: { id: TabType; label: string; icon: React.ReactNode }[] = [
     { id: 'profile', label: 'Profile', icon: <Users className="w-4 h-4" /> },
     { id: 'permissions', label: 'Access Permissions', icon: <Key className="w-4 h-4" /> },
+    { id: 'effective-permissions', label: 'Effective Permissions', icon: <Monitor className="w-4 h-4" /> },
     { id: 'clients', label: 'Assigned Clients', icon: <Briefcase className="w-4 h-4" /> },
     { id: 'activity', label: 'Activity Log', icon: <FileText className="w-4 h-4" /> },
   ];
@@ -91,10 +106,10 @@ export default function UserDetails() {
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           {/* User Info */}
           <div className="flex items-center gap-4">
-            {user.avatar ? (
+            {currentUser.avatar ? (
               <img
-                src={user.avatar}
-                alt={user.name}
+                src={currentUser.avatar}
+                alt={currentUser.name}
                 className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gray-200"
               />
             ) : (
@@ -104,8 +119,8 @@ export default function UserDetails() {
             )}
             <div>
               <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-gray-900">{user.name}</h1>
-                {user.mfaEnabled && (
+                <h1 className="text-gray-900">{currentUser.name}</h1>
+                {currentUser.mfaEnabled && (
                   <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-green-50 text-green-700">
                     <Shield className="w-3 h-3" />
                     <span className="text-sm">MFA</span>
@@ -113,12 +128,12 @@ export default function UserDetails() {
                 )}
               </div>
               <div className="flex flex-wrap items-center gap-2">
-                <span className="text-gray-600">{user.email}</span>
-                <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm ${getRoleColor(user.role)}`}>
-                  {getRoleLabel(user.role)}
+                <span className="text-gray-600">{currentUser.email}</span>
+                <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm ${getRoleColor(currentUser.role)}`}>
+                  {getRoleLabel(currentUser.role)}
                 </span>
-                <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm ${getStatusColor(user.status)}`}>
-                  {getStatusLabel(user.status)}
+                <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm ${getStatusColor(currentUser.status)}`}>
+                  {getStatusLabel(currentUser.status)}
                 </span>
               </div>
             </div>
@@ -178,24 +193,24 @@ export default function UserDetails() {
                   <Mail className="w-5 h-5 text-gray-400 mt-0.5" />
                   <div>
                     <div className="text-gray-600 mb-1">Email Address</div>
-                    <div className="text-gray-900">{user.email}</div>
+                    <div className="text-gray-900">{currentUser.email}</div>
                   </div>
                 </div>
-                {user.phoneNumber && (
+                {currentUser.phoneNumber && (
                   <div className="flex items-start gap-3">
                     <Phone className="w-5 h-5 text-gray-400 mt-0.5" />
                     <div>
                       <div className="text-gray-600 mb-1">Phone Number</div>
-                      <div className="text-gray-900">{user.phoneNumber}</div>
+                      <div className="text-gray-900">{currentUser.phoneNumber}</div>
                     </div>
                   </div>
                 )}
-                {user.jobTitle && (
+                {currentUser.jobTitle && (
                   <div className="flex items-start gap-3">
                     <Briefcase className="w-5 h-5 text-gray-400 mt-0.5" />
                     <div>
                       <div className="text-gray-600 mb-1">Job Title</div>
-                      <div className="text-gray-900">{user.jobTitle}</div>
+                      <div className="text-gray-900">{currentUser.jobTitle}</div>
                     </div>
                   </div>
                 )}
@@ -203,7 +218,7 @@ export default function UserDetails() {
                   <Calendar className="w-5 h-5 text-gray-400 mt-0.5" />
                   <div>
                     <div className="text-gray-600 mb-1">Member Since</div>
-                    <div className="text-gray-900">{formatDate(user.createdAt)}</div>
+                    <div className="text-gray-900">{formatDate(currentUser.createdAt)}</div>
                   </div>
                 </div>
               </div>
@@ -215,26 +230,13 @@ export default function UserDetails() {
                 <h3 className="text-gray-900">Security</h3>
               </div>
               <div className="p-6 space-y-4">
-                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <Shield className={`w-5 h-5 ${user.mfaEnabled ? 'text-green-600' : 'text-gray-400'}`} />
-                    <div>
-                      <div className="text-gray-900">Two-Factor Authentication</div>
-                      <div className="text-gray-600">
-                        {user.mfaEnabled ? 'Enabled and active' : 'Not enabled'}
-                      </div>
-                    </div>
-                  </div>
-                  <button className="px-4 h-9 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
-                    {user.mfaEnabled ? 'Reset MFA' : 'Enable MFA'}
-                  </button>
-                </div>
-                {user.lastLogin && (
+                <MFAManagementSection user={currentUser} onUpdate={handleUserUpdate} />
+                {currentUser.lastLogin && (
                   <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
                     <Clock className="w-5 h-5 text-gray-400 mt-0.5" />
                     <div className="flex-1">
                       <div className="text-gray-900 mb-1">Last Login</div>
-                      <div className="text-gray-600">{formatDateTime(user.lastLogin)}</div>
+                      <div className="text-gray-600">{formatDateTime(currentUser.lastLogin)}</div>
                     </div>
                   </div>
                 )}
@@ -248,23 +250,23 @@ export default function UserDetails() {
               </div>
               <div className="p-6">
                 <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
-                  {user.status === 'active' ? (
+                  {currentUser.status === 'active' ? (
                     <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
-                  ) : user.status === 'pending' ? (
+                  ) : currentUser.status === 'pending' ? (
                     <AlertCircle className="w-5 h-5 text-yellow-600 mt-0.5" />
                   ) : (
                     <XCircle className="w-5 h-5 text-red-600 mt-0.5" />
                   )}
                   <div className="flex-1">
                     <div className="text-gray-900 mb-1">
-                      {user.status === 'active' && 'Account is Active'}
-                      {user.status === 'pending' && 'Invitation Pending'}
-                      {user.status === 'disabled' && 'Account is Disabled'}
+                      {currentUser.status === 'active' && 'Account is Active'}
+                      {currentUser.status === 'pending' && 'Invitation Pending'}
+                      {currentUser.status === 'disabled' && 'Account is Disabled'}
                     </div>
                     <div className="text-gray-600">
-                      {user.status === 'active' && 'User has full access to assigned resources'}
-                      {user.status === 'pending' && 'User has not yet accepted their invitation'}
-                      {user.status === 'disabled' && 'User cannot access the platform'}
+                      {currentUser.status === 'active' && 'User has full access to assigned resources'}
+                      {currentUser.status === 'pending' && 'User has not yet accepted their invitation'}
+                      {currentUser.status === 'disabled' && 'User cannot access the platform'}
                     </div>
                   </div>
                 </div>
@@ -330,6 +332,17 @@ export default function UserDetails() {
           </div>
         )}
 
+        {/* Effective Permissions Tab */}
+        {activeTab === 'effective-permissions' && userRole && (
+          <div className="max-w-4xl space-y-6">
+            <EffectivePermissionsEditor
+              user={currentUser}
+              role={userRole}
+              onSave={handlePermissionOverrideSave}
+            />
+          </div>
+        )}
+
         {/* Clients Tab */}
         {activeTab === 'clients' && (
           <div className="max-w-4xl">
@@ -339,9 +352,9 @@ export default function UserDetails() {
                 <p className="text-gray-600">Clients this user has access to</p>
               </div>
               <div className="p-6">
-                {user.assignedClients && user.assignedClients.length > 0 ? (
+                {currentUser.assignedClients && currentUser.assignedClients.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {user.assignedClients.map((clientId, index) => (
+                    {currentUser.assignedClients.map((clientId, index) => (
                       <div
                         key={clientId}
                         className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
