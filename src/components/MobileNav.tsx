@@ -11,7 +11,8 @@ import {
   Settings,
   ChevronDown,
   Building2,
-  Package
+  Package,
+  Layers
 } from 'lucide-react';
 
 interface MobileNavProps {
@@ -27,6 +28,7 @@ export function MobileNav({ activePage = 'welcome', onNavigate }: MobileNavProps
     { id: 'welcome', label: 'Welcome', icon: Home },
     { id: 'tenants', label: 'Tenants', icon: Building2 },
     { id: 'editions', label: 'Editions', icon: Package },
+    { id: 'organization-units', label: 'Org Units', icon: Layers },
     { id: 'customers', label: 'Customers', icon: Users },
     { id: 'campaigns', label: 'Campaigns', icon: Target },
     { id: 'terminals', label: 'Kiosks', icon: Monitor },

@@ -19,7 +19,8 @@ import {
   PanelLeft,
   Shield,
   Building2,
-  Package
+  Package,
+  Layers
 } from 'lucide-react';
 import React from 'react';
 
@@ -39,6 +40,7 @@ export function Sidebar({ activePage = 'welcome', onNavigate, isCollapsed = fals
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, hasDropdown: true, disabled: true },
     { id: 'tenants', label: 'Tenant Management', icon: Building2 },
     { id: 'editions', label: 'Edition Management', icon: Package },
+    { id: 'organization-units', label: 'Organization Units', icon: Layers },
     { id: 'customers', label: 'Customers', icon: Users },
     { id: 'campaigns', label: 'Campaigns', icon: Target, active: true },
     { id: 'terminals', label: 'Kiosk Management', icon: Monitor },
