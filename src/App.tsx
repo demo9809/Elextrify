@@ -12,6 +12,9 @@ import RolesManagement from './components/users/RolesManagement';
 import CreateEditRole from './components/users/CreateEditRole';
 import ActivityLog from './components/users/ActivityLog';
 import SettingsHub from './components/settings/SettingsHub';
+import SettingsAccount from './components/settings/SettingsAccount';
+import SettingsWorkspace from './components/settings/SettingsWorkspace';
+import SettingsSystem from './components/settings/SettingsSystem';
 import LanguageSettings from './components/settings/LanguageSettings';
 import GeneralSettings from './components/settings/GeneralSettings';
 import BillingSettings from './components/settings/BillingSettings';
@@ -20,6 +23,10 @@ import NotificationSettings from './components/settings/NotificationSettings';
 import SecuritySettings from './components/settings/SecuritySettings';
 import EmailConfiguration from './components/settings/EmailConfiguration';
 import ApiIntegration from './components/settings/ApiIntegration';
+import ThirdPartyIntegrations from './components/settings/ThirdPartyIntegrations';
+import RazorpayConfig from './components/settings/integrations/RazorpayConfig';
+import ZohoBooksConfig from './components/settings/integrations/ZohoBooksConfig';
+import WebhooksConfig from './components/settings/integrations/WebhooksConfig';
 import TenantManagement from './components/tenants/TenantManagement';
 import TenantDetails from './components/tenants/TenantDetails';
 import EditionManagement from './components/editions/EditionManagement';
@@ -45,7 +52,7 @@ import { Sidebar } from './components/Sidebar';
 import { MobileNav } from './components/MobileNav';
 import { TopHeader } from './components/TopHeader';
 
-type Page = 'welcome' | 'campaigns' | 'terminals' | 'playlists' | 'media' | 'customers' | 'tenants' | 'editions' | 'organization-units' | 'billing' | 'admin-billing' | 'admin-billing-overview' | 'admin-billing-subscriptions' | 'admin-billing-invoices' | 'admin-billing-payments' | 'admin-billing-revenue' | 'admin-billing-discounts' | 'admin-billing-audit' | 'settings' | 'settings-users' | 'settings-language' | 'settings-general' | 'settings-billing' | 'settings-integrations' | 'settings-notifications' | 'help-support' | 'documentation' | 'notifications';
+type Page = 'welcome' | 'campaigns' | 'terminals' | 'playlists' | 'media' | 'customers' | 'tenants' | 'editions' | 'organization-units' | 'billing' | 'admin-billing' | 'admin-billing-overview' | 'admin-billing-subscriptions' | 'admin-billing-invoices' | 'admin-billing-payments' | 'admin-billing-revenue' | 'admin-billing-discounts' | 'admin-billing-audit' | 'settings' | 'settings-account' | 'settings-workspace' | 'settings-system' | 'settings-users' | 'settings-language' | 'settings-general' | 'settings-billing' | 'settings-integrations' | 'settings-notifications' | 'settings-security' | 'settings-email' | 'settings-api' | 'help-support' | 'documentation' | 'notifications';
 
 function AppContent() {
   const location = useLocation();
@@ -72,6 +79,14 @@ function AppContent() {
     if (path.includes('/admin/billing/audit')) return 'admin-billing-audit';
     if (path.includes('/admin/billing')) return 'admin-billing';
     if (path.includes('/billing')) return 'billing';
+    // Handle nested integration routes FIRST - before other settings checks
+    if (path.includes('/settings/system/integrations')) return 'settings-system';
+    if (path === '/settings/account') return 'settings-account';
+    if (path === '/settings/workspace') return 'settings-workspace';
+    if (path === '/settings/system') return 'settings-system';
+    if (path.includes('/settings/security')) return 'settings-security';
+    if (path.includes('/settings/email')) return 'settings-email';
+    if (path.includes('/settings/api')) return 'settings-api';
     if (path.includes('/settings/language')) return 'settings-language';
     if (path.includes('/settings/general')) return 'settings-general';
     if (path.includes('/settings/billing')) return 'settings-billing';
@@ -111,11 +126,17 @@ function AppContent() {
       users: '/users',
       settings: '/settings',
       'settings-users': '/users',
+      'settings-account': '/settings/account',
+      'settings-workspace': '/settings/workspace',
+      'settings-system': '/settings/system',
       'settings-language': '/settings/language',
       'settings-general': '/settings/general',
       'settings-billing': '/settings/billing',
       'settings-integrations': '/settings/integrations',
       'settings-notifications': '/settings/notifications',
+      'settings-security': '/settings/security',
+      'settings-email': '/settings/email',
+      'settings-api': '/settings/api',
       'help-support': '/help-support',
       'documentation': '/documentation',
       'notifications': '/notifications',
@@ -188,6 +209,9 @@ function AppContent() {
             <Route path="/users/roles/:roleId/edit" element={<CreateEditRole />} />
             <Route path="/users/activity" element={<ActivityLog />} />
             <Route path="/settings" element={<SettingsHub />} />
+            <Route path="/settings/account" element={<SettingsAccount />} />
+            <Route path="/settings/workspace" element={<SettingsWorkspace />} />
+            <Route path="/settings/system" element={<SettingsSystem />} />
             <Route path="/settings/language" element={<LanguageSettings />} />
             <Route path="/settings/general" element={<GeneralSettings />} />
             <Route path="/settings/billing" element={<BillingSettings />} />
@@ -196,6 +220,10 @@ function AppContent() {
             <Route path="/settings/security" element={<SecuritySettings />} />
             <Route path="/settings/email" element={<EmailConfiguration />} />
             <Route path="/settings/api" element={<ApiIntegration />} />
+            <Route path="/settings/system/integrations" element={<ThirdPartyIntegrations />} />
+            <Route path="/settings/system/integrations/razorpay" element={<RazorpayConfig />} />
+            <Route path="/settings/system/integrations/zoho-books" element={<ZohoBooksConfig />} />
+            <Route path="/settings/system/integrations/webhooks" element={<WebhooksConfig />} />
             <Route path="/help-support" element={<HelpSupport />} />
             <Route path="/documentation" element={<Documentation />} />
             <Route path="/notifications" element={<NotificationsPage />} />

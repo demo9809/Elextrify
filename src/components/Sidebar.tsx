@@ -29,7 +29,11 @@ import {
   Globe,
   Activity,
   Server,
-  BookOpen
+  BookOpen,
+  Lock,
+  Mail,
+  Code,
+  Languages
 } from 'lucide-react';
 import React from 'react';
 
@@ -38,9 +42,10 @@ interface SidebarProps {
   onNavigate?: (pageId: string) => void;
   isCollapsed?: boolean;
   onToggleCollapse?: () => void;
+  userRole?: 'user' | 'tenant-admin' | 'host-admin' | 'saas-admin';
 }
 
-export function Sidebar({ activePage = 'welcome', onNavigate, isCollapsed = false, onToggleCollapse }: SidebarProps) {
+export function Sidebar({ activePage = 'welcome', onNavigate, isCollapsed = false, onToggleCollapse, userRole = 'saas-admin' }: SidebarProps) {
   const [showUserMenu, setShowUserMenu] = React.useState(false);
   const [settingsExpanded, setSettingsExpanded] = React.useState(false);
   const [billingExpanded, setBillingExpanded] = React.useState(false);
@@ -72,10 +77,11 @@ export function Sidebar({ activePage = 'welcome', onNavigate, isCollapsed = fals
     { id: 'admin-billing-audit', label: 'Audit Log', icon: Activity, route: '/admin/billing/audit' },
   ];
 
+  // Settings Items - Simplified to 3 top-level items
   const settingsItems = [
-    { id: 'settings-users', label: 'Users & Permissions', route: '/settings/users' },
-    { id: 'settings-language', label: 'Language Settings', route: '/settings/language' },
-    { id: 'settings-general', label: 'General Configurations', route: '/settings/general' },
+    { id: 'settings-account', label: 'Account', route: '/settings/account' },
+    { id: 'settings-workspace', label: 'Workspace', route: '/settings/workspace' },
+    { id: 'settings-system', label: 'System', route: '/settings/system' },
   ];
 
   // Check if current page is a settings page
@@ -86,6 +92,12 @@ export function Sidebar({ activePage = 'welcome', onNavigate, isCollapsed = fals
   
   // Check if current page is a host admin page
   const isHostAdminActive = activePage === 'tenants' || activePage === 'editions' || activePage === 'organization-units';
+
+  // Determine if user can see System section
+  const canViewSystemSettings = userRole === 'saas-admin' || userRole === 'host-admin';
+  
+  // Determine if user can see Workspace section
+  const canViewWorkspaceSettings = userRole !== 'user';
 
   // Auto-expand settings if a settings page is active
   React.useEffect(() => {
@@ -274,7 +286,7 @@ export function Sidebar({ activePage = 'welcome', onNavigate, isCollapsed = fals
             )}
           </div>
 
-          {/* Settings Menu Item with Submenu */}
+          {/* Settings Menu Item with Sectioned Submenu */}
           <div className="relative group">
             <button
               onClick={() => {
@@ -318,31 +330,31 @@ export function Sidebar({ activePage = 'welcome', onNavigate, isCollapsed = fals
               </div>
             )}
 
-            {/* Submenu - only show when expanded and not collapsed */}
+            {/* Simple Submenu - only show when expanded and not collapsed */}
             {settingsExpanded && !isCollapsed && (
               <div className="mt-1 ml-4 pl-4 border-l-2 border-[#E5E7EB] space-y-1">
-                {settingsItems.map((subItem) => {
-                  const isSubActive = activePage === subItem.id;
-                  
-                  return (
-                    <button
-                      key={subItem.id}
-                      onClick={() => !subItem.disabled && onNavigate?.(subItem.id)}
-                      disabled={subItem.disabled}
-                      className={`
-                        w-full flex items-center gap-3 px-4 py-2 rounded-lg text-left text-sm transition-colors
-                        ${subItem.disabled 
-                          ? 'text-[#D1D5DB] cursor-not-allowed opacity-50' 
-                          : isSubActive 
+                {settingsItems
+                  .filter(item => item.id !== 'settings-system' || canViewSystemSettings)
+                  .filter(item => item.id !== 'settings-workspace' || canViewWorkspaceSettings)
+                  .map((subItem) => {
+                    const isSubActive = activePage === subItem.id;
+                    
+                    return (
+                      <button
+                        key={subItem.id}
+                        onClick={() => onNavigate?.(subItem.id)}
+                        className={`
+                          w-full flex items-center gap-3 px-4 py-2 rounded-lg text-left text-sm transition-colors
+                          ${isSubActive 
                             ? 'bg-[#FEF2F2] text-[#D9480F] font-medium' 
                             : 'text-[#6B7280] hover:bg-[#F9FAFB]'
-                        }
-                      `}
-                    >
-                      {subItem.label}
-                    </button>
-                  );
-                })}
+                          }
+                        `}
+                      >
+                        {subItem.label}
+                      </button>
+                    );
+                  })}
               </div>
             )}
           </div>
