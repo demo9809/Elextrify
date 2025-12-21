@@ -17,7 +17,8 @@ import {
   HelpCircle,
   PanelLeftClose,
   PanelLeft,
-  Shield
+  Shield,
+  Building2
 } from 'lucide-react';
 import React from 'react';
 
@@ -35,6 +36,7 @@ export function Sidebar({ activePage = 'welcome', onNavigate, isCollapsed = fals
   const menuItems = [
     { id: 'welcome', label: 'Welcome', icon: Home },
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, hasDropdown: true, disabled: true },
+    { id: 'tenants', label: 'Tenant Management', icon: Building2 },
     { id: 'customers', label: 'Customers', icon: Users },
     { id: 'campaigns', label: 'Campaigns', icon: Target, active: true },
     { id: 'terminals', label: 'Kiosk Management', icon: Monitor },

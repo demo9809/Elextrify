@@ -18,11 +18,13 @@ import BillingSettings from './components/settings/BillingSettings';
 import IntegrationsSettings from './components/settings/IntegrationsSettings';
 import NotificationSettings from './components/settings/NotificationSettings';
 import SecuritySettings from './components/settings/SecuritySettings';
+import TenantManagement from './components/tenants/TenantManagement';
+import TenantDetails from './components/tenants/TenantDetails';
 import { Sidebar } from './components/Sidebar';
 import { MobileNav } from './components/MobileNav';
 import { TopHeader } from './components/TopHeader';
 
-type Page = 'welcome' | 'campaigns' | 'terminals' | 'playlists' | 'media' | 'customers' | 'settings' | 'settings-users' | 'settings-language' | 'settings-general' | 'settings-billing' | 'settings-integrations' | 'settings-notifications';
+type Page = 'welcome' | 'campaigns' | 'terminals' | 'playlists' | 'media' | 'customers' | 'tenants' | 'settings' | 'settings-users' | 'settings-language' | 'settings-general' | 'settings-billing' | 'settings-integrations' | 'settings-notifications';
 
 function AppContent() {
   const location = useLocation();
@@ -33,6 +35,7 @@ function AppContent() {
   const getCurrentPage = (): Page => {
     const path = location.pathname;
     if (path.includes('/campaigns')) return 'campaigns';
+    if (path.includes('/tenants')) return 'tenants';
     if (path.includes('/terminals') || path.includes('/kiosks')) return 'terminals';
     if (path.includes('/playlists')) return 'playlists';
     if (path.includes('/media')) return 'media';
@@ -58,6 +61,7 @@ function AppContent() {
       playlists: '/playlists',
       media: '/media',
       customers: '/customers',
+      tenants: '/tenants',
       users: '/users',
       settings: '/settings',
       'settings-users': '/users',
@@ -108,6 +112,8 @@ function AppContent() {
             <Route path="/media" element={<MediaManager />} />
             <Route path="/customers" element={<ClientManager />} />
             <Route path="/clients" element={<ClientManager />} />
+            <Route path="/tenants" element={<TenantManagement />} />
+            <Route path="/tenants/:tenantId" element={<TenantDetails />} />
             <Route path="/users" element={<UserManagement />} />
             <Route path="/users/:userId" element={<UserDetails />} />
             <Route path="/users/roles" element={<RolesManagement />} />
