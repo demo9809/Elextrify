@@ -18,6 +18,8 @@ import BillingSettings from './components/settings/BillingSettings';
 import IntegrationsSettings from './components/settings/IntegrationsSettings';
 import NotificationSettings from './components/settings/NotificationSettings';
 import SecuritySettings from './components/settings/SecuritySettings';
+import EmailConfiguration from './components/settings/EmailConfiguration';
+import ApiIntegration from './components/settings/ApiIntegration';
 import TenantManagement from './components/tenants/TenantManagement';
 import TenantDetails from './components/tenants/TenantDetails';
 import EditionManagement from './components/editions/EditionManagement';
@@ -38,11 +40,12 @@ import AdminDiscountsCredits from './components/admin-billing/AdminDiscountsCred
 import AdminAuditLog from './components/admin-billing/AdminAuditLog';
 import HelpSupport from './components/pages/HelpSupport';
 import Documentation from './components/pages/Documentation';
+import NotificationsPage from './components/notifications/NotificationsPage';
 import { Sidebar } from './components/Sidebar';
 import { MobileNav } from './components/MobileNav';
 import { TopHeader } from './components/TopHeader';
 
-type Page = 'welcome' | 'campaigns' | 'terminals' | 'playlists' | 'media' | 'customers' | 'tenants' | 'editions' | 'organization-units' | 'billing' | 'admin-billing' | 'admin-billing-overview' | 'admin-billing-subscriptions' | 'admin-billing-invoices' | 'admin-billing-payments' | 'admin-billing-revenue' | 'admin-billing-discounts' | 'admin-billing-audit' | 'settings' | 'settings-users' | 'settings-language' | 'settings-general' | 'settings-billing' | 'settings-integrations' | 'settings-notifications' | 'help-support' | 'documentation';
+type Page = 'welcome' | 'campaigns' | 'terminals' | 'playlists' | 'media' | 'customers' | 'tenants' | 'editions' | 'organization-units' | 'billing' | 'admin-billing' | 'admin-billing-overview' | 'admin-billing-subscriptions' | 'admin-billing-invoices' | 'admin-billing-payments' | 'admin-billing-revenue' | 'admin-billing-discounts' | 'admin-billing-audit' | 'settings' | 'settings-users' | 'settings-language' | 'settings-general' | 'settings-billing' | 'settings-integrations' | 'settings-notifications' | 'help-support' | 'documentation' | 'notifications';
 
 function AppContent() {
   const location = useLocation();
@@ -78,6 +81,7 @@ function AppContent() {
     if (path.includes('/users')) return 'settings-users';
     if (path.includes('/help-support')) return 'help-support';
     if (path.includes('/documentation')) return 'documentation';
+    if (path.includes('/notifications')) return 'notifications';
     return 'welcome';
   };
 
@@ -114,6 +118,7 @@ function AppContent() {
       'settings-notifications': '/settings/notifications',
       'help-support': '/help-support',
       'documentation': '/documentation',
+      'notifications': '/notifications',
     };
     navigate(routeMap[page] || '/');
   };
@@ -189,8 +194,11 @@ function AppContent() {
             <Route path="/settings/integrations" element={<IntegrationsSettings />} />
             <Route path="/settings/notifications" element={<NotificationSettings />} />
             <Route path="/settings/security" element={<SecuritySettings />} />
+            <Route path="/settings/email" element={<EmailConfiguration />} />
+            <Route path="/settings/api" element={<ApiIntegration />} />
             <Route path="/help-support" element={<HelpSupport />} />
             <Route path="/documentation" element={<Documentation />} />
+            <Route path="/notifications" element={<NotificationsPage />} />
           </Routes>
         </div>
       </div>

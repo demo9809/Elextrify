@@ -1,5 +1,5 @@
 import { X, Download, FileSpreadsheet, Printer, MapPin } from 'lucide-react';
-import { formatCurrency, getInvoiceStatusLabel, getInvoiceStatusColor, getDetailedInvoice } from '../../data/mockBillingData';
+import { formatCurrency, getInvoiceStatusLabel, getInvoiceStatusColor, getDetailedInvoice, type DetailedInvoice } from '../../data/mockBillingData';
 
 interface InvoicePreviewProps {
   invoiceId: string;
@@ -7,7 +7,7 @@ interface InvoicePreviewProps {
 }
 
 export default function InvoicePreview({ invoiceId, onClose }: InvoicePreviewProps) {
-  const invoice = getDetailedInvoice(invoiceId);
+  const invoice: DetailedInvoice = getDetailedInvoice(invoiceId);
 
   const handleDownloadPDF = () => {
     console.log('Downloading PDF for invoice:', invoice.invoiceNumber);
