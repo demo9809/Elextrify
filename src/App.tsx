@@ -20,11 +20,14 @@ import NotificationSettings from './components/settings/NotificationSettings';
 import SecuritySettings from './components/settings/SecuritySettings';
 import TenantManagement from './components/tenants/TenantManagement';
 import TenantDetails from './components/tenants/TenantDetails';
+import EditionManagement from './components/editions/EditionManagement';
+import CreateEditEdition from './components/editions/CreateEditEdition';
+import EditionDetails from './components/editions/EditionDetails';
 import { Sidebar } from './components/Sidebar';
 import { MobileNav } from './components/MobileNav';
 import { TopHeader } from './components/TopHeader';
 
-type Page = 'welcome' | 'campaigns' | 'terminals' | 'playlists' | 'media' | 'customers' | 'tenants' | 'settings' | 'settings-users' | 'settings-language' | 'settings-general' | 'settings-billing' | 'settings-integrations' | 'settings-notifications';
+type Page = 'welcome' | 'campaigns' | 'terminals' | 'playlists' | 'media' | 'customers' | 'tenants' | 'editions' | 'settings' | 'settings-users' | 'settings-language' | 'settings-general' | 'settings-billing' | 'settings-integrations' | 'settings-notifications';
 
 function AppContent() {
   const location = useLocation();
@@ -40,6 +43,7 @@ function AppContent() {
     if (path.includes('/playlists')) return 'playlists';
     if (path.includes('/media')) return 'media';
     if (path.includes('/customers') || path.includes('/clients')) return 'customers';
+    if (path.includes('/editions')) return 'editions';
     if (path.includes('/settings/language')) return 'settings-language';
     if (path.includes('/settings/general')) return 'settings-general';
     if (path.includes('/settings/billing')) return 'settings-billing';
@@ -62,6 +66,7 @@ function AppContent() {
       media: '/media',
       customers: '/customers',
       tenants: '/tenants',
+      editions: '/editions',
       users: '/users',
       settings: '/settings',
       'settings-users': '/users',
@@ -114,6 +119,10 @@ function AppContent() {
             <Route path="/clients" element={<ClientManager />} />
             <Route path="/tenants" element={<TenantManagement />} />
             <Route path="/tenants/:tenantId" element={<TenantDetails />} />
+            <Route path="/editions" element={<EditionManagement />} />
+            <Route path="/editions/new" element={<CreateEditEdition />} />
+            <Route path="/editions/:editionId/edit" element={<CreateEditEdition />} />
+            <Route path="/editions/:editionId" element={<EditionDetails />} />
             <Route path="/users" element={<UserManagement />} />
             <Route path="/users/:userId" element={<UserDetails />} />
             <Route path="/users/roles" element={<RolesManagement />} />

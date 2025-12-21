@@ -114,6 +114,8 @@
     --color-purple-200: oklch(.902 .063 306.703);
     --color-purple-600: oklch(.558 .288 302.321);
     --color-purple-700: oklch(.496 .265 301.924);
+    --color-pink-50: oklch(.971 .014 343.198);
+    --color-pink-600: oklch(.592 .249 .584);
     --color-gray-50: oklch(.985 .002 247.839);
     --color-gray-100: oklch(.967 .003 264.542);
     --color-gray-200: oklch(.928 .006 264.531);
@@ -1722,6 +1724,10 @@
     border-color: #fde68a;
   }
 
+  .border-\[\#FECACA\] {
+    border-color: #fecaca;
+  }
+
   .border-\[\#FED7AA\] {
     border-color: #fed7aa;
   }
@@ -2048,6 +2054,10 @@
 
   .bg-orange-100 {
     background-color: var(--color-orange-100);
+  }
+
+  .bg-pink-50 {
+    background-color: var(--color-pink-50);
   }
 
   .bg-purple-50 {
@@ -2426,6 +2436,10 @@
     padding-top: calc(var(--spacing) * 8);
   }
 
+  .pt-10 {
+    padding-top: calc(var(--spacing) * 10);
+  }
+
   .pt-14 {
     padding-top: calc(var(--spacing) * 14);
   }
@@ -2724,6 +2738,10 @@
 
   .text-orange-700 {
     color: var(--color-orange-700);
+  }
+
+  .text-pink-600 {
+    color: var(--color-pink-600);
   }
 
   .text-purple-600 {
@@ -3474,6 +3492,10 @@
     --tw-ring-color: #dc2626;
   }
 
+  .focus\:ring-\[\#F59E0B\]:focus {
+    --tw-ring-color: #f59e0b;
+  }
+
   .focus\:ring-offset-0:focus {
     --tw-ring-offset-width: 0px;
     --tw-ring-offset-shadow: var(--tw-ring-inset, ) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
@@ -3517,6 +3539,12 @@
   @media (width >= 40rem) {
     .sm\:right-3 {
       right: calc(var(--spacing) * 3);
+    }
+  }
+
+  @media (width >= 40rem) {
+    .sm\:col-span-2 {
+      grid-column: span 2 / span 2;
     }
   }
 
@@ -3827,6 +3855,12 @@
     .sm\:text-sm {
       font-size: var(--text-sm);
       line-height: var(--tw-leading, var(--text-sm--line-height));
+    }
+  }
+
+  @media (width >= 48rem) {
+    .md\:col-span-2 {
+      grid-column: span 2 / span 2;
     }
   }
 
@@ -4179,6 +4213,12 @@
   @media (width >= 64rem) {
     .lg\:items-center {
       align-items: center;
+    }
+  }
+
+  @media (width >= 64rem) {
+    .lg\:items-start {
+      align-items: flex-start;
     }
   }
 

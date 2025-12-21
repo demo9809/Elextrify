@@ -10,7 +10,8 @@ import {
   X,
   Settings,
   ChevronDown,
-  Building2
+  Building2,
+  Package
 } from 'lucide-react';
 
 interface MobileNavProps {
@@ -25,6 +26,7 @@ export function MobileNav({ activePage = 'welcome', onNavigate }: MobileNavProps
   const menuItems = [
     { id: 'welcome', label: 'Welcome', icon: Home },
     { id: 'tenants', label: 'Tenants', icon: Building2 },
+    { id: 'editions', label: 'Editions', icon: Package },
     { id: 'customers', label: 'Customers', icon: Users },
     { id: 'campaigns', label: 'Campaigns', icon: Target },
     { id: 'terminals', label: 'Kiosks', icon: Monitor },
