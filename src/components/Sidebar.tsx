@@ -45,7 +45,6 @@ export function Sidebar({ activePage = 'welcome', onNavigate, isCollapsed = fals
 
   const menuItems = [
     { id: 'welcome', label: 'Welcome', icon: Home },
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, hasDropdown: true, disabled: true },
     { id: 'tenants', label: 'Tenant Management', icon: Building2 },
     { id: 'editions', label: 'Edition Management', icon: Package },
     { id: 'organization-units', label: 'Organization Units', icon: Layers },
@@ -55,8 +54,6 @@ export function Sidebar({ activePage = 'welcome', onNavigate, isCollapsed = fals
     { id: 'terminals', label: 'Kiosk Management', icon: Monitor },
     { id: 'media', label: 'Media', icon: Film },
     { id: 'playlists', label: 'Playlists', icon: List },
-    { id: 'analytics', label: 'Proof-of-Play Analytics', icon: BarChart3, disabled: true },
-    { id: 'reports', label: 'Reports & Insights', icon: FileText, disabled: true },
   ];
 
   const billingAdminItems = [
@@ -73,9 +70,6 @@ export function Sidebar({ activePage = 'welcome', onNavigate, isCollapsed = fals
     { id: 'settings-users', label: 'Users & Permissions', route: '/settings/users' },
     { id: 'settings-language', label: 'Language Settings', route: '/settings/language' },
     { id: 'settings-general', label: 'General Configurations', route: '/settings/general' },
-    { id: 'settings-billing', label: 'Billing & Subscription', route: '/settings/billing', disabled: true },
-    { id: 'settings-integrations', label: 'Integrations / Webhooks', route: '/settings/integrations', disabled: true },
-    { id: 'settings-notifications', label: 'Email / Notifications', route: '/settings/notifications', disabled: true },
   ];
 
   // Check if current page is a settings page
