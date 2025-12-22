@@ -3,14 +3,17 @@ import { BrowserRouter, Routes, Route, useLocation, useNavigate, Navigate } from
 import { Sidebar } from './components/Sidebar';
 import { MobileNav } from './components/MobileNav';
 import { TopHeader } from './components/TopHeader';
+import { GlobalFooter } from './components/GlobalFooter';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { LegalEntityProvider } from './contexts/LegalEntityContext';
 import LoginScreen from './components/auth/LoginScreen';
 import AccessRestricted from './components/auth/AccessRestricted';
 import React from 'react';
+import { Toaster } from 'sonner@2.0.3';
 
 // Import all page components
 import { WelcomeScreen } from './components/welcome/WelcomeScreen';
+import DashboardContainer from './components/operational-dashboard/DashboardContainer';
 import { CampaignScheduler } from './components/pages/CampaignScheduler';
 import { TerminalManagement } from './components/terminal/TerminalManagement';
 import { PlaylistManager } from './components/playlists/PlaylistManager';
@@ -65,7 +68,7 @@ import Documentation from './components/pages/Documentation';
 import EnhancedNotificationsPage from './components/notifications/EnhancedNotificationsPage';
 import GlobalAlertBanner from './components/GlobalAlertBanner';
 
-type Page = 'welcome' | 'campaigns' | 'terminals' | 'playlists' | 'media' | 'customers' | 'tenants' | 'editions' | 'organization-units' | 'billing' | 'media-billing' | 'admin-billing' | 'admin-billing-overview' | 'admin-billing-subscriptions' | 'admin-billing-invoices' | 'admin-billing-payments' | 'admin-billing-revenue' | 'admin-billing-discounts' | 'admin-billing-audit' | 'settings' | 'settings-account' | 'settings-workspace' | 'settings-system' | 'settings-users' | 'settings-language' | 'settings-general' | 'settings-billing' | 'settings-integrations' | 'settings-notifications' | 'settings-security' | 'settings-email' | 'settings-api' | 'help-support' | 'documentation' | 'notifications';
+type Page = 'welcome' | 'dashboard' | 'campaigns' | 'terminals' | 'playlists' | 'media' | 'customers' | 'tenants' | 'editions' | 'organization-units' | 'billing' | 'media-billing' | 'admin-billing' | 'admin-billing-overview' | 'admin-billing-subscriptions' | 'admin-billing-invoices' | 'admin-billing-payments' | 'admin-billing-revenue' | 'admin-billing-discounts' | 'admin-billing-audit' | 'settings' | 'settings-account' | 'settings-workspace' | 'settings-system' | 'settings-users' | 'settings-language' | 'settings-general' | 'settings-billing' | 'settings-integrations' | 'settings-notifications' | 'settings-security' | 'settings-email' | 'settings-api' | 'help-support' | 'documentation' | 'notifications';
 
 function AppContent() {
   const location = useLocation();
@@ -83,6 +86,7 @@ function AppContent() {
   // Determine current page from route
   const getCurrentPage = (): Page => {
     const path = location.pathname;
+    if (path === '/dashboard') return 'dashboard';
     if (path.includes('/campaigns')) return 'campaigns';
     if (path.includes('/tenants')) return 'tenants';
     if (path.includes('/terminals') || path.includes('/kiosks')) return 'terminals';
@@ -130,6 +134,7 @@ function AppContent() {
     // Map page names to routes
     const routeMap: { [key: string]: string } = {
       welcome: '/',
+      dashboard: '/dashboard',
       campaigns: '/campaigns',
       terminals: '/terminals',
       playlists: '/playlists',
@@ -209,9 +214,10 @@ function AppContent() {
         </div>
 
         {/* Page Content - Naturally pushed down by banner when visible */}
-        <div className="flex-1">
+        <div className="flex-1 pb-12">
           <Routes>
             <Route path="/" element={<WelcomeScreen onNavigate={(route) => navigate(route)} />} />
+            <Route path="/dashboard" element={<DashboardContainer />} />
             <Route path="/campaigns" element={<CampaignScheduler />} />
             <Route path="/terminals" element={<TerminalManagement />} />
             <Route path="/playlists" element={<PlaylistManager />} />
@@ -271,6 +277,14 @@ function AppContent() {
             <Route path="/notifications" element={<EnhancedNotificationsPage />} />
           </Routes>
         </div>
+
+        {/* Desktop Footer - hidden on mobile */}
+        <div className="hidden lg:block">
+          <GlobalFooter 
+            onNavigate={handleNavigate}
+            isSidebarCollapsed={isSidebarCollapsed}
+          />
+        </div>
       </div>
     </div>
   );
@@ -281,6 +295,7 @@ function App() {
     <AuthProvider>
       <LegalEntityProvider>
         <BrowserRouter>
+          <Toaster position="top-right" />
           <Routes>
             <Route path="/login" element={<LoginScreen />} />
             <Route path="/access-restricted" element={<AccessRestricted />} />
