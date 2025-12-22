@@ -1,11 +1,40 @@
 import { useState } from 'react';
-import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { Sidebar } from './components/Sidebar';
+import { MobileNav } from './components/MobileNav';
+import { TopHeader } from './components/TopHeader';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import LoginScreen from './components/auth/LoginScreen';
+import AccessRestricted from './components/auth/AccessRestricted';
+import React from 'react';
+
+// Import all page components
+import { WelcomeScreen } from './components/welcome/WelcomeScreen';
 import { CampaignScheduler } from './components/pages/CampaignScheduler';
 import { TerminalManagement } from './components/terminal/TerminalManagement';
-import { WelcomeScreen } from './components/welcome/WelcomeScreen';
 import { PlaylistManager } from './components/playlists/PlaylistManager';
 import { MediaManager } from './components/media/MediaManager';
 import { ClientManager } from './components/clients/ClientManager';
+import TenantManagement from './components/tenants/TenantManagement';
+import TenantDetails from './components/tenants/TenantDetails';
+import TenantOrganizationUnitsReadOnly from './components/tenants/TenantOrganizationUnitsReadOnly';
+import EditionManagement from './components/editions/EditionManagement';
+import CreateEditEdition from './components/editions/CreateEditEdition';
+import EditionDetails from './components/editions/EditionDetails';
+import OrganizationUnitManagement from './components/organization-units/OrganizationUnitManagement';
+import CreateEditOrganizationUnit from './components/organization-units/CreateEditOrganizationUnit';
+import OrganizationUnitDetails from './components/organization-units/OrganizationUnitDetails';
+import UserAccessManagement from './components/organization-units/UserAccessManagement';
+import TenantBilling from './components/billing/TenantBilling';
+import MediaBilling from './components/media-billing/MediaBilling';
+import AdminBillingDashboard from './components/admin-billing/AdminBillingDashboard';
+import AdminSubscriptions from './components/admin-billing/AdminSubscriptions';
+import AdminInvoices from './components/admin-billing/AdminInvoices';
+import AdminPaymentsFailures from './components/admin-billing/AdminPaymentsFailures';
+import AdminRevenueAnalytics from './components/admin-billing/AdminRevenueAnalytics';
+import AdminDiscountsCredits from './components/admin-billing/AdminDiscountsCredits';
+import AdminAuditLog from './components/admin-billing/AdminAuditLog';
+import AdminTenantBillingDetail from './components/admin-billing/AdminTenantBillingDetail';
 import UserManagement from './components/users/UserManagement';
 import UserDetails from './components/users/UserDetails';
 import RolesManagement from './components/users/RolesManagement';
@@ -23,7 +52,7 @@ import NotificationSettings from './components/settings/NotificationSettings';
 import SecuritySettings from './components/settings/SecuritySettings';
 import EmailConfiguration from './components/settings/EmailConfiguration';
 import ApiIntegration from './components/settings/ApiIntegration';
-import ThirdPartyIntegrations from './components/settings/ThirdPartyIntegrations';
+import ThirdPartyIntegrations from './components/settings/IntegrationsSettings';
 import RazorpayConfig from './components/settings/integrations/RazorpayConfig';
 import ZohoBooksConfig from './components/settings/integrations/ZohoBooksConfig';
 import WebhooksConfig from './components/settings/integrations/WebhooksConfig';
@@ -31,37 +60,24 @@ import ProfileSettings from './components/settings/account/ProfileSettings';
 import PasswordMFA from './components/settings/account/PasswordMFA';
 import NotificationPreferences from './components/settings/account/NotificationPreferences';
 import LanguageTimezone from './components/settings/account/LanguageTimezone';
-import TenantManagement from './components/tenants/TenantManagement';
-import TenantDetails from './components/tenants/TenantDetails';
-import EditionManagement from './components/editions/EditionManagement';
-import CreateEditEdition from './components/editions/CreateEditEdition';
-import EditionDetails from './components/editions/EditionDetails';
-import OrganizationUnitManagement from './components/organization-units/OrganizationUnitManagement';
-import CreateEditOrganizationUnit from './components/organization-units/CreateEditOrganizationUnit';
-import OrganizationUnitDetails from './components/organization-units/OrganizationUnitDetails';
-import UserAccessManagement from './components/organization-units/UserAccessManagement';
-import TenantBilling from './components/billing/TenantBilling';
-import AdminBillingDashboard from './components/admin-billing/AdminBillingDashboard';
-import AdminTenantBillingDetail from './components/admin-billing/AdminTenantBillingDetail';
-import AdminSubscriptions from './components/admin-billing/AdminSubscriptions';
-import AdminInvoices from './components/admin-billing/AdminInvoices';
-import AdminPaymentsFailures from './components/admin-billing/AdminPaymentsFailures';
-import AdminRevenueAnalytics from './components/admin-billing/AdminRevenueAnalytics';
-import AdminDiscountsCredits from './components/admin-billing/AdminDiscountsCredits';
-import AdminAuditLog from './components/admin-billing/AdminAuditLog';
 import HelpSupport from './components/pages/HelpSupport';
 import Documentation from './components/pages/Documentation';
 import NotificationsPage from './components/notifications/NotificationsPage';
-import { Sidebar } from './components/Sidebar';
-import { MobileNav } from './components/MobileNav';
-import { TopHeader } from './components/TopHeader';
 
-type Page = 'welcome' | 'campaigns' | 'terminals' | 'playlists' | 'media' | 'customers' | 'tenants' | 'editions' | 'organization-units' | 'billing' | 'admin-billing' | 'admin-billing-overview' | 'admin-billing-subscriptions' | 'admin-billing-invoices' | 'admin-billing-payments' | 'admin-billing-revenue' | 'admin-billing-discounts' | 'admin-billing-audit' | 'settings' | 'settings-account' | 'settings-workspace' | 'settings-system' | 'settings-users' | 'settings-language' | 'settings-general' | 'settings-billing' | 'settings-integrations' | 'settings-notifications' | 'settings-security' | 'settings-email' | 'settings-api' | 'help-support' | 'documentation' | 'notifications';
+type Page = 'welcome' | 'campaigns' | 'terminals' | 'playlists' | 'media' | 'customers' | 'tenants' | 'editions' | 'organization-units' | 'billing' | 'media-billing' | 'admin-billing' | 'admin-billing-overview' | 'admin-billing-subscriptions' | 'admin-billing-invoices' | 'admin-billing-payments' | 'admin-billing-revenue' | 'admin-billing-discounts' | 'admin-billing-audit' | 'settings' | 'settings-account' | 'settings-workspace' | 'settings-system' | 'settings-users' | 'settings-language' | 'settings-general' | 'settings-billing' | 'settings-integrations' | 'settings-notifications' | 'settings-security' | 'settings-email' | 'settings-api' | 'help-support' | 'documentation' | 'notifications';
 
 function AppContent() {
   const location = useLocation();
   const navigate = useNavigate();
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const { isAuthenticated } = useAuth();
+
+  // Redirect to login if not authenticated
+  React.useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login');
+    }
+  }, [isAuthenticated, navigate]);
 
   // Determine current page from route
   const getCurrentPage = (): Page => {
@@ -70,6 +86,7 @@ function AppContent() {
     if (path.includes('/tenants')) return 'tenants';
     if (path.includes('/terminals') || path.includes('/kiosks')) return 'terminals';
     if (path.includes('/playlists')) return 'playlists';
+    if (path.includes('/media-billing')) return 'media-billing';
     if (path.includes('/media')) return 'media';
     if (path.includes('/customers') || path.includes('/clients')) return 'customers';
     if (path.includes('/editions')) return 'editions';
@@ -129,6 +146,7 @@ function AppContent() {
       'admin-billing-discounts': '/admin/billing/discounts',
       'admin-billing-audit': '/admin/billing/audit',
       billing: '/billing',
+      'media-billing': '/media-billing',
       users: '/users',
       settings: '/settings',
       'settings-users': '/users',
@@ -176,7 +194,10 @@ function AppContent() {
       >
         {/* Desktop Header - hidden on mobile */}
         <div className="hidden lg:block">
-          <TopHeader isSidebarCollapsed={isSidebarCollapsed} />
+          <TopHeader 
+            isSidebarCollapsed={isSidebarCollapsed} 
+            onNavigate={handleNavigate}
+          />
         </div>
 
         <div className="flex-1">
@@ -190,6 +211,7 @@ function AppContent() {
             <Route path="/clients" element={<ClientManager />} />
             <Route path="/tenants" element={<TenantManagement />} />
             <Route path="/tenants/:tenantId" element={<TenantDetails />} />
+            <Route path="/tenants/:tenantId/organization-units" element={<TenantOrganizationUnitsReadOnly />} />
             <Route path="/editions" element={<EditionManagement />} />
             <Route path="/editions/new" element={<CreateEditEdition />} />
             <Route path="/editions/:editionId/edit" element={<CreateEditEdition />} />
@@ -200,6 +222,7 @@ function AppContent() {
             <Route path="/organization-units/:unitId" element={<OrganizationUnitDetails />} />
             <Route path="/organization-units/:unitId/access" element={<UserAccessManagement />} />
             <Route path="/billing" element={<TenantBilling />} />
+            <Route path="/media-billing" element={<MediaBilling />} />
             <Route path="/admin/billing" element={<AdminBillingDashboard />} />
             <Route path="/admin/billing/subscriptions" element={<AdminSubscriptions />} />
             <Route path="/admin/billing/invoices" element={<AdminInvoices />} />
@@ -246,9 +269,15 @@ function AppContent() {
 
 function App() {
   return (
-    <BrowserRouter>
-      <AppContent />
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<LoginScreen />} />
+          <Route path="/access-restricted" element={<AccessRestricted />} />
+          <Route path="*" element={<AppContent />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 

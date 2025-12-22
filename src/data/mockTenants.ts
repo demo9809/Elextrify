@@ -2,6 +2,16 @@ export type TenantStatus = 'trial' | 'active' | 'suspended' | 'expired' | 'archi
 export type TenantEdition = 'starter' | 'professional' | 'enterprise' | 'custom';
 export type BillingStatus = 'paid' | 'pending' | 'overdue' | 'trial';
 
+// Simplified Organization Unit summary for Tenant view
+export interface OrgUnitSummary {
+  id: string;
+  name: string;
+  parentId: string | null;
+  screensCount: number;
+  campaignsCount: number;
+  status: 'active' | 'inactive';
+}
+
 export interface Tenant {
   id: string;
   tenantId: string; // System-generated unique ID
@@ -25,6 +35,18 @@ export interface Tenant {
   mfaEnforced: boolean;
   isTrial: boolean;
   trialEndsDate?: string;
+  // Subscription & Billing Data
+  billingCycle?: 'monthly' | 'yearly';
+  nextRenewalDate?: string;
+  lastInvoiceAmount?: number;
+  lastPaymentDate?: string;
+  screenLimit?: number;
+  storageLimit?: number; // in GB
+  // Organization Unit Data
+  organizationUnits?: OrgUnitSummary[];
+  totalOrgUnits?: number;
+  hierarchyDepth?: number; // 1 = flat, 2+ = multi-level
+  largestOrgUnit?: string; // Name of the org unit with most resources
 }
 
 export const mockTenants: Tenant[] = [
@@ -50,6 +72,22 @@ export const mockTenants: Tenant[] = [
     failedLoginAttempts: 0,
     mfaEnforced: true,
     isTrial: false,
+    billingCycle: 'yearly',
+    nextRenewalDate: '2026-06-15T10:00:00Z',
+    lastInvoiceAmount: 1200,
+    lastPaymentDate: '2025-01-10T14:30:00Z',
+    screenLimit: 200,
+    storageLimit: 100,
+    totalOrgUnits: 8,
+    hierarchyDepth: 3,
+    largestOrgUnit: 'North America Region',
+    organizationUnits: [
+      { id: '1', name: 'Acme Corporation HQ', parentId: null, screensCount: 45, campaignsCount: 8, status: 'active' },
+      { id: '2', name: 'North America Region', parentId: '1', screensCount: 68, campaignsCount: 12, status: 'active' },
+      { id: '3', name: 'Europe Region', parentId: '1', screensCount: 32, campaignsCount: 5, status: 'active' },
+      { id: '4', name: 'East Coast Division', parentId: '2', screensCount: 28, campaignsCount: 6, status: 'active' },
+      { id: '5', name: 'West Coast Division', parentId: '2', screensCount: 25, campaignsCount: 4, status: 'active' },
+    ],
   },
   {
     id: '2',
@@ -73,6 +111,12 @@ export const mockTenants: Tenant[] = [
     failedLoginAttempts: 0,
     mfaEnforced: true,
     isTrial: false,
+    billingCycle: 'monthly',
+    nextRenewalDate: '2025-02-20T09:30:00Z',
+    lastInvoiceAmount: 200,
+    lastPaymentDate: '2025-01-08T11:20:00Z',
+    screenLimit: 50,
+    storageLimit: 20,
   },
   {
     id: '3',
@@ -96,6 +140,12 @@ export const mockTenants: Tenant[] = [
     mfaEnforced: false,
     isTrial: true,
     trialEndsDate: '2025-02-05T08:00:00Z',
+    billingCycle: 'monthly',
+    nextRenewalDate: '2025-02-05T08:00:00Z',
+    lastInvoiceAmount: 0,
+    lastPaymentDate: '2025-01-05T08:00:00Z',
+    screenLimit: 10,
+    storageLimit: 5,
   },
   {
     id: '4',
@@ -119,6 +169,12 @@ export const mockTenants: Tenant[] = [
     failedLoginAttempts: 1,
     mfaEnforced: true,
     isTrial: false,
+    billingCycle: 'yearly',
+    nextRenewalDate: '2025-08-10T12:00:00Z',
+    lastInvoiceAmount: 600,
+    lastPaymentDate: '2024-08-10T12:00:00Z',
+    screenLimit: 100,
+    storageLimit: 50,
   },
   {
     id: '5',
@@ -142,6 +198,12 @@ export const mockTenants: Tenant[] = [
     failedLoginAttempts: 0,
     mfaEnforced: true,
     isTrial: false,
+    billingCycle: 'yearly',
+    nextRenewalDate: '2024-11-08T14:30:00Z',
+    lastInvoiceAmount: 2400,
+    lastPaymentDate: '2025-01-10T13:00:00Z',
+    screenLimit: 300,
+    storageLimit: 150,
   },
   {
     id: '6',
@@ -165,6 +227,12 @@ export const mockTenants: Tenant[] = [
     failedLoginAttempts: 3,
     mfaEnforced: false,
     isTrial: false,
+    billingCycle: 'yearly',
+    nextRenewalDate: '2025-02-14T11:00:00Z',
+    lastInvoiceAmount: 1800,
+    lastPaymentDate: '2024-12-15T10:30:00Z',
+    screenLimit: 150,
+    storageLimit: 75,
   },
   {
     id: '7',
@@ -188,6 +256,12 @@ export const mockTenants: Tenant[] = [
     failedLoginAttempts: 0,
     mfaEnforced: true,
     isTrial: false,
+    billingCycle: 'yearly',
+    nextRenewalDate: '2024-09-22T10:15:00Z',
+    lastInvoiceAmount: 1800,
+    lastPaymentDate: '2025-01-09T08:45:00Z',
+    screenLimit: 500,
+    storageLimit: 200,
   },
   {
     id: '8',
@@ -210,6 +284,12 @@ export const mockTenants: Tenant[] = [
     mfaEnforced: false,
     isTrial: true,
     trialEndsDate: '2025-02-08T13:20:00Z',
+    billingCycle: 'monthly',
+    nextRenewalDate: '2025-02-08T13:20:00Z',
+    lastInvoiceAmount: 0,
+    lastPaymentDate: '2025-01-08T13:20:00Z',
+    screenLimit: 5,
+    storageLimit: 2,
   },
   {
     id: '9',
@@ -232,6 +312,12 @@ export const mockTenants: Tenant[] = [
     failedLoginAttempts: 0,
     mfaEnforced: false,
     isTrial: false,
+    billingCycle: 'yearly',
+    nextRenewalDate: '2025-01-15T09:00:00Z',
+    lastInvoiceAmount: 400,
+    lastPaymentDate: '2024-11-20T15:00:00Z',
+    screenLimit: 50,
+    storageLimit: 20,
   },
   {
     id: '10',
@@ -255,6 +341,12 @@ export const mockTenants: Tenant[] = [
     failedLoginAttempts: 0,
     mfaEnforced: true,
     isTrial: false,
+    billingCycle: 'yearly',
+    nextRenewalDate: '2025-05-03T10:45:00Z',
+    lastInvoiceAmount: 600,
+    lastPaymentDate: '2025-01-10T12:20:00Z',
+    screenLimit: 100,
+    storageLimit: 50,
   },
 ];
 

@@ -25,7 +25,17 @@ import {
   CheckCircle2,
   Database,
   FileText,
-  Film
+  Film,
+  Calendar,
+  TrendingUp,
+  DollarSign,
+  Activity,
+  ExternalLink,
+  Receipt,
+  Percent,
+  Lock,
+  Network,
+  ChevronRight
 } from 'lucide-react';
 import { toast } from 'sonner@2.0.3';
 import { 
@@ -175,6 +185,19 @@ export default function TenantDetails() {
   };
 
   const isDeleteConfirmValid = deleteConfirmText.toUpperCase() === 'DELETE';
+
+  // Calculate days until renewal
+  const getDaysUntilRenewal = (renewalDate?: string): number => {
+    if (!renewalDate) return 0;
+    const now = new Date();
+    const renewal = new Date(renewalDate);
+    const diffMs = renewal.getTime() - now.getTime();
+    const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
+
+  const daysUntilRenewal = getDaysUntilRenewal(tenant.nextRenewalDate);
+  const isRenewalSoon = daysUntilRenewal > 0 && daysUntilRenewal <= 14;
 
   return (
     <div className="flex flex-col h-full bg-[#F9FAFB]">
@@ -334,6 +357,249 @@ export default function TenantDetails() {
                   <p className="text-sm text-[#6B7280] mt-1">Billing Status</p>
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* Subscription & Billing Overview */}
+          <div className="bg-white border border-[#E5E7EB] rounded-lg p-6">
+            {/* Header with Actions */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
+              <div>
+                <h3 className="font-semibold text-[#111827] mb-1">Subscription & Billing Overview</h3>
+                <p className="text-sm text-[#6B7280]">Current plan, billing cycle, and renewal status for this tenant</p>
+              </div>
+              
+              {/* Admin Actions - Right Aligned */}
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => {
+                    setSelectedEdition(tenant.edition);
+                    setShowChangePackageModal(true);
+                  }}
+                  className="flex items-center gap-2 px-4 h-[36px] border border-[#E5E7EB] text-[#6B7280] rounded-lg hover:bg-[#F9FAFB] transition-colors text-sm font-medium"
+                >
+                  <Package className="w-4 h-4" />
+                  <span>Change Package</span>
+                </button>
+                <button
+                  onClick={() => navigate(`/admin/billing?tenant=${tenant.id}&tab=invoices`)}
+                  className="flex items-center gap-2 px-4 h-[36px] border border-[#E5E7EB] text-[#6B7280] rounded-lg hover:bg-[#F9FAFB] transition-colors text-sm font-medium"
+                >
+                  <Receipt className="w-4 h-4" />
+                  <span>View Billing History</span>
+                  <ExternalLink className="w-3 h-3" />
+                </button>
+                <button
+                  onClick={() => {
+                    toast.info('Apply Discount/Credit feature coming soon');
+                  }}
+                  className="flex items-center gap-2 px-4 h-[36px] border border-[#E5E7EB] text-[#6B7280] rounded-lg hover:bg-[#F9FAFB] transition-colors text-sm font-medium"
+                >
+                  <Percent className="w-4 h-4" />
+                  <span>Apply Discount</span>
+                </button>
+                <button
+                  onClick={() => handleStatusChange('suspended')}
+                  className="flex items-center gap-2 px-4 h-[36px] border border-[#DC2626] text-[#DC2626] rounded-lg hover:bg-[#FEF2F2] transition-colors text-sm font-medium"
+                >
+                  <Ban className="w-4 h-4" />
+                  <span>Suspend</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Insight Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+              {/* Current Plan */}
+              <div className="border border-[#E5E7EB] rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center flex-shrink-0">
+                    <Package className="w-4 h-4 text-purple-600" />
+                  </div>
+                  <p className="text-xs font-medium text-[#6B7280]">Current Plan</p>
+                </div>
+                <div className="space-y-2">
+                  <span className={`inline-flex items-center px-2.5 py-1 rounded-md border text-xs font-medium ${getEditionColor(tenant.edition)}`}>
+                    {getEditionLabel(tenant.edition)}
+                  </span>
+                  {tenant.billingCycle && (
+                    <p className="text-xs text-[#6B7280] capitalize">
+                      {tenant.billingCycle === 'monthly' ? 'Monthly Billing' : 'Yearly Billing'}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {/* Subscription Status */}
+              <div className="border border-[#E5E7EB] rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                    tenant.billingStatus === 'paid' ? 'bg-green-50' :
+                    tenant.billingStatus === 'overdue' ? 'bg-red-50' :
+                    tenant.billingStatus === 'pending' ? 'bg-yellow-50' : 'bg-blue-50'
+                  }`}>
+                    <Activity className={`w-4 h-4 ${
+                      tenant.billingStatus === 'paid' ? 'text-green-600' :
+                      tenant.billingStatus === 'overdue' ? 'text-red-600' :
+                      tenant.billingStatus === 'pending' ? 'text-yellow-600' : 'text-blue-600'
+                    }`} />
+                  </div>
+                  <p className="text-xs font-medium text-[#6B7280]">Status</p>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <span className={`inline-flex items-center px-2.5 py-1 rounded-md border text-xs font-medium ${getBillingStatusColor(tenant.billingStatus)}`}>
+                      {getBillingStatusLabel(tenant.billingStatus)}
+                    </span>
+                    {tenant.billingStatus === 'overdue' && (
+                      <AlertTriangle className="w-4 h-4 text-[#DC2626]" />
+                    )}
+                  </div>
+                  {tenant.isTrial ? (
+                    <p className="text-xs text-[#6B7280]">Trial Active</p>
+                  ) : (
+                    <p className="text-xs text-[#6B7280]">Subscription Active</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Next Renewal */}
+              <div className="border border-[#E5E7EB] rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                    isRenewalSoon ? 'bg-orange-50' : 'bg-blue-50'
+                  }`}>
+                    <Calendar className={`w-4 h-4 ${
+                      isRenewalSoon ? 'text-orange-600' : 'text-blue-600'
+                    }`} />
+                  </div>
+                  <p className="text-xs font-medium text-[#6B7280]">Next Renewal</p>
+                </div>
+                <div className="space-y-1">
+                  {tenant.nextRenewalDate ? (
+                    <>
+                      <p className="text-sm font-medium text-[#111827]">
+                        {formatDate(tenant.nextRenewalDate)}
+                      </p>
+                      <div className="flex items-center gap-1">
+                        {isRenewalSoon && <AlertTriangle className="w-3 h-3 text-[#F59E0B]" />}
+                        <p className={`text-xs ${
+                          isRenewalSoon ? 'text-[#F59E0B] font-medium' : 'text-[#6B7280]'
+                        }`}>
+                          {daysUntilRenewal > 0 ? `Renews in ${daysUntilRenewal} days` : 'Renewal overdue'}
+                        </p>
+                      </div>
+                    </>
+                  ) : (
+                    <p className="text-xs text-[#6B7280]">No renewal date</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Billing Health */}
+              <div className="border border-[#E5E7EB] rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                    tenant.billingStatus === 'paid' ? 'bg-green-50' :
+                    tenant.billingStatus === 'overdue' ? 'bg-red-50' : 'bg-yellow-50'
+                  }`}>
+                    <DollarSign className={`w-4 h-4 ${
+                      tenant.billingStatus === 'paid' ? 'text-green-600' :
+                      tenant.billingStatus === 'overdue' ? 'text-red-600' : 'text-yellow-600'
+                    }`} />
+                  </div>
+                  <p className="text-xs font-medium text-[#6B7280]">Billing Health</p>
+                </div>
+                <div className="space-y-1">
+                  {tenant.lastInvoiceAmount !== undefined && (
+                    <p className="text-sm font-medium text-[#111827]">
+                      ${tenant.lastInvoiceAmount.toLocaleString()}
+                    </p>
+                  )}
+                  {tenant.lastPaymentDate && (
+                    <p className="text-xs text-[#6B7280]">
+                      Last paid: {new Date(tenant.lastPaymentDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                    </p>
+                  )}
+                  {tenant.billingStatus === 'overdue' && (
+                    <p className="text-xs text-[#DC2626] font-medium">Payment overdue</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Plan Limits Snapshot */}
+              <div className="border border-[#E5E7EB] rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center flex-shrink-0">
+                    <TrendingUp className="w-4 h-4 text-indigo-600" />
+                  </div>
+                  <p className="text-xs font-medium text-[#6B7280]">Plan Limits</p>
+                </div>
+                <div className="space-y-2">
+                  {/* Screens Usage */}
+                  {tenant.screenLimit && (
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <p className="text-xs text-[#6B7280]">Screens</p>
+                        <p className={`text-xs font-medium ${
+                          (tenant.totalScreens / tenant.screenLimit) >= 0.9 ? 'text-[#F59E0B]' : 'text-[#111827]'
+                        }`}>
+                          {tenant.totalScreens}/{tenant.screenLimit}
+                        </p>
+                      </div>
+                      <div className="w-full h-1.5 bg-[#E5E7EB] rounded-full overflow-hidden">
+                        <div 
+                          className={`h-full rounded-full ${
+                            (tenant.totalScreens / tenant.screenLimit) >= 0.9 ? 'bg-[#F59E0B]' :
+                            (tenant.totalScreens / tenant.screenLimit) >= 0.7 ? 'bg-[#3B82F6]' : 'bg-[#16A34A]'
+                          }`}
+                          style={{ width: `${Math.min((tenant.totalScreens / tenant.screenLimit) * 100, 100)}%` }}
+                        />
+                      </div>
+                    </div>
+                  )}
+                  {/* Storage Usage */}
+                  {tenant.storageLimit && (
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <p className="text-xs text-[#6B7280]">Storage</p>
+                        <p className={`text-xs font-medium ${
+                          (tenant.storageUsedGB / tenant.storageLimit) >= 0.9 ? 'text-[#F59E0B]' : 'text-[#111827]'
+                        }`}>
+                          {tenant.storageUsedGB}/{tenant.storageLimit} GB
+                        </p>
+                      </div>
+                      <div className="w-full h-1.5 bg-[#E5E7EB] rounded-full overflow-hidden">
+                        <div 
+                          className={`h-full rounded-full ${
+                            (tenant.storageUsedGB / tenant.storageLimit) >= 0.9 ? 'bg-[#F59E0B]' :
+                            (tenant.storageUsedGB / tenant.storageLimit) >= 0.7 ? 'bg-[#3B82F6]' : 'bg-[#16A34A]'
+                          }`}
+                          style={{ width: `${Math.min((tenant.storageUsedGB / tenant.storageLimit) * 100, 100)}%` }}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Links to Billing Admin */}
+            <div className="mt-4 pt-4 border-t border-[#E5E7EB] flex flex-wrap gap-3">
+              <button
+                onClick={() => navigate(`/admin/billing/subscriptions?tenant=${tenant.id}`)}
+                className="inline-flex items-center gap-2 text-sm text-[#D9480F] hover:text-[#C23D0D] transition-colors"
+              >
+                <ExternalLink className="w-4 h-4" />
+                <span>View in Billing Admin → Subscriptions</span>
+              </button>
+              <button
+                onClick={() => navigate(`/admin/billing/invoices?tenant=${tenant.id}`)}
+                className="inline-flex items-center gap-2 text-sm text-[#D9480F] hover:text-[#C23D0D] transition-colors"
+              >
+                <ExternalLink className="w-4 h-4" />
+                <span>View in Billing Admin → Invoices</span>
+              </button>
             </div>
           </div>
 
@@ -509,6 +775,168 @@ export default function TenantDetails() {
               </div>
             </div>
           </div>
+
+          {/* Organization Units */}
+          {tenant.organizationUnits && tenant.organizationUnits.length > 0 && (
+            <div className="bg-white border border-[#E5E7EB] rounded-lg p-6">
+              {/* Header with Lock Icon */}
+              <div className="flex items-start justify-between mb-6">
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="font-semibold text-[#111827]">Organization Units</h3>
+                    <Lock className="w-4 h-4 text-[#6B7280]" />
+                  </div>
+                  <p className="text-sm text-[#6B7280]">Business structure defined by this tenant</p>
+                  <p className="text-xs text-[#9CA3AF] mt-1 flex items-center gap-1">
+                    <Lock className="w-3 h-3" />
+                    <span>Managed by tenant — Read-only view</span>
+                  </p>
+                </div>
+              </div>
+
+              {/* Summary Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                {/* Total Organization Units */}
+                <div className="border border-[#E5E7EB] rounded-lg p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center flex-shrink-0">
+                      <Network className="w-4 h-4 text-indigo-600" />
+                    </div>
+                    <p className="text-xs font-medium text-[#6B7280]">Total Units</p>
+                  </div>
+                  <p className="text-2xl font-semibold text-[#111827]">{tenant.totalOrgUnits || tenant.organizationUnits.length}</p>
+                  <p className="text-xs text-[#6B7280] mt-1">
+                    {tenant.totalOrgUnits === 1 ? 'Organization Unit' : 'Organization Units'}
+                  </p>
+                </div>
+
+                {/* Hierarchy Depth */}
+                <div className="border border-[#E5E7EB] rounded-lg p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
+                      <Database className="w-4 h-4 text-blue-600" />
+                    </div>
+                    <p className="text-xs font-medium text-[#6B7280]">Structure</p>
+                  </div>
+                  <div className="flex items-baseline gap-2">
+                    <p className="text-2xl font-semibold text-[#111827]">{tenant.hierarchyDepth || 1}</p>
+                    <p className="text-sm text-[#6B7280]">
+                      {tenant.hierarchyDepth === 1 ? 'Level' : 'Levels'}
+                    </p>
+                  </div>
+                  <p className="text-xs text-[#6B7280] mt-1">
+                    {tenant.hierarchyDepth === 1 ? 'Flat hierarchy' : 'Multi-level hierarchy'}
+                  </p>
+                </div>
+
+                {/* Largest Unit */}
+                {tenant.largestOrgUnit && (
+                  <div className="border border-[#E5E7EB] rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center flex-shrink-0">
+                        <TrendingUp className="w-4 h-4 text-purple-600" />
+                      </div>
+                      <p className="text-xs font-medium text-[#6B7280]">Largest Unit</p>
+                    </div>
+                    <p className="text-sm font-medium text-[#111827] line-clamp-2">{tenant.largestOrgUnit}</p>
+                    <p className="text-xs text-[#6B7280] mt-1">Highest resource count</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Organization Units Preview Table */}
+              <div className="border border-[#E5E7EB] rounded-lg overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-[#F9FAFB] border-b border-[#E5E7EB]">
+                      <tr>
+                        <th className="text-left px-4 py-3 text-xs font-medium text-[#6B7280] uppercase tracking-wider">
+                          Unit Name
+                        </th>
+                        <th className="text-left px-4 py-3 text-xs font-medium text-[#6B7280] uppercase tracking-wider">
+                          Parent Unit
+                        </th>
+                        <th className="text-center px-4 py-3 text-xs font-medium text-[#6B7280] uppercase tracking-wider">
+                          Screens
+                        </th>
+                        <th className="text-center px-4 py-3 text-xs font-medium text-[#6B7280] uppercase tracking-wider">
+                          Campaigns
+                        </th>
+                        <th className="text-center px-4 py-3 text-xs font-medium text-[#6B7280] uppercase tracking-wider">
+                          Status
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-[#E5E7EB]">
+                      {tenant.organizationUnits.slice(0, 5).map((unit) => {
+                        const parentUnit = tenant.organizationUnits?.find(u => u.id === unit.parentId);
+                        return (
+                          <tr key={unit.id} className="hover:bg-[#F9FAFB] transition-colors">
+                            <td className="px-4 py-3">
+                              <div className="flex items-center gap-2">
+                                <Building2 className="w-4 h-4 text-[#6B7280] flex-shrink-0" />
+                                <span className="text-sm font-medium text-[#111827]">{unit.name}</span>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3">
+                              {parentUnit ? (
+                                <div className="flex items-center gap-1 text-sm text-[#6B7280]">
+                                  <ChevronRight className="w-3 h-3" />
+                                  <span>{parentUnit.name}</span>
+                                </div>
+                              ) : (
+                                <span className="text-sm text-[#9CA3AF] italic">Root</span>
+                              )}
+                            </td>
+                            <td className="px-4 py-3 text-center">
+                              <span className="text-sm font-medium text-[#111827]">{unit.screensCount}</span>
+                            </td>
+                            <td className="px-4 py-3 text-center">
+                              <span className="text-sm font-medium text-[#111827]">{unit.campaignsCount}</span>
+                            </td>
+                            <td className="px-4 py-3 text-center">
+                              <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
+                                unit.status === 'active' 
+                                  ? 'bg-green-50 text-green-700' 
+                                  : 'bg-gray-50 text-gray-700'
+                              }`}>
+                                {unit.status === 'active' ? 'Active' : 'Inactive'}
+                              </span>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Footer with View Full Structure Link */}
+                {tenant.organizationUnits.length > 5 && (
+                  <div className="bg-[#F9FAFB] border-t border-[#E5E7EB] px-4 py-3">
+                    <p className="text-sm text-[#6B7280] text-center">
+                      Showing top 5 of {tenant.organizationUnits.length} units
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* View Full Structure Link */}
+              <div className="mt-4 flex items-center justify-between">
+                <button
+                  onClick={() => navigate(`/tenants/${tenant.id}/organization-units`)}
+                  className="inline-flex items-center gap-2 text-sm text-[#D9480F] hover:text-[#C23D0D] transition-colors font-medium"
+                >
+                  <Lock className="w-4 h-4" />
+                  <span>View full structure (read-only)</span>
+                  <ExternalLink className="w-4 h-4" />
+                </button>
+                <div className="flex items-center gap-1.5 text-xs text-[#9CA3AF]">
+                  <Lock className="w-3.5 h-3.5" />
+                  <span>Configuration managed by tenant</span>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* User Hierarchy Overview */}
           <div className="bg-white border border-[#E5E7EB] rounded-lg p-6">

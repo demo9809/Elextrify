@@ -103,7 +103,7 @@ export default function TenantBilling() {
               <div>
                 <h1 className="text-[#111827]">Billing & Subscription</h1>
                 <p className="text-sm text-[#6B7280] mt-1">
-                  Manage your subscription, view invoices, and track usage
+                  Platform subscription fees and account management
                 </p>
               </div>
             </div>
@@ -282,6 +282,22 @@ export default function TenantBilling() {
                   <div className="mb-6">
                     <h2 className="font-semibold text-[#111827] mb-1">Usage & Limits</h2>
                     <p className="text-sm text-[#6B7280]">Track your usage against plan limits</p>
+                  </div>
+
+                  {/* Info Card */}
+                  <div className="mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div className="flex gap-3">
+                      <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <h4 className="font-medium text-blue-900 mb-1">
+                          Platform Subscription Only
+                        </h4>
+                        <p className="text-sm text-blue-800">
+                          This section shows your platform subscription fees and limits. 
+                          For customer delivery charges and campaign-based invoices, visit the Media Billing module.
+                        </p>
+                      </div>
+                    </div>
                   </div>
 
                   <div className="space-y-6">

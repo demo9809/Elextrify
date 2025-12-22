@@ -8,12 +8,9 @@ import {
   CreditCard, 
   FileText, 
   Settings, 
-  LogOut,
   ChevronDown,
   Monitor,
   Home,
-  MoreVertical,
-  User,
   HelpCircle,
   PanelLeftClose,
   PanelLeft,
@@ -22,49 +19,53 @@ import {
   Package,
   Layers,
   Receipt,
-  DollarSign,
   TrendingUp,
   AlertCircle,
   Percent,
-  Globe,
   Activity,
-  Server,
-  BookOpen,
-  Lock,
-  Mail,
-  Code,
-  Languages
+  BookOpen
 } from 'lucide-react';
 import React from 'react';
+import { useAuth } from '../contexts/AuthContext';
 
 interface SidebarProps {
   activePage?: string;
   onNavigate?: (pageId: string) => void;
   isCollapsed?: boolean;
   onToggleCollapse?: () => void;
-  userRole?: 'user' | 'tenant-admin' | 'host-admin' | 'saas-admin';
 }
 
-export function Sidebar({ activePage = 'welcome', onNavigate, isCollapsed = false, onToggleCollapse, userRole = 'saas-admin' }: SidebarProps) {
-  const [showUserMenu, setShowUserMenu] = React.useState(false);
+export function Sidebar({ activePage = 'welcome', onNavigate, isCollapsed = false, onToggleCollapse }: SidebarProps) {
+  const { user } = useAuth();
+  const userRole = user?.role || 'tenant-user';
+  
   const [settingsExpanded, setSettingsExpanded] = React.useState(false);
   const [billingExpanded, setBillingExpanded] = React.useState(false);
   const [hostAdminExpanded, setHostAdminExpanded] = React.useState(false);
 
-  const menuItems = [
+  // Tenant User Menu Items
+  const tenantMenuItems = [
     { id: 'welcome', label: 'Welcome', icon: Home },
-    { id: 'billing', label: 'Billing & Subscription', icon: Receipt, badge: 'TENANT' },
     { id: 'customers', label: 'Customers', icon: Users },
-    { id: 'campaigns', label: 'Campaigns', icon: Target, active: true },
+    { id: 'campaigns', label: 'Campaigns', icon: Target },
     { id: 'terminals', label: 'Kiosk Management', icon: Monitor },
     { id: 'media', label: 'Media', icon: Film },
     { id: 'playlists', label: 'Playlists', icon: List },
+    { id: 'organization-units', label: 'Organization Units', icon: Layers },
+    { id: 'media-billing', label: 'Media Billing', icon: Receipt },
   ];
+
+  // SaaS Admin Menu Items
+  const adminMenuItems = [
+    { id: 'welcome', label: 'Dashboard', icon: Home },
+  ];
+
+  // Choose menu items based on role
+  const menuItems = userRole === 'saas-admin' ? adminMenuItems : tenantMenuItems;
 
   const hostAdminItems = [
     { id: 'tenants', label: 'Tenant Management', icon: Building2 },
     { id: 'editions', label: 'Edition Management', icon: Package },
-    { id: 'organization-units', label: 'Organization Units', icon: Layers },
   ];
 
   const billingAdminItems = [
@@ -91,7 +92,7 @@ export function Sidebar({ activePage = 'welcome', onNavigate, isCollapsed = fals
   const isBillingAdminActive = activePage === 'admin-billing' || activePage.startsWith('admin-billing-');
   
   // Check if current page is a host admin page
-  const isHostAdminActive = activePage === 'tenants' || activePage === 'editions' || activePage === 'organization-units';
+  const isHostAdminActive = activePage === 'tenants' || activePage === 'editions';
 
   // Determine if user can see System section
   const canViewSystemSettings = userRole === 'saas-admin' || userRole === 'host-admin';
@@ -214,77 +215,79 @@ export function Sidebar({ activePage = 'welcome', onNavigate, isCollapsed = fals
           })}
 
           {/* Host Admin Menu Item with Submenu */}
-          <div className="relative group">
-            <button
-              onClick={() => {
-                if (isCollapsed) {
-                  onNavigate?.('tenants');
-                } else {
-                  setHostAdminExpanded(!hostAdminExpanded);
-                }
-              }}
-              className={`
-                w-full flex items-center rounded-lg transition-colors text-left
-                ${isCollapsed ? 'justify-center px-0 py-3' : 'gap-3 px-4 py-2.5'}
-                ${isHostAdminActive 
-                  ? 'bg-[#FEF2F2] text-[#D9480F]' 
-                  : 'text-[#6B7280] hover:bg-[#F9FAFB]'
-                }
-                ${isHostAdminActive && !isCollapsed ? 'border-l-4 border-[#D9480F] -ml-[4px] pl-[20px]' : ''}
-              `}
-              title={isCollapsed ? 'Host Admin' : undefined}
-            >
-              <Shield className={`w-5 h-5 ${ 
-                isHostAdminActive ? 'text-[#D9480F]' : 'text-[#6B7280]'
-              }`} />
-              {!isCollapsed && (
-                <>
-                  <span className={`text-sm flex-1 ${isHostAdminActive ? 'font-medium' : ''}`}>
-                    Host Admin
-                  </span>
-                  <ChevronDown className={`w-4 h-4 transition-transform ${
-                    hostAdminExpanded ? 'rotate-180' : ''
-                  } ${isHostAdminActive ? 'text-[#D9480F]' : 'text-[#6B7280]'}`} />
-                </>
+          {userRole === 'saas-admin' && (
+            <div className="relative group">
+              <button
+                onClick={() => {
+                  if (isCollapsed) {
+                    onNavigate?.('tenants');
+                  } else {
+                    setHostAdminExpanded(!hostAdminExpanded);
+                  }
+                }}
+                className={`
+                  w-full flex items-center rounded-lg transition-colors text-left
+                  ${isCollapsed ? 'justify-center px-0 py-3' : 'gap-3 px-4 py-2.5'}
+                  ${isHostAdminActive 
+                    ? 'bg-[#FEF2F2] text-[#D9480F]' 
+                    : 'text-[#6B7280] hover:bg-[#F9FAFB]'
+                  }
+                  ${isHostAdminActive && !isCollapsed ? 'border-l-4 border-[#D9480F] -ml-[4px] pl-[20px]' : ''}
+                `}
+                title={isCollapsed ? 'Host Admin' : undefined}
+              >
+                <Shield className={`w-5 h-5 ${ 
+                  isHostAdminActive ? 'text-[#D9480F]' : 'text-[#6B7280]'
+                }`} />
+                {!isCollapsed && (
+                  <>
+                    <span className={`text-sm flex-1 ${isHostAdminActive ? 'font-medium' : ''}`}>
+                      Host Admin
+                    </span>
+                    <ChevronDown className={`w-4 h-4 transition-transform ${
+                      hostAdminExpanded ? 'rotate-180' : ''
+                    } ${isHostAdminActive ? 'text-[#D9480F]' : 'text-[#6B7280]'}`} />
+                  </>
+                )}
+              </button>
+
+              {/* Tooltip for collapsed state */}
+              {isCollapsed && (
+                <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-[#111827] text-white text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 pointer-events-none">
+                  Host Admin
+                  <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-[#111827]"></div>
+                </div>
               )}
-            </button>
 
-            {/* Tooltip for collapsed state */}
-            {isCollapsed && (
-              <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-[#111827] text-white text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 pointer-events-none">
-                Host Admin
-                <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-[#111827]"></div>
-              </div>
-            )}
-
-            {/* Submenu - only show when expanded and not collapsed */}
-            {hostAdminExpanded && !isCollapsed && (
-              <div className="mt-1 ml-4 pl-4 border-l-2 border-[#E5E7EB] space-y-1">
-                {hostAdminItems.map((subItem) => {
-                  const isSubActive = activePage === subItem.id;
-                  
-                  return (
-                    <button
-                      key={subItem.id}
-                      onClick={() => !subItem.disabled && onNavigate?.(subItem.id)}
-                      disabled={subItem.disabled}
-                      className={`
-                        w-full flex items-center gap-3 px-4 py-2 rounded-lg text-left text-sm transition-colors
-                        ${subItem.disabled 
-                          ? 'text-[#D1D5DB] cursor-not-allowed opacity-50' 
-                          : isSubActive 
-                            ? 'bg-[#FEF2F2] text-[#D9480F] font-medium' 
-                            : 'text-[#6B7280] hover:bg-[#F9FAFB]'
-                        }
-                      `}
-                    >
-                      {subItem.label}
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-          </div>
+              {/* Submenu - only show when expanded and not collapsed */}
+              {hostAdminExpanded && !isCollapsed && (
+                <div className="mt-1 ml-4 pl-4 border-l-2 border-[#E5E7EB] space-y-1">
+                  {hostAdminItems.map((subItem) => {
+                    const isSubActive = activePage === subItem.id;
+                    
+                    return (
+                      <button
+                        key={subItem.id}
+                        onClick={() => !subItem.disabled && onNavigate?.(subItem.id)}
+                        disabled={subItem.disabled}
+                        className={`
+                          w-full flex items-center gap-3 px-4 py-2 rounded-lg text-left text-sm transition-colors
+                          ${subItem.disabled 
+                            ? 'text-[#D1D5DB] cursor-not-allowed opacity-50' 
+                            : isSubActive 
+                              ? 'bg-[#FEF2F2] text-[#D9480F] font-medium' 
+                              : 'text-[#6B7280] hover:bg-[#F9FAFB]'
+                          }
+                        `}
+                      >
+                        {subItem.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Settings Menu Item with Sectioned Submenu */}
           <div className="relative group">
@@ -360,192 +363,174 @@ export function Sidebar({ activePage = 'welcome', onNavigate, isCollapsed = fals
           </div>
 
           {/* Billing Admin Menu Item with Submenu */}
-          <div className="relative group">
-            <button
-              onClick={() => {
-                if (isCollapsed) {
-                  onNavigate?.('admin-billing');
-                } else {
-                  setBillingExpanded(!billingExpanded);
-                }
-              }}
-              className={`
-                w-full flex items-center rounded-lg transition-colors text-left
-                ${isCollapsed ? 'justify-center px-0 py-3' : 'gap-3 px-4 py-2.5'}
-                ${isBillingAdminActive 
-                  ? 'bg-[#FEF2F2] text-[#D9480F]' 
-                  : 'text-[#6B7280] hover:bg-[#F9FAFB]'
-                }
-                ${isBillingAdminActive && !isCollapsed ? 'border-l-4 border-[#D9480F] -ml-[4px] pl-[20px]' : ''}
-              `}
-              title={isCollapsed ? 'Billing Admin' : undefined}
-            >
-              <CreditCard className={`w-5 h-5 ${ 
-                isBillingAdminActive ? 'text-[#D9480F]' : 'text-[#6B7280]'
-              }`} />
-              {!isCollapsed && (
-                <>
-                  <span className={`text-sm flex-1 ${isBillingAdminActive ? 'font-medium' : ''}`}>
-                    Billing Admin
-                  </span>
-                  <ChevronDown className={`w-4 h-4 transition-transform ${
-                    billingExpanded ? 'rotate-180' : ''
-                  } ${isBillingAdminActive ? 'text-[#D9480F]' : 'text-[#6B7280]'}`} />
-                </>
+          {userRole === 'saas-admin' && (
+            <div className="relative group">
+              <button
+                onClick={() => {
+                  if (isCollapsed) {
+                    onNavigate?.('admin-billing');
+                  } else {
+                    setBillingExpanded(!billingExpanded);
+                  }
+                }}
+                className={`
+                  w-full flex items-center rounded-lg transition-colors text-left
+                  ${isCollapsed ? 'justify-center px-0 py-3' : 'gap-3 px-4 py-2.5'}
+                  ${isBillingAdminActive 
+                    ? 'bg-[#FEF2F2] text-[#D9480F]' 
+                    : 'text-[#6B7280] hover:bg-[#F9FAFB]'
+                  }
+                  ${isBillingAdminActive && !isCollapsed ? 'border-l-4 border-[#D9480F] -ml-[4px] pl-[20px]' : ''}
+                `}
+                title={isCollapsed ? 'Billing Admin' : undefined}
+              >
+                <CreditCard className={`w-5 h-5 ${ 
+                  isBillingAdminActive ? 'text-[#D9480F]' : 'text-[#6B7280]'
+                }`} />
+                {!isCollapsed && (
+                  <>
+                    <span className={`text-sm flex-1 ${isBillingAdminActive ? 'font-medium' : ''}`}>
+                      Billing Admin
+                    </span>
+                    <ChevronDown className={`w-4 h-4 transition-transform ${
+                      billingExpanded ? 'rotate-180' : ''
+                    } ${isBillingAdminActive ? 'text-[#D9480F]' : 'text-[#6B7280]'}`} />
+                  </>
+                )}
+              </button>
+
+              {/* Tooltip for collapsed state */}
+              {isCollapsed && (
+                <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-[#111827] text-white text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 pointer-events-none">
+                  Billing Admin
+                  <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-[#111827]"></div>
+                </div>
               )}
-            </button>
 
-            {/* Tooltip for collapsed state */}
-            {isCollapsed && (
-              <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-[#111827] text-white text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 pointer-events-none">
-                Billing Admin
-                <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-[#111827]"></div>
-              </div>
-            )}
-
-            {/* Submenu - only show when expanded and not collapsed */}
-            {billingExpanded && !isCollapsed && (
-              <div className="mt-1 ml-4 pl-4 border-l-2 border-[#E5E7EB] space-y-1">
-                {billingAdminItems.map((subItem) => {
-                  const isSubActive = activePage === subItem.id;
-                  
-                  return (
-                    <button
-                      key={subItem.id}
-                      onClick={() => !subItem.disabled && onNavigate?.(subItem.id)}
-                      disabled={subItem.disabled}
-                      className={`
-                        w-full flex items-center gap-3 px-4 py-2 rounded-lg text-left text-sm transition-colors
-                        ${subItem.disabled 
-                          ? 'text-[#D1D5DB] cursor-not-allowed opacity-50' 
-                          : isSubActive 
-                            ? 'bg-[#FEF2F2] text-[#D9480F] font-medium' 
-                            : 'text-[#6B7280] hover:bg-[#F9FAFB]'
-                        }
-                      `}
-                    >
-                      {subItem.label}
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-          </div>
+              {/* Submenu - only show when expanded and not collapsed */}
+              {billingExpanded && !isCollapsed && (
+                <div className="mt-1 ml-4 pl-4 border-l-2 border-[#E5E7EB] space-y-1">
+                  {billingAdminItems.map((subItem) => {
+                    const isSubActive = activePage === subItem.id;
+                    
+                    return (
+                      <button
+                        key={subItem.id}
+                        onClick={() => !subItem.disabled && onNavigate?.(subItem.id)}
+                        disabled={subItem.disabled}
+                        className={`
+                          w-full flex items-center gap-3 px-4 py-2 rounded-lg text-left text-sm transition-colors
+                          ${subItem.disabled 
+                            ? 'text-[#D1D5DB] cursor-not-allowed opacity-50' 
+                            : isSubActive 
+                              ? 'bg-[#FEF2F2] text-[#D9480F] font-medium' 
+                              : 'text-[#6B7280] hover:bg-[#F9FAFB]'
+                          }
+                        `}
+                      >
+                        {subItem.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
         </nav>
       </div>
 
-      {/* User Section */}
-      <div className="border-t border-[#E5E7EB] p-4 relative">
-        {isCollapsed ? (
-          /* Collapsed User Avatar */
-          <div className="relative group">
-            <button
-              onClick={() => setShowUserMenu(!showUserMenu)}
-              className="w-10 h-10 mx-auto rounded-full bg-gradient-to-br from-[#D9480F] to-[#C23D0D] flex items-center justify-center hover:ring-2 hover:ring-[#D9480F] hover:ring-offset-2 transition-all"
-            >
-              <span className="text-sm font-semibold text-white">SK</span>
-            </button>
-            
-            {/* Tooltip */}
-            <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-[#111827] text-white text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 pointer-events-none">
-              Sarah Khan
-              <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-[#111827]"></div>
+      {/* Fixed Footer - Support Section with Version */}
+      <div className="mt-6 pt-6 border-t border-[#E5E7EB]">
+        <div className="mx-4 px-4 py-5 bg-[#FAFAFA] rounded-2xl shadow-sm">
+          {/* Support Header */}
+          {!isCollapsed && (
+            <div className="flex items-center gap-2.5 mb-4 px-1">
+              <div className="w-1.5 h-1.5 rounded-full bg-[#D9480F] opacity-40"></div>
+              <p className="text-[11px] text-[#374151] uppercase tracking-[0.1em] font-semibold">
+                Support
+              </p>
+            </div>
+          )}
+          
+          {/* Support Links */}
+          <div className="space-y-1.5">
+            {/* Help & Support */}
+            <div className="relative group">
+              <button
+                onClick={() => onNavigate?.('help-support')}
+                className={`
+                  w-full flex items-center rounded-xl transition-all duration-200 text-left
+                  ${isCollapsed ? 'justify-center px-0 py-3' : 'gap-3 px-3.5 py-3'}
+                  ${activePage === 'help-support' 
+                    ? 'bg-white shadow-sm text-[#D9480F]' 
+                    : 'text-[#374151] hover:bg-white hover:shadow-sm hover:text-[#111827]'
+                  }
+                `}
+                title={isCollapsed ? 'Help & Support' : undefined}
+              >
+                <HelpCircle className={`w-[18px] h-[18px] flex-shrink-0 transition-colors ${
+                  activePage === 'help-support' ? 'text-[#D9480F]' : 'text-[#6B7280] group-hover:text-[#D9480F]'
+                }`} />
+                {!isCollapsed && (
+                  <span className="text-[13px] font-medium flex-1">
+                    Help & Support
+                  </span>
+                )}
+              </button>
+              
+              {/* Tooltip for collapsed state */}
+              {isCollapsed && (
+                <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-[#111827] text-white text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 pointer-events-none">
+                  Help & Support
+                  <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-[#111827]"></div>
+                </div>
+              )}
+            </div>
+
+            {/* Documentation */}
+            <div className="relative group">
+              <button
+                onClick={() => onNavigate?.('documentation')}
+                className={`
+                  w-full flex items-center rounded-xl transition-all duration-200 text-left
+                  ${isCollapsed ? 'justify-center px-0 py-3' : 'gap-3 px-3.5 py-3'}
+                  ${activePage === 'documentation' 
+                    ? 'bg-white shadow-sm text-[#D9480F]' 
+                    : 'text-[#374151] hover:bg-white hover:shadow-sm hover:text-[#111827]'
+                  }
+                `}
+                title={isCollapsed ? 'Documentation' : undefined}
+              >
+                <BookOpen className={`w-[18px] h-[18px] flex-shrink-0 transition-colors ${
+                  activePage === 'documentation' ? 'text-[#D9480F]' : 'text-[#6B7280] group-hover:text-[#D9480F]'
+                }`} />
+                {!isCollapsed && (
+                  <span className="text-[13px] font-medium flex-1">
+                    Documentation
+                  </span>
+                )}
+              </button>
+              
+              {/* Tooltip for collapsed state */}
+              {isCollapsed && (
+                <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-[#111827] text-white text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 pointer-events-none">
+                  Documentation
+                  <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-[#111827]"></div>
+                </div>
+              )}
             </div>
           </div>
-        ) : (
-          /* Expanded User Section */
-          <button
-            onClick={() => setShowUserMenu(!showUserMenu)}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-[#F9FAFB] transition-colors group"
-          >
-            {/* Avatar */}
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#D9480F] to-[#C23D0D] flex items-center justify-center flex-shrink-0">
-              <span className="text-sm font-semibold text-white">SK</span>
-            </div>
-            
-            {/* User Info */}
-            <div className="flex-1 min-w-0 text-left">
-              <p className="text-sm font-medium text-[#111827] truncate">Sarah Khan</p>
-              <p className="text-xs text-[#6B7280] truncate">Agency Pro Plan</p>
-            </div>
-            
-            {/* More Icon */}
-            <MoreVertical className="w-4 h-4 text-[#9CA3AF] opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
-          </button>
-        )}
 
-        {/* User Menu Dropdown */}
-        {showUserMenu && (
-          <>
-            {/* Backdrop to close menu */}
-            <div 
-              className="fixed inset-0 z-40" 
-              onClick={() => setShowUserMenu(false)}
-            />
-            
-            {/* Dropdown Menu */}
-            <div className={`absolute bottom-full mb-2 bg-white border border-[#E5E7EB] rounded-lg shadow-lg z-50 py-1 ${
-              isCollapsed ? 'left-full ml-2 w-48' : 'left-4 right-4'
-            }`}>
-              <button
-                onClick={() => {
-                  setShowUserMenu(false);
-                  onNavigate?.('settings');
-                }}
-                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-[#111827] hover:bg-[#F9FAFB] transition-colors"
-              >
-                <User className="w-4 h-4 text-[#6B7280]" />
-                <span>Profile Settings</span>
-              </button>
-              
-              <button
-                onClick={() => {
-                  setShowUserMenu(false);
-                  onNavigate?.('billing');
-                }}
-                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-[#111827] hover:bg-[#F9FAFB] transition-colors"
-              >
-                <CreditCard className="w-4 h-4 text-[#6B7280]" />
-                <span>Billing & Plan</span>
-              </button>
-              
-              <button
-                onClick={() => {
-                  setShowUserMenu(false);
-                  onNavigate?.('help-support');
-                }}
-                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-[#111827] hover:bg-[#F9FAFB] transition-colors"
-              >
-                <HelpCircle className="w-4 h-4 text-[#6B7280]" />
-                <span>Help & Support</span>
-              </button>
-              
-              <button
-                onClick={() => {
-                  setShowUserMenu(false);
-                  onNavigate?.('documentation');
-                }}
-                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-[#111827] hover:bg-[#F9FAFB] transition-colors"
-              >
-                <BookOpen className="w-4 h-4 text-[#6B7280]" />
-                <span>Documentation</span>
-              </button>
-              
-              <div className="border-t border-[#E5E7EB] my-1" />
-              
-              <button
-                onClick={() => {
-                  setShowUserMenu(false);
-                  console.log('Signing out...');
-                }}
-                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-[#DC2626] hover:bg-[#FEF2F2] transition-colors"
-              >
-                <LogOut className="w-4 h-4" />
-                <span>Sign Out</span>
-              </button>
+          {/* Version Information */}
+          {!isCollapsed && (
+            <div className="mt-5 px-3.5">
+              <div className="text-[11px] font-medium text-[#9CA3AF] leading-relaxed space-y-0.5">
+                <div>Version 1.8.2</div>
+                <div className="text-[10px] text-[#C4C4C4] font-normal">Build 2025.01.18</div>
+              </div>
             </div>
-          </>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
