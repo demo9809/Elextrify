@@ -76,8 +76,7 @@ export default function SettingsSystem() {
       description: 'Configure webhook endpoints for real-time event notifications',
       icon: Webhook,
       route: '/settings/system/webhooks',
-      available: false,
-      comingSoon: true,
+      available: true,
     },
   ];
 

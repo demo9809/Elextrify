@@ -25,6 +25,7 @@ import {
   getStatusLabel,
   type TenantBilling,
 } from '../../data/mockAdminBillingData';
+import { Pagination } from '../shared/Pagination';
 
 export default function AdminBillingDashboard() {
   const navigate = useNavigate();
@@ -34,6 +35,8 @@ export default function AdminBillingDashboard() {
   const [selectedTenant, setSelectedTenant] = useState<string | null>(null);
   const [dateRange, setDateRange] = useState<string>('30-days');
   const [comparisonEnabled, setComparisonEnabled] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const { revenueMetrics, tenantBillings } = billingData;
 
@@ -240,7 +243,7 @@ export default function AdminBillingDashboard() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#E5E7EB]">
-                {filteredTenants.map((tenant) => (
+                {filteredTenants.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((tenant) => (
                   <tr 
                     key={tenant.id} 
                     onClick={() => handleViewDetails(tenant.tenantId)}
@@ -335,7 +338,7 @@ export default function AdminBillingDashboard() {
 
           {/* Mobile Cards */}
           <div className="lg:hidden divide-y divide-[#E5E7EB]">
-            {filteredTenants.map((tenant) => (
+            {filteredTenants.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((tenant) => (
               <div key={tenant.id} className="p-4">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
@@ -387,6 +390,20 @@ export default function AdminBillingDashboard() {
             </div>
           )}
         </div>
+
+        {/* Pagination */}
+        {filteredTenants.length > 0 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={Math.ceil(filteredTenants.length / itemsPerPage)}
+            totalItems={filteredTenants.length}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
+            onItemsPerPageChange={setItemsPerPage}
+            startIndex={(currentPage - 1) * itemsPerPage}
+            endIndex={Math.min(currentPage * itemsPerPage, filteredTenants.length)}
+          />
+        )}
       </div>
     </div>
   );

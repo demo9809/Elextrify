@@ -7,7 +7,11 @@ import {
   XCircle,
   AlertCircle,
   ArrowLeft,
-  Lock
+  Lock,
+  MessageSquare,
+  Mail,
+  BarChart3,
+  Cloud
 } from 'lucide-react';
 
 export default function ThirdPartyIntegrations() {

@@ -54,10 +54,16 @@ import NotificationSettings from './components/settings/NotificationSettings';
 import SecuritySettings from './components/settings/SecuritySettings';
 import EmailConfiguration from './components/settings/EmailConfiguration';
 import ApiIntegration from './components/settings/ApiIntegration';
-import ThirdPartyIntegrations from './components/settings/IntegrationsSettings';
+import ThirdPartyIntegrations from './components/settings/ThirdPartyIntegrations';
 import RazorpayConfig from './components/settings/integrations/RazorpayConfig';
 import ZohoBooksConfig from './components/settings/integrations/ZohoBooksConfig';
 import WebhooksConfig from './components/settings/integrations/WebhooksConfig';
+import PaytmConfig from './components/settings/integrations/PaytmConfig';
+import CashfreeConfig from './components/settings/integrations/CashfreeConfig';
+import TwilioConfig from './components/settings/integrations/TwilioConfig';
+import SendGridConfig from './components/settings/integrations/SendGridConfig';
+import GoogleAnalyticsConfig from './components/settings/integrations/GoogleAnalyticsConfig';
+import AWSS3Config from './components/settings/integrations/AWSS3Config';
 import ProfileSettings from './components/settings/account/ProfileSettings';
 import PasswordMFA from './components/settings/account/PasswordMFA';
 import NotificationPreferences from './components/settings/account/NotificationPreferences';
@@ -66,8 +72,9 @@ import HelpSupport from './components/pages/HelpSupport';
 import Documentation from './components/pages/Documentation';
 import EnhancedNotificationsPage from './components/notifications/EnhancedNotificationsPage';
 import GlobalAlertBanner from './components/GlobalAlertBanner';
+import UILibrary from './components/UILibrary';
 
-type Page = 'welcome' | 'dashboard' | 'campaigns' | 'ad-slotting' | 'terminals' | 'playlists' | 'media' | 'customers' | 'proof-of-play' | 'tenants' | 'editions' | 'organization-units' | 'billing' | 'media-billing' | 'admin-billing' | 'admin-billing-overview' | 'admin-billing-subscriptions' | 'admin-billing-invoices' | 'admin-billing-payments' | 'admin-billing-revenue' | 'admin-billing-discounts' | 'admin-billing-audit' | 'settings' | 'settings-account' | 'settings-workspace' | 'settings-system' | 'settings-users' | 'settings-language' | 'settings-general' | 'settings-billing' | 'settings-integrations' | 'settings-notifications' | 'settings-security' | 'settings-email' | 'settings-api' | 'help-support' | 'documentation' | 'notifications';
+type Page = 'welcome' | 'dashboard' | 'campaigns' | 'ad-slotting' | 'terminals' | 'playlists' | 'media' | 'customers' | 'proof-of-play' | 'ui-library' | 'tenants' | 'editions' | 'organization-units' | 'billing' | 'media-billing' | 'admin-billing' | 'admin-billing-overview' | 'admin-billing-subscriptions' | 'admin-billing-invoices' | 'admin-billing-payments' | 'admin-billing-revenue' | 'admin-billing-discounts' | 'admin-billing-audit' | 'settings' | 'settings-account' | 'settings-workspace' | 'settings-system' | 'settings-users' | 'settings-language' | 'settings-general' | 'settings-billing' | 'settings-integrations' | 'settings-notifications' | 'settings-security' | 'settings-email' | 'settings-api' | 'help-support' | 'documentation' | 'notifications';
 
 function AppContent() {
   const location = useLocation();
@@ -126,6 +133,7 @@ function AppContent() {
     if (path.includes('/help-support')) return 'help-support';
     if (path.includes('/documentation')) return 'documentation';
     if (path.includes('/notifications')) return 'notifications';
+    if (path.includes('/ui-library')) return 'ui-library';
     return 'welcome';
   };
 
@@ -173,6 +181,7 @@ function AppContent() {
       'help-support': '/help-support',
       'documentation': '/documentation',
       'notifications': '/notifications',
+      'ui-library': '/ui-library',
     };
     navigate(routeMap[page] || '/');
   };
@@ -273,6 +282,13 @@ function AppContent() {
             <Route path="/settings/system/integrations/razorpay" element={<RazorpayConfig />} />
             <Route path="/settings/system/integrations/zoho-books" element={<ZohoBooksConfig />} />
             <Route path="/settings/system/integrations/webhooks" element={<WebhooksConfig />} />
+            <Route path="/settings/system/webhooks" element={<WebhooksConfig />} />
+            <Route path="/settings/system/integrations/paytm" element={<PaytmConfig />} />
+            <Route path="/settings/system/integrations/cashfree" element={<CashfreeConfig />} />
+            <Route path="/settings/system/integrations/twilio" element={<TwilioConfig />} />
+            <Route path="/settings/system/integrations/sendgrid" element={<SendGridConfig />} />
+            <Route path="/settings/system/integrations/google-analytics" element={<GoogleAnalyticsConfig />} />
+            <Route path="/settings/system/integrations/aws-s3" element={<AWSS3Config />} />
             <Route path="/settings/account/profile" element={<ProfileSettings />} />
             <Route path="/settings/account/password-mfa" element={<PasswordMFA />} />
             <Route path="/settings/account/notifications" element={<NotificationPreferences />} />
@@ -280,6 +296,7 @@ function AppContent() {
             <Route path="/help-support" element={<HelpSupport />} />
             <Route path="/documentation" element={<Documentation />} />
             <Route path="/notifications" element={<EnhancedNotificationsPage />} />
+            <Route path="/ui-library" element={<UILibrary />} />
           </Routes>
         </div>
 

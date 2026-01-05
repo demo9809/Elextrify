@@ -25,7 +25,8 @@ import {
   Activity,
   BookOpen,
   ShieldCheck,
-  CheckCircle
+  CheckCircle,
+  Palette
 } from 'lucide-react';
 import React from 'react';
 import { useAuth } from '../contexts/AuthContext';
@@ -240,6 +241,16 @@ export function Sidebar({ activePage = 'welcome', onNavigate, isCollapsed = fals
               />
 
               {/* Divider 2 */}
+              <MenuDivider />
+
+              {/* UI Library */}
+              <MenuItem 
+                key="ui-library" 
+                item={{ id: 'ui-library', label: 'UI Library', icon: Palette }} 
+                isActive={'ui-library' === activePage} 
+              />
+
+              {/* Divider 3 */}
               <MenuDivider />
 
               {/* Administration */}
