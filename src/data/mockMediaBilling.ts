@@ -61,6 +61,7 @@ export interface CampaignPoP {
   peakRate: number;
   nonPeakRate: number;
   status: 'active' | 'completed';
+  isInvoiced?: boolean; // Track if campaign has been invoiced
 }
 
 export const mockMediaInvoices: MediaInvoice[] = [
@@ -285,6 +286,7 @@ export const mockCampaignPoP: CampaignPoP[] = [
     peakRate: 1200,
     nonPeakRate: 800,
     status: 'completed',
+    isInvoiced: true,
   },
   {
     campaignId: 'camp-007',
@@ -301,6 +303,7 @@ export const mockCampaignPoP: CampaignPoP[] = [
     peakRate: 1000,
     nonPeakRate: 650,
     status: 'completed',
+    isInvoiced: true,
   },
   {
     campaignId: 'camp-008',
@@ -334,6 +337,7 @@ export const mockCampaignPoP: CampaignPoP[] = [
     peakRate: 1200,
     nonPeakRate: 800,
     status: 'completed',
+    isInvoiced: true,
   },
   {
     campaignId: 'camp-010',
@@ -350,6 +354,7 @@ export const mockCampaignPoP: CampaignPoP[] = [
     peakRate: 1200,
     nonPeakRate: 800,
     status: 'completed',
+    isInvoiced: true,
   },
   {
     campaignId: 'camp-011',
@@ -366,6 +371,7 @@ export const mockCampaignPoP: CampaignPoP[] = [
     peakRate: 900,
     nonPeakRate: 600,
     status: 'completed',
+    isInvoiced: true,
   },
   {
     campaignId: 'camp-012',
@@ -382,6 +388,7 @@ export const mockCampaignPoP: CampaignPoP[] = [
     peakRate: 1000,
     nonPeakRate: 650,
     status: 'completed',
+    isInvoiced: true,
   },
   {
     campaignId: 'camp-013',
@@ -398,6 +405,7 @@ export const mockCampaignPoP: CampaignPoP[] = [
     peakRate: 1200,
     nonPeakRate: 800,
     status: 'completed',
+    isInvoiced: true,
   },
   {
     campaignId: 'camp-014',
@@ -414,6 +422,7 @@ export const mockCampaignPoP: CampaignPoP[] = [
     peakRate: 850,
     nonPeakRate: 550,
     status: 'completed',
+    isInvoiced: true,
   },
   {
     campaignId: 'camp-015',
@@ -430,6 +439,93 @@ export const mockCampaignPoP: CampaignPoP[] = [
     peakRate: 1000,
     nonPeakRate: 650,
     status: 'completed',
+    isInvoiced: true,
+  },
+  // Uninvoiced campaigns (pending billing)
+  {
+    campaignId: 'camp-016',
+    campaignName: 'Easter Weekend Special',
+    clientId: 'client-1',
+    scheduledStart: '2025-04-01',
+    scheduledEnd: '2025-04-20',
+    scheduledHours: 220,
+    actualPopHours: 218,
+    screens: 12,
+    regions: ['Mumbai', 'Delhi', 'Pune'],
+    peakSlots: 110,
+    nonPeakSlots: 108,
+    peakRate: 1200,
+    nonPeakRate: 800,
+    status: 'completed',
+    isInvoiced: false,
+  },
+  {
+    campaignId: 'camp-017',
+    campaignName: 'Summer Sports Campaign',
+    clientId: 'client-4',
+    scheduledStart: '2025-03-15',
+    scheduledEnd: '2025-04-15',
+    scheduledHours: 350,
+    actualPopHours: 345,
+    screens: 20,
+    regions: ['Delhi', 'Mumbai', 'Bangalore', 'Chennai'],
+    peakSlots: 175,
+    nonPeakSlots: 170,
+    peakRate: 850,
+    nonPeakRate: 550,
+    status: 'completed',
+    isInvoiced: false,
+  },
+  {
+    campaignId: 'camp-018',
+    campaignName: 'Tech Conference Promo',
+    clientId: 'client-2',
+    scheduledStart: '2025-04-01',
+    scheduledEnd: '2025-04-30',
+    scheduledHours: 280,
+    actualPopHours: 275,
+    screens: 15,
+    regions: ['Mumbai', 'Pune', 'Nashik'],
+    peakSlots: 140,
+    nonPeakSlots: 135,
+    peakRate: 1000,
+    nonPeakRate: 650,
+    status: 'completed',
+    isInvoiced: false,
+  },
+  {
+    campaignId: 'camp-019',
+    campaignName: 'Mother\'s Day Campaign',
+    clientId: 'client-3',
+    scheduledStart: '2025-05-01',
+    scheduledEnd: '2025-05-15',
+    scheduledHours: 160,
+    actualPopHours: 158,
+    screens: 10,
+    regions: ['Delhi', 'Gurgaon', 'Noida'],
+    peakSlots: 80,
+    nonPeakSlots: 78,
+    peakRate: 900,
+    nonPeakRate: 600,
+    status: 'completed',
+    isInvoiced: false,
+  },
+  {
+    campaignId: 'camp-020',
+    campaignName: 'Shopping Festival Blitz',
+    clientId: 'client-1',
+    scheduledStart: '2025-05-10',
+    scheduledEnd: '2025-05-31',
+    scheduledHours: 320,
+    actualPopHours: 315,
+    screens: 22,
+    regions: ['Mumbai', 'Delhi', 'Bangalore', 'Hyderabad'],
+    peakSlots: 160,
+    nonPeakSlots: 155,
+    peakRate: 1200,
+    nonPeakRate: 800,
+    status: 'completed',
+    isInvoiced: false,
   },
 ];
 

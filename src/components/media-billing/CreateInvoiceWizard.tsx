@@ -32,6 +32,7 @@ interface InvoiceLineItemDraft {
   peakRate: number;
   nonPeakRate: number;
   lineTotal: number;
+  description: string; // Add description field
 }
 
 export default function CreateInvoiceWizard({
@@ -47,6 +48,7 @@ export default function CreateInvoiceWizard({
   const [billingPeriodStart, setBillingPeriodStart] = useState('');
   const [billingPeriodEnd, setBillingPeriodEnd] = useState('');
   const [clientSearch, setClientSearch] = useState('');
+  const [showAllUninvoiced, setShowAllUninvoiced] = useState(false);
 
   // Step 2: Campaign & PoP Review
   const [selectedCampaigns, setSelectedCampaigns] = useState<Set<string>>(new Set());
@@ -74,7 +76,20 @@ export default function CreateInvoiceWizard({
 
   // Get campaigns for selected client and period
   const availableCampaigns = useMemo(() => {
-    if (!selectedClientId || !billingPeriodStart || !billingPeriodEnd) return [];
+    if (!selectedClientId) return [];
+
+    // If "Show All Uninvoiced" is checked, ignore period and show all uninvoiced campaigns
+    if (showAllUninvoiced) {
+      return mockCampaignPoP.filter((campaign) => {
+        if (campaign.clientId !== selectedClientId) return false;
+        if (campaign.status !== 'completed') return false;
+        if (campaign.isInvoiced) return false; // Only uninvoiced campaigns
+        return true;
+      });
+    }
+
+    // Otherwise, use the period-based filter (current method)
+    if (!billingPeriodStart || !billingPeriodEnd) return [];
 
     return mockCampaignPoP.filter((campaign) => {
       if (campaign.clientId !== selectedClientId) return false;
@@ -88,7 +103,7 @@ export default function CreateInvoiceWizard({
 
       return campaignStart <= periodEnd && campaignEnd >= periodStart;
     });
-  }, [selectedClientId, billingPeriodStart, billingPeriodEnd]);
+  }, [selectedClientId, billingPeriodStart, billingPeriodEnd, showAllUninvoiced]);
 
   // Calculate totals
   const subtotal = useMemo(() => {
@@ -126,6 +141,7 @@ export default function CreateInvoiceWizard({
     setDiscountReason('');
     setApplyTax(true);
     setDuplicateWarning('');
+    setShowAllUninvoiced(false);
   };
 
   const handleClose = () => {
@@ -137,6 +153,11 @@ export default function CreateInvoiceWizard({
   const canProceedFromStep = (step: number): boolean => {
     switch (step) {
       case 1:
+        // If "Show All Uninvoiced" is checked, only need client selected
+        if (showAllUninvoiced) {
+          return !!selectedClientId;
+        }
+        // Otherwise, need client + period
         return !!(selectedClientId && billingPeriodStart && billingPeriodEnd);
       case 2:
         return selectedCampaigns.size > 0;
@@ -176,6 +197,7 @@ export default function CreateInvoiceWizard({
             peakRate: campaign.peakRate,
             nonPeakRate: campaign.nonPeakRate,
             lineTotal,
+            description: campaign.description || '', // Add description field
           });
         }
       });
@@ -233,6 +255,25 @@ export default function CreateInvoiceWizard({
     setSelectedCampaigns(newSelected);
   };
 
+  // Select all pending (uninvoiced) campaigns
+  const handleSelectAllPending = () => {
+    const pendingCampaigns = availableCampaigns.filter(
+      (campaign) => !campaign.isInvoiced
+    );
+    const newSelected = new Set(pendingCampaigns.map((c) => c.campaignId));
+    setSelectedCampaigns(newSelected);
+  };
+
+  // Clear all selections
+  const handleClearAll = () => {
+    setSelectedCampaigns(new Set());
+  };
+
+  // Count pending campaigns
+  const pendingCampaignsCount = availableCampaigns.filter(
+    (campaign) => !campaign.isInvoiced
+  ).length;
+
   const formatDate = (dateString: string) => {
     if (!dateString) return '';
     const date = new Date(dateString);
@@ -241,6 +282,16 @@ export default function CreateInvoiceWizard({
       month: 'short',
       year: 'numeric',
     });
+  };
+
+  // Quick Action: Auto-Select All Pending
+  const handleQuickGenerateAll = () => {
+    // Logic to generate invoices for all pending campaigns across all clients
+    // This is a placeholder for the actual implementation
+    console.log('Generating all pending invoices...');
+    // Reset wizard after generating invoices
+    resetWizard();
+    onClose();
   };
 
   if (!isOpen) return null;
@@ -379,29 +430,58 @@ export default function CreateInvoiceWizard({
                 </div>
               </div>
 
+              {/* Show All Uninvoiced Checkbox - MOVED BEFORE PERIOD */}
+              <div className="bg-[#F9FAFB] border border-[#E5E7EB] rounded-lg p-4">
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={showAllUninvoiced}
+                    onChange={(e) => {
+                      setShowAllUninvoiced(e.target.checked);
+                      if (e.target.checked) {
+                        // Clear period when checkbox is enabled
+                        setBillingPeriodStart('');
+                        setBillingPeriodEnd('');
+                      }
+                    }}
+                    className="mt-0.5 w-4 h-4 text-[#D9480F] border-[#E5E7EB] rounded focus:ring-2 focus:ring-[#D9480F]/20"
+                  />
+                  <div className="flex-1">
+                    <div className="text-sm font-medium text-[#111827] mb-1">
+                      Show all uninvoiced campaigns
+                    </div>
+                    <p className="text-xs text-[#6B7280]">
+                      Skip period selection and view all completed campaigns that haven't been invoiced yet for the selected client.
+                    </p>
+                  </div>
+                </label>
+              </div>
+
               {/* Billing Period */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-[#374151] mb-2">
-                    Period Start <span className="text-[#DC2626]">*</span>
+                    Period Start {!showAllUninvoiced && <span className="text-[#DC2626]">*</span>}
                   </label>
                   <input
                     type="date"
                     value={billingPeriodStart}
                     onChange={(e) => setBillingPeriodStart(e.target.value)}
-                    className="w-full h-12 px-4 border border-[#E5E7EB] rounded-lg text-[#111827] focus:ring-2 focus:ring-[#D9480F]/20 focus:border-[#D9480F] outline-none"
+                    disabled={showAllUninvoiced}
+                    className="w-full h-12 px-4 border border-[#E5E7EB] rounded-lg text-[#111827] focus:ring-2 focus:ring-[#D9480F]/20 focus:border-[#D9480F] outline-none disabled:bg-[#F9FAFB] disabled:cursor-not-allowed"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-[#374151] mb-2">
-                    Period End <span className="text-[#DC2626]">*</span>
+                    Period End {!showAllUninvoiced && <span className="text-[#DC2626]">*</span>}
                   </label>
                   <input
                     type="date"
                     value={billingPeriodEnd}
                     onChange={(e) => setBillingPeriodEnd(e.target.value)}
                     min={billingPeriodStart}
-                    className="w-full h-12 px-4 border border-[#E5E7EB] rounded-lg text-[#111827] focus:ring-2 focus:ring-[#D9480F]/20 focus:border-[#D9480F] outline-none"
+                    disabled={showAllUninvoiced}
+                    className="w-full h-12 px-4 border border-[#E5E7EB] rounded-lg text-[#111827] focus:ring-2 focus:ring-[#D9480F]/20 focus:border-[#D9480F] outline-none disabled:bg-[#F9FAFB] disabled:cursor-not-allowed"
                   />
                 </div>
               </div>
@@ -450,54 +530,84 @@ export default function CreateInvoiceWizard({
                   </div>
                 </div>
               ) : (
-                <div className="space-y-3">
-                  {availableCampaigns.map((campaign) => (
-                    <label
-                      key={campaign.campaignId}
-                      className={`block border rounded-lg p-4 cursor-pointer transition-all ${
-                        selectedCampaigns.has(campaign.campaignId)
-                          ? 'border-[#D9480F] bg-[#FEF2F2] ring-2 ring-[#D9480F]/20'
-                          : 'border-[#E5E7EB] hover:border-[#D9480F]/50 hover:bg-[#F9FAFB]'
-                      }`}
-                    >
-                      <div className="flex items-start gap-3">
-                        <input
-                          type="checkbox"
-                          checked={selectedCampaigns.has(campaign.campaignId)}
-                          onChange={() => toggleCampaign(campaign.campaignId)}
-                          className="mt-0.5 w-4 h-4 text-[#D9480F] border-[#E5E7EB] rounded focus:ring-2 focus:ring-[#D9480F]/20"
-                        />
-                        <div className="flex-1">
-                          <div className="font-medium text-[#111827] mb-2">
-                            {campaign.campaignName}
+                <>
+                  <div className="space-y-3">
+                    {availableCampaigns.map((campaign) => (
+                      <label
+                        key={campaign.campaignId}
+                        className={`block border rounded-lg p-4 cursor-pointer transition-all relative ${
+                          selectedCampaigns.has(campaign.campaignId)
+                            ? 'border-[#D9480F] bg-[#FEF2F2] ring-2 ring-[#D9480F]/20'
+                            : 'border-[#E5E7EB] hover:border-[#D9480F]/50 hover:bg-[#F9FAFB]'
+                        }`}
+                      >
+                        {/* Invoiced Badge */}
+                        {campaign.isInvoiced && (
+                          <div className="absolute top-3 right-3">
+                            <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#F3F4F6] text-[#6B7280] text-xs rounded">
+                              <CheckCircle2 className="w-3 h-3" />
+                              Invoiced
+                            </span>
                           </div>
-                          <div className="grid grid-cols-2 gap-3 text-sm">
-                            <div>
-                              <span className="text-[#6B7280]">Scheduled: </span>
-                              <span className="text-[#111827]">{campaign.scheduledHours}h</span>
+                        )}
+                        
+                        <div className="flex items-start gap-3">
+                          <input
+                            type="checkbox"
+                            checked={selectedCampaigns.has(campaign.campaignId)}
+                            onChange={() => toggleCampaign(campaign.campaignId)}
+                            className="mt-0.5 w-4 h-4 text-[#D9480F] border-[#E5E7EB] rounded focus:ring-2 focus:ring-[#D9480F]/20"
+                          />
+                          <div className="flex-1 pr-20">
+                            <div className="font-medium text-[#111827] mb-2">
+                              {campaign.campaignName}
                             </div>
-                            <div>
-                              <span className="text-[#6B7280]">Actual PoP: </span>
-                              <span className="text-[#111827] font-semibold">
-                                {campaign.actualPopHours}h
-                              </span>
-                            </div>
-                            <div>
-                              <span className="text-[#6B7280]">Screens: </span>
-                              <span className="text-[#111827]">{campaign.screens}</span>
-                            </div>
-                            <div>
-                              <span className="text-[#6B7280]">Regions: </span>
-                              <span className="text-[#111827]">
-                                {campaign.regions.join(', ')}
-                              </span>
+                            <div className="grid grid-cols-2 gap-3 text-sm">
+                              <div>
+                                <span className="text-[#6B7280]">Scheduled: </span>
+                                <span className="text-[#111827]">{campaign.scheduledHours}h</span>
+                              </div>
+                              <div>
+                                <span className="text-[#6B7280]">Actual PoP: </span>
+                                <span className="text-[#111827] font-semibold">
+                                  {campaign.actualPopHours}h
+                                </span>
+                              </div>
+                              <div>
+                                <span className="text-[#6B7280]">Screens: </span>
+                                <span className="text-[#111827]">{campaign.screens}</span>
+                              </div>
+                              <div>
+                                <span className="text-[#6B7280]">Regions: </span>
+                                <span className="text-[#111827]">
+                                  {campaign.regions.join(', ')}
+                                </span>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </label>
-                  ))}
-                </div>
+                      </label>
+                    ))}
+                  </div>
+
+                  {/* Select All Pending Campaigns */}
+                  {pendingCampaignsCount > 0 && (
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={handleSelectAllPending}
+                        className="h-10 px-4 bg-[#D9480F] text-white rounded-lg hover:bg-[#C13D0C] transition-colors"
+                      >
+                        Select All Pending ({pendingCampaignsCount})
+                      </button>
+                      <button
+                        onClick={handleClearAll}
+                        className="h-10 px-4 bg-[#E5E7EB] text-[#374151] rounded-lg hover:bg-[#F9FAFB] transition-colors"
+                      >
+                        Clear All
+                      </button>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           )}
@@ -510,7 +620,7 @@ export default function CreateInvoiceWizard({
                   <Calculator className="w-8 h-8 text-[#D9480F]" />
                 </div>
                 <h3 className="text-[#111827] mb-2">Slot-Based Calculation</h3>
-                <p className="text-sm text-[#6B7280]">Review pricing breakdown per campaign</p>
+                <p className="text-sm text-[#6B7280]">Review pricing breakdown and add line item descriptions</p>
               </div>
 
               <div className="space-y-4">
@@ -520,6 +630,27 @@ export default function CreateInvoiceWizard({
                     className="border border-[#E5E7EB] rounded-lg p-4 bg-white"
                   >
                     <div className="font-medium text-[#111827] mb-3">{item.campaignName}</div>
+
+                    {/* Description Field */}
+                    <div className="mb-3">
+                      <label className="block text-sm font-medium text-[#374151] mb-2">
+                        Line Item Description
+                      </label>
+                      <textarea
+                        value={item.description}
+                        onChange={(e) => {
+                          const updatedLineItems = [...lineItems];
+                          updatedLineItems[index].description = e.target.value;
+                          setLineItems(updatedLineItems);
+                        }}
+                        placeholder="e.g., DOOH Campaign - Mall Screens, Peak and Non-Peak slots for January 2026"
+                        rows={2}
+                        className="w-full px-4 py-2 border border-[#E5E7EB] rounded-lg text-sm text-[#111827] placeholder:text-[#9CA3AF] focus:ring-2 focus:ring-[#D9480F]/20 focus:border-[#D9480F] outline-none resize-none"
+                      />
+                      <p className="text-xs text-[#6B7280] mt-1">
+                        This description will appear on the invoice line item
+                      </p>
+                    </div>
 
                     {/* Slot Breakdown */}
                     <div className="grid grid-cols-2 gap-4 mb-3">
