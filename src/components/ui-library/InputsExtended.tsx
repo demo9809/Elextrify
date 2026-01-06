@@ -1,12 +1,37 @@
-import { CheckCircle, Upload, Loader } from 'lucide-react';
+import { CheckCircle, Upload, Loader, Code } from 'lucide-react';
+import { CSSData } from './CSSDetailsModal';
 import { SpecTable } from './SpecTable';
 
-export function InputsExtended() {
+interface InputsExtendedProps {
+  onOpenModal: (title: string, data: CSSData) => void;
+}
+
+export function InputsExtended({ onOpenModal }: InputsExtendedProps) {
   return (
     <>
       {/* Text Input - Success State */}
       <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-        <h3 className="text-[#111827] mb-4">Text Input - Success State</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[#111827]">Text Input - Success State</h3>
+          <button
+            onClick={() => onOpenModal('Text Input (Success)', {
+              layout: 'display: block;\nwidth: 100%;',
+              typography: 'font-family: \'Inter\', sans-serif;\nfont-size: 14px;\nfont-weight: 400;\nline-height: 20px;',
+              spacing: 'height: 48px;\npadding-top: 0;\npadding-right: 16px;\npadding-bottom: 0;\npadding-left: 16px;',
+              shape: 'border-width: 2px;\nborder-style: solid;\nborder-radius: 8px;',
+              states: {
+                default: 'border-color: #16A34A;\ncolor: #16A34A;',
+                focus: 'border-color: #16A34A;\nbox-shadow: 0 0 0 4px rgba(22, 163, 74, 0.2);'
+              },
+              classContract: '.ui-input-success',
+              html: '<div class="relative"><input class="ui-input-success" /><p class="success-message">Valid</p></div>'
+            })}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+          >
+            <Code className="w-3.5 h-3.5" />
+            Copy CSS
+          </button>
+        </div>
         <div className="mb-4">
           <label className="block text-sm font-medium text-[#374151] mb-2">
             Success State
@@ -41,7 +66,27 @@ export function InputsExtended() {
 
       {/* File Upload */}
       <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-        <h3 className="text-[#111827] mb-4">File Upload</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[#111827]">File Upload</h3>
+          <button
+            onClick={() => onOpenModal('File Upload', {
+              layout: 'display: block;\nwidth: 100%;\ntext-align: center;\ntransition: all 200ms ease;',
+              typography: 'font-family: \'Inter\', sans-serif;',
+              spacing: 'padding: 32px;',
+              shape: 'border-width: 2px;\nborder-style: dashed;\nborder-radius: 8px;',
+              states: {
+                default: 'border-color: #E5E7EB;\nbackground-color: transparent;',
+                hover: 'border-color: #D9480F;\nbackground-color: #FEF2F2;'
+              },
+              classContract: '.ui-file-upload',
+              html: '<div class="ui-file-upload"><input type="file" /></div>'
+            })}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+          >
+            <Code className="w-3.5 h-3.5" />
+            Copy CSS
+          </button>
+        </div>
         <div className="mb-4">
           <label className="block text-sm font-medium text-[#374151] mb-2">
             Default State
@@ -74,7 +119,26 @@ export function InputsExtended() {
 
       {/* File Upload - Uploading Animation */}
       <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-        <h3 className="text-[#111827] mb-4">File Upload - Uploading State</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[#111827]">File Upload - Uploading State</h3>
+          <button
+            onClick={() => onOpenModal('File Upload (Uploading)', {
+              layout: 'display: flex;\nalign-items: center;\ngap: 12px;',
+              typography: 'font-family: \'Inter\', sans-serif;\nfont-size: 14px;',
+              spacing: 'padding: 16px;',
+              shape: 'border-width: 1px;\nborder-style: solid;\nborder-radius: 8px;',
+              states: {
+                default: 'background-color: #FFFFFF;\nborder-color: #E5E7EB;'
+              },
+              classContract: '.ui-upload-item',
+              html: '<div class="ui-upload-item"><div class="file-info">...</div><div class="progress-bar"></div></div>'
+            })}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+          >
+            <Code className="w-3.5 h-3.5" />
+            Copy CSS
+          </button>
+        </div>
         <div className="mb-4">
           <div className="border border-[#E5E7EB] rounded-lg p-4">
             <div className="flex items-center gap-3 mb-2">

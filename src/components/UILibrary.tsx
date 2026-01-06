@@ -37,8 +37,18 @@ import { DataDisplayComponents } from './ui-library/DataDisplayComponents';
 import { FeedbackComponents } from './ui-library/FeedbackComponents';
 import { NavigationComponents } from './ui-library/NavigationComponents';
 
+import { CSSDetailsModal, CSSData } from './ui-library/CSSDetailsModal';
+
 export default function UILibrary() {
   const [activeSection, setActiveSection] = useState('colors');
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalData, setModalData] = useState<{ title: string; data: CSSData } | null>(null);
+
+  const openCSSModal = (title: string, data: CSSData) => {
+    setModalData({ title, data });
+    setModalOpen(true);
+  };
+
 
   // Navigation sections
   const sections = [
@@ -68,11 +78,10 @@ export default function UILibrary() {
               <button
                 key={section.id}
                 onClick={() => setActiveSection(section.id)}
-                className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors text-left mb-1 ${
-                  activeSection === section.id
-                    ? 'bg-[#FEF2F2] text-[#D9480F] font-medium'
-                    : 'text-[#6B7280] hover:bg-[#F9FAFB]'
-                }`}
+                className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors text-left mb-1 ${activeSection === section.id
+                  ? 'bg-[#FEF2F2] text-[#D9480F] font-medium'
+                  : 'text-[#6B7280] hover:bg-[#F9FAFB]'
+                  }`}
               >
                 <Icon className="w-5 h-5" />
                 <span className="text-sm">{section.label}</span>
@@ -376,7 +385,28 @@ export default function UILibrary() {
 
               {/* Primary Button */}
               <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-                <h3 className="text-[#111827] mb-4">Primary Button</h3>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-[#111827]">Primary Button</h3>
+                  <button
+                    onClick={() => openCSSModal('Primary Button', {
+                      layout: 'display: inline-flex;\nalign-items: center;\njustify-content: center;\ntransition: background-color 200ms ease;',
+                      typography: 'font-family: \'Inter\', sans-serif;\nfont-size: 14px;\nfont-weight: 500;\nline-height: 20px;',
+                      spacing: 'height: 44px;\npadding-top: 0;\npadding-right: 24px;\npadding-bottom: 0;\npadding-left: 24px;',
+                      shape: 'border-radius: 8px;',
+                      states: {
+                        default: 'background-color: #D9480F;\ncolor: #FFFFFF;',
+                        hover: 'background-color: #C13D0C;',
+                        disabled: 'background-color: #E5E7EB;\ncolor: #9CA3AF;\ncursor: not-allowed;'
+                      },
+                      classContract: '.ui-button-primary',
+                      html: '<button class="ui-button-primary">Primary Button</button>'
+                    })}
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+                  >
+                    <Code className="w-3.5 h-3.5" />
+                    Copy CSS
+                  </button>
+                </div>
                 <div className="flex items-center gap-4 mb-4">
                   <button className="h-11 px-6 bg-[#D9480F] text-white rounded-lg hover:bg-[#C13D0C] transition-colors">
                     Primary Button
@@ -408,7 +438,28 @@ export default function UILibrary() {
 
               {/* Secondary Button */}
               <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-                <h3 className="text-[#111827] mb-4">Secondary Button (Outline)</h3>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-[#111827]">Secondary Button (Outline)</h3>
+                  <button
+                    onClick={() => openCSSModal('Secondary Button', {
+                      layout: 'display: inline-flex;\nalign-items: center;\njustify-content: center;\ntransition: background-color 200ms ease;',
+                      typography: 'font-family: \'Inter\', sans-serif;\nfont-size: 14px;\nfont-weight: 500;\nline-height: 20px;',
+                      spacing: 'height: 44px;\npadding-top: 0;\npadding-right: 24px;\npadding-bottom: 0;\npadding-left: 24px;',
+                      shape: 'border-width: 1px;\nborder-style: solid;\nborder-radius: 8px;',
+                      states: {
+                        default: 'background-color: transparent;\ncolor: #374151;\nborder-color: #E5E7EB;',
+                        hover: 'background-color: #F9FAFB;',
+                        disabled: 'color: #9CA3AF;\nborder-color: #E5E7EB;\ncursor: not-allowed;'
+                      },
+                      classContract: '.ui-button-secondary',
+                      html: '<button class="ui-button-secondary">Secondary Button</button>'
+                    })}
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+                  >
+                    <Code className="w-3.5 h-3.5" />
+                    Copy CSS
+                  </button>
+                </div>
                 <div className="flex items-center gap-4 mb-4">
                   <button className="h-11 px-6 border border-[#E5E7EB] text-[#374151] rounded-lg hover:bg-[#F9FAFB] transition-colors">
                     Secondary Button
@@ -440,7 +491,28 @@ export default function UILibrary() {
 
               {/* Ghost Button */}
               <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-                <h3 className="text-[#111827] mb-4">Ghost Button (Text Only)</h3>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-[#111827]">Ghost Button (Text Only)</h3>
+                  <button
+                    onClick={() => openCSSModal('Ghost Button', {
+                      layout: 'display: inline-flex;\nalign-items: center;\njustify-content: center;\ntransition: background-color 200ms ease;',
+                      typography: 'font-family: \'Inter\', sans-serif;\nfont-size: 14px;\nfont-weight: 500;\nline-height: 20px;',
+                      spacing: 'height: 44px;\npadding-top: 0;\npadding-right: 24px;\npadding-bottom: 0;\npadding-left: 24px;',
+                      shape: 'border-width: 0;\nborder-radius: 8px;',
+                      states: {
+                        default: 'background-color: transparent;\ncolor: #D9480F;',
+                        hover: 'background-color: #FEF2F2;',
+                        disabled: 'color: #9CA3AF;\ncursor: not-allowed;'
+                      },
+                      classContract: '.ui-button-ghost',
+                      html: '<button class="ui-button-ghost">Ghost Button</button>'
+                    })}
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+                  >
+                    <Code className="w-3.5 h-3.5" />
+                    Copy CSS
+                  </button>
+                </div>
                 <div className="flex items-center gap-4 mb-4">
                   <button className="h-11 px-6 text-[#D9480F] rounded-lg hover:bg-[#FEF2F2] transition-colors">
                     Ghost Button
@@ -472,7 +544,28 @@ export default function UILibrary() {
 
               {/* Danger Button */}
               <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-                <h3 className="text-[#111827] mb-4">Danger Button</h3>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-[#111827]">Danger Button</h3>
+                  <button
+                    onClick={() => openCSSModal('Danger Button', {
+                      layout: 'display: inline-flex;\nalign-items: center;\njustify-content: center;\ntransition: background-color 200ms ease;',
+                      typography: 'font-family: \'Inter\', sans-serif;\nfont-size: 14px;\nfont-weight: 500;\nline-height: 20px;',
+                      spacing: 'height: 44px;\npadding-top: 0;\npadding-right: 24px;\npadding-bottom: 0;\npadding-left: 24px;',
+                      shape: 'border-radius: 8px;',
+                      states: {
+                        default: 'background-color: #DC2626;\ncolor: #FFFFFF;',
+                        hover: 'background-color: #B91C1C;',
+                        disabled: 'background-color: #E5E7EB;\ncolor: #9CA3AF;\ncursor: not-allowed;'
+                      },
+                      classContract: '.ui-button-danger',
+                      html: '<button class="ui-button-danger">Danger Button</button>'
+                    })}
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+                  >
+                    <Code className="w-3.5 h-3.5" />
+                    Copy CSS
+                  </button>
+                </div>
                 <div className="flex items-center gap-4 mb-4">
                   <button className="h-11 px-6 bg-[#DC2626] text-white rounded-lg hover:bg-[#B91C1C] transition-colors">
                     Danger Button
@@ -521,7 +614,23 @@ export default function UILibrary() {
                   <div className="font-medium text-[#111827] mb-3">Specifications:</div>
                   <div className="grid grid-cols-3 gap-8 text-sm">
                     <div>
-                      <div className="text-[#6B7280] mb-2 font-medium">Small</div>
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="text-[#6B7280] font-medium">Small</div>
+                        <button
+                          onClick={() => openCSSModal('Button Size (Small)', {
+                            layout: 'display: inline-flex;\nalign-items: center;\njustify-content: center;',
+                            typography: 'font-size: 14px;',
+                            spacing: 'height: 36px;\npadding-left: 16px;\npadding-right: 16px;',
+                            shape: 'border-radius: 8px;',
+                            states: { default: '/* Inherits base styles */' },
+                            classContract: '.ui-button-sm',
+                            html: '<button class="ui-button-primary ui-button-sm">Small</button>'
+                          })}
+                          className="text-xs font-medium text-[#D9480F] hover:text-[#C13D0C] transition-colors"
+                        >
+                          Copy CSS
+                        </button>
+                      </div>
                       <div className="space-y-1">
                         <div className="flex justify-between">
                           <span className="text-[#6B7280]">Height:</span>
@@ -538,7 +647,23 @@ export default function UILibrary() {
                       </div>
                     </div>
                     <div>
-                      <div className="text-[#6B7280] mb-2 font-medium">Medium</div>
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="text-[#6B7280] font-medium">Medium</div>
+                        <button
+                          onClick={() => openCSSModal('Button Size (Medium)', {
+                            layout: 'display: inline-flex;\nalign-items: center;\njustify-content: center;',
+                            typography: 'font-size: 16px;',
+                            spacing: 'height: 44px;\npadding-left: 24px;\npadding-right: 24px;',
+                            shape: 'border-radius: 8px;',
+                            states: { default: '/* Inherits base styles */' },
+                            classContract: '.ui-button-md',
+                            html: '<button class="ui-button-primary ui-button-md">Medium</button>'
+                          })}
+                          className="text-xs font-medium text-[#D9480F] hover:text-[#C13D0C] transition-colors"
+                        >
+                          Copy CSS
+                        </button>
+                      </div>
                       <div className="space-y-1">
                         <div className="flex justify-between">
                           <span className="text-[#6B7280]">Height:</span>
@@ -555,7 +680,23 @@ export default function UILibrary() {
                       </div>
                     </div>
                     <div>
-                      <div className="text-[#6B7280] mb-2 font-medium">Large</div>
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="text-[#6B7280] font-medium">Large</div>
+                        <button
+                          onClick={() => openCSSModal('Button Size (Large)', {
+                            layout: 'display: inline-flex;\nalign-items: center;\njustify-content: center;',
+                            typography: 'font-size: 16px;',
+                            spacing: 'height: 48px;\npadding-left: 32px;\npadding-right: 32px;',
+                            shape: 'border-radius: 8px;',
+                            states: { default: '/* Inherits base styles */' },
+                            classContract: '.ui-button-lg',
+                            html: '<button class="ui-button-primary ui-button-lg">Large</button>'
+                          })}
+                          className="text-xs font-medium text-[#D9480F] hover:text-[#C13D0C] transition-colors"
+                        >
+                          Copy CSS
+                        </button>
+                      </div>
                       <div className="space-y-1">
                         <div className="flex justify-between">
                           <span className="text-[#6B7280]">Height:</span>
@@ -577,7 +718,27 @@ export default function UILibrary() {
 
               {/* Icon Buttons */}
               <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-                <h3 className="text-[#111827] mb-4">Icon Buttons</h3>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-[#111827]">Icon Buttons</h3>
+                  <button
+                    onClick={() => openCSSModal('Icon Buttons', {
+                      layout: 'display: flex;\nalign-items: center;\njustify-content: center;\ntransition: background-color 200ms ease;',
+                      typography: '/* Icon size defined by SVG dimensions */',
+                      spacing: 'width: 44px;\nheight: 44px;',
+                      shape: 'border-radius: 8px;',
+                      states: {
+                        default: 'background-color: #D9480F;\ncolor: #FFFFFF;',
+                        hover: 'background-color: #C13D0C;',
+                      },
+                      classContract: '.ui-button-icon',
+                      html: '<button class="ui-button-icon"><svg>...</svg></button>'
+                    })}
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+                  >
+                    <Code className="w-3.5 h-3.5" />
+                    Copy CSS
+                  </button>
+                </div>
                 <div className="flex items-center gap-4 mb-4">
                   <button className="w-11 h-11 flex items-center justify-center bg-[#D9480F] text-white rounded-lg hover:bg-[#C13D0C] transition-colors">
                     <Edit2 className="w-5 h-5" />
@@ -618,7 +779,29 @@ export default function UILibrary() {
 
               {/* Text Input */}
               <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-                <h3 className="text-[#111827] mb-4">Text Input</h3>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-[#111827]">Text Input</h3>
+                  <button
+                    onClick={() => openCSSModal('Text Input', {
+                      layout: 'display: block;\nwidth: 100%;',
+                      typography: 'font-family: \'Inter\', sans-serif;\nfont-size: 14px;\nfont-weight: 400;\nline-height: 20px;',
+                      spacing: 'height: 48px;\npadding-top: 0;\npadding-right: 16px;\npadding-bottom: 0;\npadding-left: 16px;',
+                      shape: 'border-width: 1px;\nborder-style: solid;\nborder-radius: 8px;',
+                      states: {
+                        default: 'background-color: #FFFFFF;\ncolor: #111827;\nborder-color: #E5E7EB;\nplaceholder-color: #9CA3AF;',
+                        hover: 'border-color: #D1D5DB;',
+                        focus: 'border-color: #D9480F;\nbox-shadow: 0 0 0 4px rgba(217, 72, 15, 0.1);',
+                        disabled: 'background-color: #F9FAFB;\ncursor: not-allowed;'
+                      },
+                      classContract: '.ui-input',
+                      html: '<input type="text" class="ui-input" placeholder="Enter text..." />'
+                    })}
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+                  >
+                    <Code className="w-3.5 h-3.5" />
+                    Copy CSS
+                  </button>
+                </div>
                 <div className="space-y-6 mb-4">
                   <div>
                     <label className="block text-sm font-medium text-[#374151] mb-2">
@@ -677,7 +860,27 @@ export default function UILibrary() {
 
               {/* Search Input with Icon */}
               <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-                <h3 className="text-[#111827] mb-4">Search Input (Icon Left)</h3>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-[#111827]">Search Input (Icon Left)</h3>
+                  <button
+                    onClick={() => openCSSModal('Search Input', {
+                      layout: 'position: relative;\ndisplay: block;\nwidth: 100%;',
+                      typography: 'font-family: \'Inter\', sans-serif;\nfont-size: 14px;\nfont-weight: 400;\nline-height: 20px;',
+                      spacing: 'height: 48px;\npadding-top: 0;\npadding-right: 16px;\npadding-bottom: 0;\npadding-left: 44px;',
+                      shape: 'border-width: 1px;\nborder-style: solid;\nborder-radius: 8px;',
+                      states: {
+                        default: 'background-color: #FFFFFF;\ncolor: #111827;\nborder-color: #E5E7EB;',
+                        focus: 'border-color: #D9480F;\nbox-shadow: 0 0 0 4px rgba(217, 72, 15, 0.1);'
+                      },
+                      classContract: '.ui-input-search',
+                      html: '<div class="relative"><input type="text" class="ui-input-search" placeholder="Search..." /></div>'
+                    })}
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+                  >
+                    <Code className="w-3.5 h-3.5" />
+                    Copy CSS
+                  </button>
+                </div>
                 <div className="relative mb-4">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#9CA3AF]" />
                   <input
@@ -704,7 +907,27 @@ export default function UILibrary() {
 
               {/* Select Dropdown */}
               <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-                <h3 className="text-[#111827] mb-4">Select Dropdown</h3>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-[#111827]">Select Dropdown</h3>
+                  <button
+                    onClick={() => openCSSModal('Select Dropdown', {
+                      layout: 'display: block;\nwidth: 100%;\nappearance: none;',
+                      typography: 'font-family: \'Inter\', sans-serif;\nfont-size: 14px;\nfont-weight: 400;\nline-height: 20px;',
+                      spacing: 'height: 48px;\npadding-top: 0;\npadding-right: 16px;\npadding-bottom: 0;\npadding-left: 16px;',
+                      shape: 'border-width: 1px;\nborder-style: solid;\nborder-radius: 8px;',
+                      states: {
+                        default: 'background-color: #FFFFFF;\ncolor: #111827;\nborder-color: #E5E7EB;',
+                        focus: 'border-color: #D9480F;\nbox-shadow: 0 0 0 4px rgba(217, 72, 15, 0.1);'
+                      },
+                      classContract: '.ui-select',
+                      html: '<select class="ui-select"><option>Option 1</option></select>'
+                    })}
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+                  >
+                    <Code className="w-3.5 h-3.5" />
+                    Copy CSS
+                  </button>
+                </div>
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-[#374151] mb-2">
                     Single Select
@@ -733,7 +956,27 @@ export default function UILibrary() {
 
               {/* Date & Time Pickers */}
               <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-                <h3 className="text-[#111827] mb-4">Date & Time Pickers</h3>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-[#111827]">Date & Time Pickers</h3>
+                  <button
+                    onClick={() => openCSSModal('Date & Time Pickers', {
+                      layout: 'display: block;\nwidth: 100%;\nposition: relative;',
+                      typography: 'font-family: \'Inter\', sans-serif;\nfont-size: 14px;\nfont-weight: 400;\nline-height: 20px;',
+                      spacing: 'height: 48px;\npadding-top: 0;\npadding-right: 16px;\npadding-bottom: 0;\npadding-left: 16px;',
+                      shape: 'border-width: 1px;\nborder-style: solid;\nborder-radius: 8px;',
+                      states: {
+                        default: 'background-color: #FFFFFF;\ncolor: #111827;\nborder-color: #E5E7EB;',
+                        focus: 'border-color: #D9480F;\nbox-shadow: 0 0 0 4px rgba(217, 72, 15, 0.1);'
+                      },
+                      classContract: '.ui-input-date',
+                      html: '<input type="date" class="ui-input-date" />'
+                    })}
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+                  >
+                    <Code className="w-3.5 h-3.5" />
+                    Copy CSS
+                  </button>
+                </div>
                 <div className="grid grid-cols-2 gap-4 mb-4">
                   <div>
                     <label className="block text-sm font-medium text-[#374151] mb-2">
@@ -773,10 +1016,32 @@ export default function UILibrary() {
 
               {/* Checkboxes & Radios */}
               <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-                <h3 className="text-[#111827] mb-4">Checkboxes & Radio Buttons</h3>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-[#111827]">Checkboxes & Radio Buttons</h3>
+                </div>
                 <div className="grid grid-cols-2 gap-8 mb-4">
                   <div>
-                    <div className="text-sm font-medium text-[#6B7280] mb-3">Checkboxes</div>
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="text-sm font-medium text-[#6B7280]">Checkboxes</div>
+                      <button
+                        onClick={() => openCSSModal('Checkbox', {
+                          layout: 'display: inline-flex;\nalign-items: center;\njustify-content: center;',
+                          typography: '/* Not applicable */',
+                          spacing: 'width: 20px;\nheight: 20px;',
+                          shape: 'border-width: 1px;\nborder-style: solid;\nborder-radius: 4px;',
+                          states: {
+                            default: 'border-color: #E5E7EB;\nbackground-color: transparent;',
+                            checked: 'background-color: #D9480F;\nborder-color: #D9480F;\ncolor: white;',
+                            focus: 'ring: 2px solid rgba(217, 72, 15, 0.2);'
+                          },
+                          classContract: '.ui-checkbox',
+                          html: '<input type="checkbox" class="ui-checkbox" />'
+                        })}
+                        className="text-xs font-medium text-[#D9480F] hover:text-[#C13D0C] transition-colors"
+                      >
+                        Copy CSS
+                      </button>
+                    </div>
                     <div className="space-y-3">
                       <label className="flex items-center gap-3 cursor-pointer">
                         <input
@@ -797,7 +1062,27 @@ export default function UILibrary() {
                     </div>
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-[#6B7280] mb-3">Radio Buttons</div>
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="text-sm font-medium text-[#6B7280]">Radio Buttons</div>
+                      <button
+                        onClick={() => openCSSModal('Radio Button', {
+                          layout: 'display: inline-flex;\nalign-items: center;\njustify-content: center;',
+                          typography: '/* Not applicable */',
+                          spacing: 'width: 20px;\nheight: 20px;',
+                          shape: 'border-width: 1px;\nborder-style: solid;\nborder-radius: 50%;',
+                          states: {
+                            default: 'border-color: #E5E7EB;\nbackground-color: transparent;',
+                            checked: 'background-color: #D9480F;\nborder-color: #D9480F;\ncolor: white;',
+                            focus: 'ring: 2px solid rgba(217, 72, 15, 0.2);'
+                          },
+                          classContract: '.ui-radio',
+                          html: '<input type="radio" class="ui-radio" />'
+                        })}
+                        className="text-xs font-medium text-[#D9480F] hover:text-[#C13D0C] transition-colors"
+                      >
+                        Copy CSS
+                      </button>
+                    </div>
                     <div className="space-y-3">
                       <label className="flex items-center gap-3 cursor-pointer">
                         <input
@@ -836,7 +1121,28 @@ export default function UILibrary() {
 
               {/* Toggle Switch */}
               <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-                <h3 className="text-[#111827] mb-4">Toggle Switch</h3>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-[#111827]">Toggle Switch</h3>
+                  <button
+                    onClick={() => openCSSModal('Toggle Switch', {
+                      layout: 'position: relative;\ndisplay: inline-block;\nwidth: 44px;\nheight: 24px;',
+                      typography: '/* Not applicable */',
+                      spacing: '/* Internal spacing defined by thumb position */',
+                      shape: 'border-radius: 9999px;',
+                      states: {
+                        default: 'background-color: #E5E7EB;\ntransition: 200ms ease;',
+                        checked: 'background-color: #D9480F;',
+                        focus: 'ring: 2px solid rgba(217, 72, 15, 0.2);'
+                      },
+                      classContract: '.ui-toggle',
+                      html: '<label class="ui-toggle"><input type="checkbox" /><span class="slider"></span></label>'
+                    })}
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+                  >
+                    <Code className="w-3.5 h-3.5" />
+                    Copy CSS
+                  </button>
+                </div>
                 <div className="flex items-center gap-8 mb-4">
                   <label className="flex items-center gap-3 cursor-pointer">
                     <div className="relative inline-block w-11 h-6">
@@ -874,17 +1180,17 @@ export default function UILibrary() {
               </section>
 
               {/* Extended Input Components */}
-              <InputsExtended />
+              <InputsExtended onOpenModal={openCSSModal} />
             </div>
           )}
 
           {/* Continue with other sections... (truncating due to length) */}
           {activeSection === 'navigation' && (
-            <NavigationComponents />
+            <NavigationComponents onOpenModal={openCSSModal} />
           )}
 
           {activeSection === 'data-display' && (
-            <DataDisplayComponents />
+            <DataDisplayComponents onOpenModal={openCSSModal} />
           )}
 
           {activeSection === 'data-display-old' && (
@@ -950,7 +1256,7 @@ export default function UILibrary() {
           )}
 
           {activeSection === 'feedback' && (
-            <FeedbackComponents />
+            <FeedbackComponents onOpenModal={openCSSModal} />
           )}
 
           {activeSection === 'feedback-old' && (
@@ -1162,6 +1468,16 @@ export default function UILibrary() {
           )}
         </div>
       </div>
+
+      {/* CSS Details Modal */}
+      {modalData && (
+        <CSSDetailsModal
+          isOpen={modalOpen}
+          onClose={() => setModalOpen(false)}
+          title={modalData.title}
+          data={modalData.data}
+        />
+      )}
     </div>
   );
 }

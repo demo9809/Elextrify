@@ -1,7 +1,12 @@
-import { Edit2, Trash2, TrendingUp, ChevronDown } from 'lucide-react';
+import { Edit2, Trash2, TrendingUp, ChevronDown, Code } from 'lucide-react';
+import { CSSData } from './CSSDetailsModal';
 import { SpecTable } from './SpecTable';
 
-export function DataDisplayComponents() {
+interface DataDisplayProps {
+  onOpenModal: (title: string, data: CSSData) => void;
+}
+
+export function DataDisplayComponents({ onOpenModal }: DataDisplayProps) {
   return (
     <div className="space-y-8">
       <div>
@@ -13,7 +18,26 @@ export function DataDisplayComponents() {
 
       {/* Status Badges */}
       <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-        <h3 className="text-[#111827] mb-4">Status Badges</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[#111827]">Status Badges</h3>
+          <button
+            onClick={() => onOpenModal('Status Badges', {
+              layout: 'display: inline-flex;\nalign-items: center;\njustify-content: center;',
+              typography: 'font-family: \'Inter\', sans-serif;\nfont-size: 14px;\nfont-weight: 500;\nline-height: 20px;',
+              spacing: 'padding-top: 4px;\npadding-right: 12px;\npadding-bottom: 4px;\npadding-left: 12px;',
+              shape: 'border-radius: 9999px;',
+              states: {
+                default: 'background-color: #F3F4F6;\ncolor: #1F2937;'
+              },
+              classContract: '.ui-badge',
+              html: '<span class="ui-badge">Label</span>'
+            })}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+          >
+            <Code className="w-3.5 h-3.5" />
+            Copy CSS
+          </button>
+        </div>
         <div className="flex flex-wrap gap-3 mb-4">
           <span className="px-3 py-1 bg-[#ECFDF5] text-[#047857] text-sm font-medium rounded-full">
             Live
@@ -51,7 +75,26 @@ export function DataDisplayComponents() {
 
       {/* Data Table */}
       <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-        <h3 className="text-[#111827] mb-4">Data Table</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[#111827]">Data Table</h3>
+          <button
+            onClick={() => onOpenModal('Data Table', {
+              layout: 'display: table;\nwidth: 100%;\nborder-collapse: collapse;',
+              typography: 'font-family: \'Inter\', sans-serif;',
+              spacing: '/* Cell padding defined in children */',
+              shape: 'border-width: 1px;\nborder-style: solid;\nborder-radius: 8px;\noverflow: hidden;',
+              states: {
+                default: 'background-color: #FFFFFF;\nborder-color: #E5E7EB;'
+              },
+              classContract: '.ui-table',
+              html: '<table class="ui-table"><thead><tr><th>Header</th></tr></thead><tbody><tr><td>Data</td></tr></tbody></table>'
+            })}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+          >
+            <Code className="w-3.5 h-3.5" />
+            Copy CSS
+          </button>
+        </div>
         <div className="border border-[#E5E7EB] rounded-lg overflow-hidden mb-4">
           <table className="w-full">
             <thead className="bg-[#F9FAFB] border-b border-[#E5E7EB]">
@@ -127,7 +170,28 @@ export function DataDisplayComponents() {
 
       {/* Pagination */}
       <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-        <h3 className="text-[#111827] mb-4">Pagination</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[#111827]">Pagination</h3>
+          <button
+            onClick={() => onOpenModal('Pagination', {
+              layout: 'display: flex;\nalign-items: center;\ngap: 8px;',
+              typography: 'font-family: \'Inter\', sans-serif;\nfont-size: 14px;\nfont-weight: 500;',
+              spacing: 'width: 36px;\nheight: 36px;',
+              shape: 'border-width: 1px;\nborder-style: solid;\nborder-radius: 8px;',
+              states: {
+                default: 'background-color: #FFFFFF;\ncolor: #6B7280;\nborder-color: #E5E7EB;',
+                hover: 'background-color: #F9FAFB;',
+                focus: 'border-color: #D9480F;'
+              },
+              classContract: '.ui-pagination-item',
+              html: '<div class="ui-pagination"><button class="ui-pagination-item">1</button></div>'
+            })}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+          >
+            <Code className="w-3.5 h-3.5" />
+            Copy CSS
+          </button>
+        </div>
         <div className="flex items-center justify-between mb-4">
           <div className="text-sm text-[#6B7280]">
             Showing <span className="font-medium text-[#111827]">1</span> to <span className="font-medium text-[#111827]">10</span> of <span className="font-medium text-[#111827]">97</span> results
@@ -173,7 +237,25 @@ export function DataDisplayComponents() {
 
       {/* Card Component */}
       <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-        <h3 className="text-[#111827] mb-4">Card Component</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[#111827]">Card Component</h3>
+          <button
+            onClick={() => onOpenModal('Card Component', {
+              layout: 'display: block;\nposition: relative;',
+              typography: 'font-family: \'Inter\', sans-serif;',
+              spacing: 'padding: 0;',
+              shape: 'border-width: 1px;\nborder-style: solid;\nborder-radius: 8px;',
+              states: {
+                default: 'background-color: #FFFFFF;\nborder-color: #E5E7EB;\nbox-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);'
+              },
+              classContract: '.ui-card'
+            })}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+          >
+            <Code className="w-3.5 h-3.5" />
+            Copy CSS
+          </button>
+        </div>
         <div className="bg-white rounded-lg border border-[#E5E7EB] shadow-sm max-w-md mb-4">
           <div className="p-6 border-b border-[#E5E7EB]">
             <h4 className="text-[#111827] mb-1">Card Header</h4>
@@ -212,7 +294,25 @@ export function DataDisplayComponents() {
 
       {/* Stats Card Widget */}
       <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-        <h3 className="text-[#111827] mb-4">Stats Card Widget</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[#111827]">Stats Card Widget</h3>
+          <button
+            onClick={() => onOpenModal('Stats Card', {
+              layout: 'display: flex;\nflex-direction: column;\ngap: 4px;',
+              typography: 'font-family: \'Inter\', sans-serif;',
+              spacing: 'padding: 24px;',
+              shape: 'border-width: 1px;\nborder-style: solid;\nborder-radius: 8px;',
+              states: {
+                default: 'background-color: #FFFFFF;\nborder-color: #E5E7EB;'
+              },
+              classContract: '.ui-stats-card'
+            })}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+          >
+            <Code className="w-3.5 h-3.5" />
+            Copy CSS
+          </button>
+        </div>
         <div className="grid grid-cols-3 gap-4 mb-4">
           {[
             { label: 'Total Impressions', value: '1.2M', change: '+12%', trend: 'up' },
@@ -252,7 +352,25 @@ export function DataDisplayComponents() {
 
       {/* Accordion */}
       <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-        <h3 className="text-[#111827] mb-4">Accordion</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[#111827]">Accordion</h3>
+          <button
+            onClick={() => onOpenModal('Accordion', {
+              layout: 'display: block;\nwidth: 100%;',
+              typography: 'font-family: \'Inter\', sans-serif;',
+              spacing: '/* Child dependent */',
+              shape: 'border-width: 1px;\nborder-style: solid;\nborder-radius: 8px;',
+              states: {
+                default: 'background-color: #FFFFFF;\nborder-color: #E5E7EB;'
+              },
+              classContract: '.ui-accordion'
+            })}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+          >
+            <Code className="w-3.5 h-3.5" />
+            Copy CSS
+          </button>
+        </div>
         <div className="space-y-2 mb-4">
           <div className="border border-[#E5E7EB] rounded-lg">
             <button className="w-full flex items-center justify-between p-4 text-left hover:bg-[#F9FAFB] transition-colors">

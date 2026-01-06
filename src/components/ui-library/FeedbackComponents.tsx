@@ -1,7 +1,12 @@
-import { CheckCircle, AlertCircle, Info, AlertTriangle, X, Loader, Monitor, Plus } from 'lucide-react';
+import { CheckCircle, AlertCircle, Info, AlertTriangle, X, Loader, Monitor, Plus, Code } from 'lucide-react';
+import { CSSData } from './CSSDetailsModal';
 import { SpecTable } from './SpecTable';
 
-export function FeedbackComponents() {
+interface FeedbackProps {
+  onOpenModal: (title: string, data: CSSData) => void;
+}
+
+export function FeedbackComponents({ onOpenModal }: FeedbackProps) {
   return (
     <div className="space-y-8">
       <div>
@@ -13,7 +18,28 @@ export function FeedbackComponents() {
 
       {/* Toast Notifications - All Variants */}
       <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-        <h3 className="text-[#111827] mb-4">Toast Notifications</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[#111827]">Toast Notifications</h3>
+          <button
+            onClick={() => onOpenModal('Toast Notification', {
+              layout: 'display: flex;\nalign-items: start;\ngap: 12px;\nposition: fixed;\nz-index: 50;',
+              typography: 'font-family: \'Inter\', sans-serif;\nfont-size: 14px;',
+              spacing: 'padding: 16px;\nmax-width: 448px;',
+              shape: 'border-width: 1px;\nborder-style: solid;\nborder-radius: 8px;',
+              states: {
+                default: 'background-color: #FFFFFF;\nborder-color: transparent;',
+                'success': 'background-color: #ECFDF5;\nborder-color: #A7F3D0;\ncolor: #065F46;',
+                'error': 'background-color: #FEE2E2;\nborder-color: #FECACA;\ncolor: #991B1B;'
+              },
+              classContract: '.ui-toast',
+              html: '<div class="ui-toast"><div class="icon"></div><div class="content">Message</div><button class="close"></button></div>'
+            })}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+          >
+            <Code className="w-3.5 h-3.5" />
+            Copy CSS
+          </button>
+        </div>
         <div className="space-y-4 max-w-md mb-4">
           <div className="flex items-start gap-3 p-4 bg-[#ECFDF5] border border-[#A7F3D0] rounded-lg">
             <CheckCircle className="w-5 h-5 text-[#047857] flex-shrink-0 mt-0.5" />
@@ -84,7 +110,26 @@ export function FeedbackComponents() {
 
       {/* Modal Dialog - Small */}
       <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-        <h3 className="text-[#111827] mb-4">Modal Dialog - Small (480px)</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[#111827]">Modal Dialog - Small (480px)</h3>
+          <button
+            onClick={() => onOpenModal('Modal Small', {
+              layout: 'position: fixed;\ntop: 50%;\nleft: 50%;\ntransform: translate(-50%, -50%);\nz-index: 50;',
+              typography: 'font-family: \'Inter\', sans-serif;',
+              spacing: 'width: 100%;\nmax-width: 480px;\npadding: 0;',
+              shape: 'border-radius: 8px;\nbox-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);',
+              states: {
+                default: 'background-color: #FFFFFF;'
+              },
+              classContract: '.ui-modal-small',
+              html: '<div class="ui-modal-overlay"><div class="ui-modal-small">...</div></div>'
+            })}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+          >
+            <Code className="w-3.5 h-3.5" />
+            Copy CSS
+          </button>
+        </div>
         <div className="bg-[#F9FAFB] rounded-lg border border-[#E5E7EB] p-8 relative mb-4">
           <div className="bg-white rounded-lg shadow-lg max-w-[480px] mx-auto">
             <div className="p-6 border-b border-[#E5E7EB]">
@@ -130,7 +175,26 @@ export function FeedbackComponents() {
 
       {/* Modal Dialog - Medium */}
       <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-        <h3 className="text-[#111827] mb-4">Modal Dialog - Medium (640px)</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[#111827]">Modal Dialog - Medium (640px)</h3>
+          <button
+            onClick={() => onOpenModal('Modal Medium', {
+              layout: 'position: fixed;\ntop: 50%;\nleft: 50%;\ntransform: translate(-50%, -50%);\nz-index: 50;',
+              typography: 'font-family: \'Inter\', sans-serif;',
+              spacing: 'width: 100%;\nmax-width: 640px;\npadding: 0;',
+              shape: 'border-radius: 8px;\nbox-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);',
+              states: {
+                default: 'background-color: #FFFFFF;'
+              },
+              classContract: '.ui-modal-medium',
+              html: '<div class="ui-modal-overlay"><div class="ui-modal-medium">...</div></div>'
+            })}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+          >
+            <Code className="w-3.5 h-3.5" />
+            Copy CSS
+          </button>
+        </div>
         <div className="bg-[#F9FAFB] rounded-lg border border-[#E5E7EB] p-8 relative mb-4">
           <div className="bg-white rounded-lg shadow-lg max-w-[640px] mx-auto">
             <div className="p-6 border-b border-[#E5E7EB]">
@@ -170,7 +234,26 @@ export function FeedbackComponents() {
 
       {/* Modal Dialog - Large */}
       <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-        <h3 className="text-[#111827] mb-4">Modal Dialog - Large (800px+)</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[#111827]">Modal Dialog - Large (800px+)</h3>
+          <button
+            onClick={() => onOpenModal('Modal Large', {
+              layout: 'position: fixed;\ntop: 50%;\nleft: 50%;\ntransform: translate(-50%, -50%);\nz-index: 50;',
+              typography: 'font-family: \'Inter\', sans-serif;',
+              spacing: 'width: 80%;\nmax-width: 1152px;\npadding: 0;',
+              shape: 'border-radius: 8px;\nbox-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);',
+              states: {
+                default: 'background-color: #FFFFFF;'
+              },
+              classContract: '.ui-modal-large',
+              html: '<div class="ui-modal-overlay"><div class="ui-modal-large">...</div></div>'
+            })}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+          >
+            <Code className="w-3.5 h-3.5" />
+            Copy CSS
+          </button>
+        </div>
         <div className="text-sm text-[#6B7280] mb-4">
           Large modals (800px, 960px, or 80% viewport width) are used for complex forms, data tables, or detailed content viewing.
         </div>
@@ -187,7 +270,26 @@ export function FeedbackComponents() {
 
       {/* Confirmation Dialog */}
       <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-        <h3 className="text-[#111827] mb-4">Confirmation Dialog</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[#111827]">Confirmation Dialog</h3>
+          <button
+            onClick={() => onOpenModal('Confirmation Dialog', {
+              layout: 'position: fixed;\ntop: 50%;\nleft: 50%;\ntransform: translate(-50%, -50%);\nz-index: 50;',
+              typography: 'font-family: \'Inter\', sans-serif;\ntext-align: center;',
+              spacing: 'width: 100%;\nmax-width: 448px;\npadding: 24px;',
+              shape: 'border-radius: 8px;\nbox-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);',
+              states: {
+                default: 'background-color: #FFFFFF;'
+              },
+              classContract: '.ui-modal-confirm',
+              html: '<div class="ui-modal-overlay"><div class="ui-modal-confirm">...</div></div>'
+            })}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+          >
+            <Code className="w-3.5 h-3.5" />
+            Copy CSS
+          </button>
+        </div>
         <div className="bg-[#F9FAFB] rounded-lg border border-[#E5E7EB] p-8 relative mb-4">
           <div className="bg-white rounded-lg shadow-lg max-w-md mx-auto">
             <div className="p-6">
@@ -228,7 +330,26 @@ export function FeedbackComponents() {
 
       {/* Loading Indicators */}
       <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-        <h3 className="text-[#111827] mb-4">Loading Indicators</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[#111827]">Loading Indicators</h3>
+          <button
+            onClick={() => onOpenModal('Loading', {
+              layout: 'display: inline-block;\nanimation: spin 1s linear infinite;',
+              typography: '/* Not applicable */',
+              spacing: 'width: 32px;\nheight: 32px;',
+              shape: 'border-radius: 50%;',
+              states: {
+                default: 'color: #D9480F;'
+              },
+              classContract: '.ui-spinner',
+              html: '<div class="ui-spinner"></div>'
+            })}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+          >
+            <Code className="w-3.5 h-3.5" />
+            Copy CSS
+          </button>
+        </div>
         <div className="grid grid-cols-3 gap-6 mb-4">
           <div className="text-center">
             <div className="flex items-center justify-center h-32 mb-3">
@@ -274,7 +395,26 @@ export function FeedbackComponents() {
 
       {/* Empty State */}
       <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-        <h3 className="text-[#111827] mb-4">Empty State</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[#111827]">Empty State</h3>
+          <button
+            onClick={() => onOpenModal('Empty State', {
+              layout: 'display: flex;\nflex-direction: column;\nalign-items: center;\njustify-content: center;\ntext-align: center;',
+              typography: 'font-family: \'Inter\', sans-serif;',
+              spacing: 'padding: 48px 24px;',
+              shape: 'border-width: 1px;\nborder-style: solid;\nborder-radius: 8px;',
+              states: {
+                default: 'background-color: #F9FAFB;\nborder-color: #E5E7EB;\ncolor: #6B7280;'
+              },
+              classContract: '.ui-empty-state',
+              html: '<div class="ui-empty-state"><div class="icon"></div><h3>Title</h3><p>Description</p></div>'
+            })}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+          >
+            <Code className="w-3.5 h-3.5" />
+            Copy CSS
+          </button>
+        </div>
         <div className="text-center py-12 border border-[#E5E7EB] rounded-lg bg-[#F9FAFB] mb-4">
           <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 border border-[#E5E7EB]">
             <Monitor className="w-8 h-8 text-[#9CA3AF]" />
@@ -308,7 +448,27 @@ export function FeedbackComponents() {
 
       {/* Progress Bar */}
       <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-        <h3 className="text-[#111827] mb-4">Progress Bar</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[#111827]">Progress Bar</h3>
+          <button
+            onClick={() => onOpenModal('Progress Bar', {
+              layout: 'display: block;\nwidth: 100%;\noverflow: hidden;',
+              typography: '/* Not applicable */',
+              spacing: 'height: 8px;',
+              shape: 'border-radius: 9999px;',
+              states: {
+                default: 'background-color: #E5E7EB;',
+                active: '/* Inner bar */\nbackground-color: #D9480F;\ntransition: width 300ms ease;'
+              },
+              classContract: '.ui-progress',
+              html: '<div class="ui-progress"><div class="bar"></div></div>'
+            })}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+          >
+            <Code className="w-3.5 h-3.5" />
+            Copy CSS
+          </button>
+        </div>
         <div className="space-y-4 mb-4">
           <div>
             <div className="flex justify-between text-sm mb-2">

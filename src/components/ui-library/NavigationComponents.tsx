@@ -1,7 +1,12 @@
-import { Home, Users, Monitor, Settings, ChevronRight, ChevronLeft, Check } from 'lucide-react';
+import { Home, Users, Monitor, Settings, ChevronRight, ChevronLeft, Check, Code } from 'lucide-react';
+import { CSSData } from './CSSDetailsModal';
 import { SpecTable } from './SpecTable';
 
-export function NavigationComponents() {
+interface NavigationProps {
+  onOpenModal: (title: string, data: CSSData) => void;
+}
+
+export function NavigationComponents({ onOpenModal }: NavigationProps) {
   return (
     <div className="space-y-8">
       <div>
@@ -13,7 +18,29 @@ export function NavigationComponents() {
 
       {/* Horizontal Tabs */}
       <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-        <h3 className="text-[#111827] mb-4">Horizontal Tabs</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[#111827]">Horizontal Tabs</h3>
+          <button
+            onClick={() => onOpenModal('Horizontal Tabs', {
+              layout: 'display: flex;\nalign-items: center;\ngap: 4px;',
+              typography: 'font-family: \'Inter\', sans-serif;\nfont-size: 14px;\nfont-weight: 500;',
+              spacing: 'padding: 10px 16px;',
+              shape: 'border-bottom-width: 2px;\nborder-style: solid;',
+              states: {
+                default: 'color: #6B7280;\nborder-color: transparent;',
+                hover: 'color: #111827;\nbackground-color: #F9FAFB;',
+                active: 'color: #D9480F;\nborder-color: #D9480F;',
+                disabled: 'color: #9CA3AF;'
+              },
+              classContract: '.ui-tab',
+              html: '<div class="ui-tab-container"><button class="ui-tab active">Tab 1</button><button class="ui-tab">Tab 2</button></div>'
+            })}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+          >
+            <Code className="w-3.5 h-3.5" />
+            Copy CSS
+          </button>
+        </div>
         <div className="mb-4">
           <div className="border-b border-[#E5E7EB]">
             <div className="flex gap-1">
@@ -54,7 +81,28 @@ export function NavigationComponents() {
 
       {/* Pill Tabs */}
       <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-        <h3 className="text-[#111827] mb-4">Pill Tabs (Alternative Style)</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[#111827]">Pill Tabs (Alternative Style)</h3>
+          <button
+            onClick={() => onOpenModal('Pill Tabs', {
+              layout: 'display: inline-flex;\nalign-items: center;\ngap: 4px;',
+              typography: 'font-family: \'Inter\', sans-serif;\nfont-size: 14px;\nfont-weight: 500;',
+              spacing: 'padding: 8px 16px;',
+              shape: 'border-radius: 6px;',
+              states: {
+                default: 'color: #6B7280;\nbackground-color: transparent;',
+                hover: 'color: #111827;',
+                active: 'color: #111827;\nbackground-color: #FFFFFF;\nbox-shadow: 0 1px 2px rgba(0,0,0,0.05);'
+              },
+              classContract: '.ui-pill-tab',
+              html: '<div class="ui-pill-tab-container"><button class="ui-pill-tab active">Tab 1</button></div>'
+            })}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+          >
+            <Code className="w-3.5 h-3.5" />
+            Copy CSS
+          </button>
+        </div>
         <div className="mb-4">
           <div className="inline-flex gap-1 bg-[#F9FAFB] p-1 rounded-lg">
             <button className="px-4 py-2 text-sm font-medium bg-white text-[#111827] rounded-md shadow-sm">
@@ -90,7 +138,28 @@ export function NavigationComponents() {
 
       {/* Breadcrumbs */}
       <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-        <h3 className="text-[#111827] mb-4">Breadcrumbs</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[#111827]">Breadcrumbs</h3>
+          <button
+            onClick={() => onOpenModal('Breadcrumbs', {
+              layout: 'display: flex;\nalign-items: center;\ngap: 8px;',
+              typography: 'font-family: \'Inter\', sans-serif;\nfont-size: 14px;',
+              spacing: 'padding: 0;',
+              shape: '/* No specific shape */',
+              states: {
+                default: 'color: #6B7280;',
+                hover: 'color: #111827;',
+                active: 'color: #111827;\nfont-weight: 500;'
+              },
+              classContract: '.ui-breadcrumb',
+              html: '<nav class="ui-breadcrumb"><a href="#">Home</a><span class="separator">/</span><span>Page</span></nav>'
+            })}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+          >
+            <Code className="w-3.5 h-3.5" />
+            Copy CSS
+          </button>
+        </div>
         <div className="mb-4">
           <nav className="flex items-center gap-2 text-sm">
             <a href="#" className="text-[#6B7280] hover:text-[#111827] transition-colors">
@@ -123,7 +192,28 @@ export function NavigationComponents() {
 
       {/* Breadcrumbs with Home Icon */}
       <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-        <h3 className="text-[#111827] mb-4">Breadcrumbs - With Home Icon</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[#111827]">Breadcrumbs - With Home Icon</h3>
+          <button
+            onClick={() => onOpenModal('Breadcrumbs (Icon)', {
+              layout: 'display: flex;\nalign-items: center;\ngap: 8px;',
+              typography: 'font-family: \'Inter\', sans-serif;\nfont-size: 14px;',
+              spacing: 'padding: 0;',
+              shape: '/* No specific shape */',
+              states: {
+                default: 'color: #6B7280;',
+                hover: 'color: #111827;',
+                active: 'color: #111827;\nfont-weight: 500;'
+              },
+              classContract: '.ui-breadcrumb-icon',
+              html: '<nav class="ui-breadcrumb"><a href="#"><svg>...</svg></a><span class="separator">/</span><span>Page</span></nav>'
+            })}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+          >
+            <Code className="w-3.5 h-3.5" />
+            Copy CSS
+          </button>
+        </div>
         <div className="mb-4">
           <nav className="flex items-center gap-2 text-sm">
             <a href="#" className="text-[#6B7280] hover:text-[#111827] transition-colors">
@@ -150,7 +240,28 @@ export function NavigationComponents() {
 
       {/* Horizontal Stepper */}
       <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-        <h3 className="text-[#111827] mb-4">Horizontal Stepper</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[#111827]">Horizontal Stepper</h3>
+          <button
+            onClick={() => onOpenModal('Horizontal Stepper', {
+              layout: 'display: flex;\nalign-items: center;\njustify-content: space-between;',
+              typography: 'font-family: \'Inter\', sans-serif;\nfont-size: 14px;\nfont-weight: 500;',
+              spacing: '/* Child dependent */',
+              shape: '/* Child dependent */',
+              states: {
+                completed: 'color: #16A34A;\nbackground-color: #16A34A;',
+                current: 'color: #D9480F;\nbackground-color: #D9480F;',
+                upcoming: 'color: #9CA3AF;\nbackground-color: #E5E7EB;'
+              },
+              classContract: '.ui-stepper',
+              html: '<div class="ui-stepper">...</div>'
+            })}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+          >
+            <Code className="w-3.5 h-3.5" />
+            Copy CSS
+          </button>
+        </div>
         <div className="mb-4">
           <div className="flex items-center justify-between max-w-2xl mx-auto">
             {/* Step 1 - Completed */}
@@ -161,7 +272,7 @@ export function NavigationComponents() {
               <span className="text-sm font-medium text-[#16A34A]">Campaign Setup</span>
             </div>
             <div className="flex-1 h-0.5 bg-[#16A34A] -mx-4"></div>
-            
+
             {/* Step 2 - Current */}
             <div className="flex flex-col items-center gap-2 flex-1">
               <div className="w-10 h-10 rounded-full bg-[#D9480F] flex items-center justify-center text-white font-medium">
@@ -170,7 +281,7 @@ export function NavigationComponents() {
               <span className="text-sm font-medium text-[#D9480F]">Ad Groups</span>
             </div>
             <div className="flex-1 h-0.5 bg-[#E5E7EB] -mx-4"></div>
-            
+
             {/* Step 3 - Upcoming */}
             <div className="flex flex-col items-center gap-2 flex-1">
               <div className="w-10 h-10 rounded-full bg-[#E5E7EB] flex items-center justify-center text-[#9CA3AF] font-medium">
@@ -205,7 +316,28 @@ export function NavigationComponents() {
 
       {/* Vertical Stepper */}
       <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-        <h3 className="text-[#111827] mb-4">Vertical Stepper</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[#111827]">Vertical Stepper</h3>
+          <button
+            onClick={() => onOpenModal('Vertical Stepper', {
+              layout: 'display: flex;\nflex-direction: column;',
+              typography: 'font-family: \'Inter\', sans-serif;',
+              spacing: 'padding-bottom: 48px;',
+              shape: '/* Child dependent */',
+              states: {
+                completed: 'color: #16A34A;',
+                current: 'color: #D9480F;',
+                upcoming: 'color: #9CA3AF;'
+              },
+              classContract: '.ui-stepper-vertical',
+              html: '<div class="ui-stepper-vertical">...</div>'
+            })}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+          >
+            <Code className="w-3.5 h-3.5" />
+            Copy CSS
+          </button>
+        </div>
         <div className="mb-4">
           <div className="max-w-md">
             {/* Step 1 - Completed */}
@@ -221,7 +353,7 @@ export function NavigationComponents() {
                 <div className="text-sm text-[#6B7280]">Define campaign details and objectives</div>
               </div>
             </div>
-            
+
             {/* Step 2 - Current */}
             <div className="flex gap-4">
               <div className="flex flex-col items-center">
@@ -235,7 +367,7 @@ export function NavigationComponents() {
                 <div className="text-sm text-[#6B7280]">Create and configure ad groups</div>
               </div>
             </div>
-            
+
             {/* Step 3 - Upcoming */}
             <div className="flex gap-4">
               <div className="flex flex-col items-center">
@@ -270,7 +402,28 @@ export function NavigationComponents() {
 
       {/* Pagination */}
       <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-        <h3 className="text-[#111827] mb-4">Pagination</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[#111827]">Pagination</h3>
+          <button
+            onClick={() => onOpenModal('Pagination', {
+              layout: 'display: flex;\nalign-items: center;\ngap: 8px;',
+              typography: 'font-family: \'Inter\', sans-serif;\nfont-size: 14px;',
+              spacing: 'padding: 8px;',
+              shape: 'border-radius: 8px;',
+              states: {
+                default: 'color: #6B7280;\nborder: 1px solid #E5E7EB;',
+                active: 'background-color: #D9480F;\ncolor: white;',
+                hover: 'background-color: #F9FAFB;'
+              },
+              classContract: '.ui-pagination',
+              html: '<div class="ui-pagination"><button>1</button></div>'
+            })}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+          >
+            <Code className="w-3.5 h-3.5" />
+            Copy CSS
+          </button>
+        </div>
         <div className="flex items-center justify-between mb-4">
           <div className="text-sm text-[#6B7280]">
             Showing <span className="font-medium text-[#111827]">1</span> to <span className="font-medium text-[#111827]">10</span> of <span className="font-medium text-[#111827]">97</span> results
@@ -319,7 +472,28 @@ export function NavigationComponents() {
 
       {/* Sidebar Navigation */}
       <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-        <h3 className="text-[#111827] mb-4">Sidebar Navigation</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[#111827]">Sidebar Navigation</h3>
+          <button
+            onClick={() => onOpenModal('Sidebar Navigation', {
+              layout: 'display: flex;\nflex-direction: column;\ngap: 4px;',
+              typography: 'font-family: \'Inter\', sans-serif;\nfont-size: 14px;',
+              spacing: 'padding: 10px 16px;',
+              shape: 'border-radius: 8px;',
+              states: {
+                default: 'color: #6B7280;\nbackground-color: transparent;',
+                hover: 'color: #111827;\nbackground-color: #F9FAFB;',
+                active: 'color: #D9480F;\nbackground-color: #FEF2F2;\nfont-weight: 500;'
+              },
+              classContract: '.ui-sidebar-nav',
+              html: '<nav class="ui-sidebar-nav"><a href="#">Link</a></nav>'
+            })}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+          >
+            <Code className="w-3.5 h-3.5" />
+            Copy CSS
+          </button>
+        </div>
         <div className="bg-white border border-[#E5E7EB] rounded-lg max-w-xs mb-4">
           <nav className="p-4 space-y-1">
             <a href="#" className="flex items-center gap-3 px-4 py-2.5 bg-[#FEF2F2] text-[#D9480F] rounded-lg font-medium">
@@ -364,7 +538,28 @@ export function NavigationComponents() {
 
       {/* Sidebar Navigation with Badges */}
       <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-        <h3 className="text-[#111827] mb-4">Sidebar Navigation - With Badges</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[#111827]">Sidebar Navigation - With Badges</h3>
+          <button
+            onClick={() => onOpenModal('Sidebar Navigation (Badges)', {
+              layout: 'display: flex;\nflex-direction: column;\ngap: 4px;',
+              typography: 'font-family: \'Inter\', sans-serif;\nfont-size: 14px;',
+              spacing: 'padding: 10px 16px;',
+              shape: 'border-radius: 8px;',
+              states: {
+                default: 'color: #6B7280;\nbackground-color: transparent;',
+                hover: 'color: #111827;\nbackground-color: #F9FAFB;',
+                active: 'color: #D9480F;\nbackground-color: #FEF2F2;\nfont-weight: 500;'
+              },
+              classContract: '.ui-sidebar-nav-badge',
+              html: '<nav class="ui-sidebar-nav"><a href="#">Link <span class="badge">4</span></a></nav>'
+            })}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+          >
+            <Code className="w-3.5 h-3.5" />
+            Copy CSS
+          </button>
+        </div>
         <div className="bg-white border border-[#E5E7EB] rounded-lg max-w-xs mb-4">
           <nav className="p-4 space-y-1">
             <a href="#" className="flex items-center justify-between px-4 py-2.5 bg-[#FEF2F2] text-[#D9480F] rounded-lg font-medium">
@@ -408,7 +603,26 @@ export function NavigationComponents() {
 
       {/* Top Navigation Bar */}
       <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-        <h3 className="text-[#111827] mb-4">Top Navigation Bar</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[#111827]">Top Navigation Bar</h3>
+          <button
+            onClick={() => onOpenModal('Top Navigation', {
+              layout: 'display: flex;\nalign-items: center;\njustify-content: space-between;',
+              typography: 'font-family: \'Inter\', sans-serif;',
+              spacing: 'padding: 16px 24px;',
+              shape: 'border-bottom-width: 1px;\nborder-style: solid;',
+              states: {
+                default: 'background-color: #FFFFFF;\nborder-color: #E5E7EB;'
+              },
+              classContract: '.ui-top-nav',
+              html: '<header class="ui-top-nav">...</header>'
+            })}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+          >
+            <Code className="w-3.5 h-3.5" />
+            Copy CSS
+          </button>
+        </div>
         <div className="bg-white border border-[#E5E7EB] rounded-lg mb-4">
           <div className="flex items-center justify-between px-6 py-4 border-b border-[#E5E7EB]">
             <div className="flex items-center gap-8">
@@ -455,7 +669,27 @@ export function NavigationComponents() {
 
       {/* Dropdown Menu */}
       <section className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-        <h3 className="text-[#111827] mb-4">Dropdown Menu</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[#111827]">Dropdown Menu</h3>
+          <button
+            onClick={() => onOpenModal('Dropdown Menu', {
+              layout: 'position: absolute;\ndisplay: flex;\nflex-direction: column;',
+              typography: 'font-family: \'Inter\', sans-serif;\nfont-size: 14px;',
+              spacing: 'padding: 8px 16px;',
+              shape: 'border-width: 1px;\nborder-style: solid;\nborder-radius: 8px;',
+              states: {
+                default: 'background-color: #FFFFFF;\nborder-color: #E5E7EB;\ncolor: #111827;',
+                hover: 'background-color: #F9FAFB;'
+              },
+              classContract: '.ui-dropdown',
+              html: '<div class="ui-dropdown"><a href="#">Item</a></div>'
+            })}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#D9480F] hover:bg-[#FEF2F2] rounded-md transition-colors border border-[#D9480F]/20"
+          >
+            <Code className="w-3.5 h-3.5" />
+            Copy CSS
+          </button>
+        </div>
         <div className="inline-block mb-4">
           <div className="bg-white border border-[#E5E7EB] rounded-lg shadow-lg min-w-[200px]">
             <div className="py-1">
