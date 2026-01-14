@@ -416,7 +416,7 @@ export function SmartFilterPanel({ onFiltersChange, onClose }: SmartFilterPanelP
               });
               onClose();
             }}
-            className="w-full h-12 bg-[#D9480F] text-white rounded-lg font-medium hover:bg-[#C13D0C] transition-colors flex items-center justify-center gap-2"
+            className="w-full h-11 bg-[#D9480F] text-white rounded-lg font-medium hover:bg-[#C13D0C] transition-colors flex items-center justify-center gap-2"
           >
             <Check className="w-5 h-5" />
             Load {matchingScreens} Screen{matchingScreens !== 1 ? 's' : ''}

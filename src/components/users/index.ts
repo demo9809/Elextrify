@@ -5,3 +5,7 @@ export { default as CreateEditRole } from './CreateEditRole';
 export { default as ActivityLog } from './ActivityLog';
 export { default as InviteUserPanel } from './InviteUserPanel';
 export { default as PermissionMatrix } from './PermissionMatrix';
+export { default as ModulePermissionEditor } from './ModulePermissionEditor';
+export { default as PermissionSummaryPanel } from './PermissionSummaryPanel';
+export { default as RoleAssignmentTab } from './RoleAssignmentTab';
+export { default as EffectivePermissionsEditor } from './EffectivePermissionsEditor';

@@ -22,6 +22,7 @@ import {
 import { mockUsers, mockActivityLog, getRoleLabel, getStatusLabel, getStatusColor, getRoleColor, mockRoles, PERMISSION_MODULES } from '../../data/mockUsers';
 import { User, ActivityLogEntry, PermissionSet } from '../../types/users';
 import EffectivePermissionsEditor from './EffectivePermissionsEditor';
+import RoleAssignmentTab from './RoleAssignmentTab';
 import MFAManagementSection from './MFAManagementSection';
 
 type TabType = 'profile' | 'permissions' | 'effective-permissions' | 'clients' | 'activity';
@@ -277,59 +278,16 @@ export default function UserDetails() {
 
         {/* Permissions Tab */}
         {activeTab === 'permissions' && userRole && (
-          <div className="max-w-4xl space-y-6">
-            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-              <div className="px-6 py-4 border-b border-gray-200">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="text-gray-900 mb-1">Role: {userRole.name}</h3>
-                    <p className="text-gray-600">{userRole.description}</p>
-                  </div>
-                  <button className="px-4 h-9 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
-                    Change Role
-                  </button>
-                </div>
-              </div>
-              <div className="p-6">
-                <div className="space-y-4">
-                  {PERMISSION_MODULES.map((module) => {
-                    const perms = userRole.permissions[module.id];
-                    if (!perms) return null;
-
-                    const enabledActions = Object.entries(perms)
-                      .filter(([_, enabled]) => enabled)
-                      .map(([action]) => action);
-
-                    return (
-                      <div key={module.id} className="border border-gray-200 rounded-lg p-4">
-                        <div className="flex items-start justify-between gap-4 mb-3">
-                          <div>
-                            <h4 className="text-gray-900 mb-1">{module.name}</h4>
-                            <p className="text-gray-600">{module.description}</p>
-                          </div>
-                        </div>
-                        {enabledActions.length > 0 ? (
-                          <div className="flex flex-wrap gap-2">
-                            {enabledActions.map((action) => (
-                              <span
-                                key={action}
-                                className="inline-flex items-center px-3 py-1 rounded-full bg-green-50 text-green-700 text-sm"
-                              >
-                                <CheckCircle className="w-3 h-3 mr-1" />
-                                {action}
-                              </span>
-                            ))}
-                          </div>
-                        ) : (
-                          <div className="text-gray-500 italic">No permissions granted</div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          </div>
+          <RoleAssignmentTab
+            user={currentUser}
+            currentRole={userRole}
+            onRoleChange={(roleId) => {
+              const newRole = mockRoles.find(r => r.id === roleId);
+              if (newRole) {
+                handleUserUpdate({ role: newRole.name.toLowerCase().replace(' ', '-') as any });
+              }
+            }}
+          />
         )}
 
         {/* Effective Permissions Tab */}
