@@ -11,7 +11,8 @@ import {
 } from 'lucide-react';
 import { mockRoles, PERMISSION_MODULES, PERMISSION_ACTIONS } from '../../data/mockUsers';
 import { Role, PermissionSet } from '../../types/users';
-import PermissionMatrix from './PermissionMatrix';
+import ModulePermissionEditor from './ModulePermissionEditor';
+import PermissionSummaryPanel from './PermissionSummaryPanel';
 
 export default function CreateEditRole() {
   const { roleId } = useParams<{ roleId: string }>();
@@ -116,7 +117,7 @@ export default function CreateEditRole() {
 
       {/* Content */}
       <div className="flex-1 overflow-auto px-4 sm:px-8 py-6">
-        <div className="max-w-6xl mx-auto space-y-6">
+        <div className="max-w-7xl mx-auto space-y-6">
           {/* System Role Warning */}
           {isSystemRole && (
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start gap-3">
@@ -135,7 +136,7 @@ export default function CreateEditRole() {
             <div className="px-6 py-4 border-b border-gray-200">
               <h3 className="text-gray-900">Basic Information</h3>
             </div>
-            <div className="p-6 space-y-6">
+            <div className="p-4 space-y-4">
               <div>
                 <label className="block text-gray-700 mb-2">
                   Role Name <span className="text-red-500">*</span>
@@ -166,7 +167,7 @@ export default function CreateEditRole() {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Describe what this role is for and who should have it..."
-                  rows={3}
+                  rows={2}
                   disabled={isSystemRole}
                   className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#D9480F] focus:border-transparent resize-none ${
                     isSystemRole ? 'bg-gray-50 cursor-not-allowed' : ''
@@ -185,20 +186,23 @@ export default function CreateEditRole() {
             </div>
           </div>
 
-          {/* Permission Matrix */}
+          {/* Permission Editor */}
           <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
             <div className="px-6 py-4 border-b border-gray-200">
               <h3 className="text-gray-900 mb-1">Permissions</h3>
               <p className="text-gray-600">
-                Configure what actions this role can perform in each module
+                Configure module-specific permissions for this role
               </p>
             </div>
-            <PermissionMatrix
+            <ModulePermissionEditor
               permissions={permissions}
               onChange={handlePermissionChange}
               disabled={isSystemRole}
             />
           </div>
+
+          {/* Permission Summary */}
+          <PermissionSummaryPanel permissions={permissions} />
 
           {/* Action Buttons (Mobile/Bottom) */}
           {!isSystemRole && (

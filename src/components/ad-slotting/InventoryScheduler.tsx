@@ -510,34 +510,33 @@ export function InventoryScheduler() {
 
             {/* Right: Action Buttons */}
             <div className="flex items-center gap-3">
-              {/* Multi-Device Mode Toggle */}
+              {/* Bulk Select Mode Toggle */}
               <button
                 onClick={() => {
-                  setMultiDeviceMode(!multiDeviceMode);
-                  if (!multiDeviceMode) {
+                  if (multiDeviceMode) {
+                    // Cancel bulk mode
+                    setMultiDeviceMode(false);
                     setSelectedDevices(new Set());
                     setSelectedTimeSlot(null);
+                  } else {
+                    // Enter bulk mode
+                    setMultiDeviceMode(true);
                   }
                 }}
-                className={`h-10 px-4 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors ${
+                className={`h-11 px-4 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors ${
                   multiDeviceMode
                     ? 'bg-[#D9480F] text-white hover:bg-[#C13C09]'
                     : 'bg-[#F9FAFB] text-[#111827] hover:bg-[#F3F4F6] border border-[#E5E7EB]'
                 }`}
               >
                 <Layers className="w-4 h-4" />
-                <span>Multi-Device Mode</span>
-                {multiDeviceMode && selectedDevices.size > 0 && (
-                  <span className="ml-1 px-2 py-0.5 bg-white text-[#D9480F] rounded-full text-xs font-semibold">
-                    {selectedDevices.size}
-                  </span>
-                )}
+                <span>{multiDeviceMode ? 'Cancel Bulk Selection' : 'Bulk Select Mode'}</span>
               </button>
               
-              {/* Filters Button */}
+              {/* Filter Button */}
               <button
                 onClick={() => setFilterOpen(true)}
-                className="h-10 px-4 bg-[#F9FAFB] text-[#111827] rounded-lg hover:bg-[#F3F4F6] text-sm font-medium flex items-center gap-2 border border-[#E5E7EB]"
+                className="h-11 px-4 bg-[#F9FAFB] text-[#111827] rounded-lg hover:bg-[#F3F4F6] text-sm font-medium flex items-center gap-2 border border-[#E5E7EB]"
               >
                 <SlidersHorizontal className="w-4 h-4" />
                 <span>Filters</span>
